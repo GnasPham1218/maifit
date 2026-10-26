@@ -13,7 +13,9 @@ spring:
     open-in-view: false
   flyway:
     enabled: true
-
+server:
+  servlet:
+    context-path: /api
 management:
   endpoints:
     web:
