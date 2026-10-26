@@ -1,0 +1,9 @@
+# backend/.dockerignore
+target/
+.idea/
+.vscode/
+*.iml
+*.log
+HELP.md
+.env
+.env.*
