@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: maifit-backend
+  config:
+    import: optional:file:../.env[.properties]
+  datasource:
+    url: ${DB_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
