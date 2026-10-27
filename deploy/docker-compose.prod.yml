@@ -1,0 +1,61 @@
+# deploy/docker-compose.prod.yml
+# Chạy trên VPS bằng: docker compose -f docker-compose.prod.yml --env-file .env up -d
+# File .env nằm cùng thư mục trên VPS (KHÔNG commit lên git).
+
+services:
+
+  # ---------------- DATABASE ----------------
+  db:
+    # Cùng image + tag với docker-compose.yml ở máy dev → dev và prod chạy cùng phiên bản Postgres
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data   # dữ liệu nằm ngoài container, xoá container không mất DB
+    healthcheck:
+      # $$ = để Compose không tự thay biến; biến được đọc BÊN TRONG container
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # KHÔNG có "ports:" → không publish.
+    # Chỉ container trong cùng mạng Docker gọi được, bằng tên "db" + cổng 5432.
+
+  # ---------------- BACKEND ----------------
+  backend:
+    image: ghcr.io/${GHCR_OWNER}/maifit-backend:${IMAGE_TAG}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy        # chờ Postgres sẵn sàng rồi mới chạy (Flyway cần DB)
+    environment:
+      # Trong mạng Docker gọi DB bằng TÊN SERVICE "db", không phải localhost
+      DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      # 127.0.0.1 : 8080         : 8080
+      # chỉ VPS   : cổng trên VPS : cổng trong container
+      # → Nginx trên VPS gọi http://127.0.0.1:8080, Internet KHÔNG gọi được
+      - "127.0.0.1:8080:8080"
+
+  # ---------------- FRONTEND ----------------
+  frontend:
+    image: ghcr.io/${GHCR_OWNER}/maifit-frontend:${IMAGE_TAG}
+    restart: unless-stopped
+    ports:
+      # Trong container Nginx-unprivileged nghe 8080 (trùng số với backend nhưng
+      # là container khác nên không đụng nhau). Trên VPS nối ra cổng 3000.
+      - "127.0.0.1:3000:8080"
+
+volumes:
+  pgdata:
+
+# Docker Compose tự tạo một mạng nội bộ cho 3 service trên.
+# Trong mạng đó: "db", "backend", "frontend" là tên máy (DNS nội bộ).
+#
+# SAI — tuyệt đối không viết:  ports: - "8080:8080"
+#   → cổng mở ra MỌI địa chỉ, Internet gọi thẳng được, và đi vòng qua ufw.
