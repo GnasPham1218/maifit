@@ -21,13 +21,18 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    # KHÔNG có "ports:" → không publish.
-    # Chỉ container trong cùng mạng Docker gọi được, bằng tên "db" + cổng 5432.
+    ports:
+      # Chỉ VPS thấy cổng này (cho SSH tunnel); Internet không gọi được
+      - "127.0.0.1:5432:5432"
+    
 
   # ---------------- BACKEND ----------------
   backend:
     image: ghcr.io/${GHCR_OWNER}/maifit-backend:${IMAGE_TAG}
     restart: unless-stopped
+    # Giới hạn RAM container → JVM tính MaxRAMPercentage=75 trên 768m (~576m heap),
+    # chừa RAM cho Postgres và hệ điều hành trên VPS 2 GB
+    mem_limit: 768m
     depends_on:
       db:
         condition: service_healthy        # chờ Postgres sẵn sàng rồi mới chạy (Flyway cần DB)
