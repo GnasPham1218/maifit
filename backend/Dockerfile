@@ -19,6 +19,7 @@ RUN ./mvnw -B package -DskipTests
 
 # ===== Stage 2: Running .jar by JRE =====
 FROM eclipse-temurin:25-jre
+LABEL org.opencontainers.image.source="https://github.com/GnasPham1218/maifit"
 WORKDIR /app
 
 # Create user not root
