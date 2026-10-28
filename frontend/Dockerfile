@@ -11,6 +11,7 @@ RUN npm run build
 
 # ---- Stage 2: serve ----
 FROM nginx/nginx-unprivileged:stable-alpine
+LABEL org.opencontainers.image.source="https://github.com/GnasPham1218/maifit"
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 8080
