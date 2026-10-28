@@ -15,7 +15,7 @@ function App() {
 
   return (
     <main style={{fontFamily: 'sans-serif', padding:24}}>
-      <h1>MAIFit</h1>
+      <h1>MAIFit của sangdeptrai</h1>
       <p>
         Backend Status: <strong>{status}</strong>
       </p>
