@@ -26,3 +26,7 @@ app:
     secret: ${JWT_SECRET}      # Base64, >= 32 bytes; only in .env / GitHub Secrets
     issuer: maifit
     access-token-ttl: 15m
+  auth:
+    frontend-url: ${FRONTEND_URL:http://localhost:5173}   # Vite dev server; prod sets FRONTEND_URL
+    verify-token-ttl: 24h
+    reset-token-ttl: 30m
