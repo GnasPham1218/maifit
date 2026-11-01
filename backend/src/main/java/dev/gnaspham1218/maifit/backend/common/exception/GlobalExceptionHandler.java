@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -44,6 +45,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ApiResponse<Void>> handleBadRequest(Exception ex) {
         ErrorCode code = ErrorCode.BAD_REQUEST;
+        return build(code.getStatus(), code, code.getDefaultMessage(), null);
+    }
+
+    // Không có token, token sai chữ ký hoặc đã hết hạn (chuyển từ RestAuthenticationEntryPoint sang)
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAuthentication(AuthenticationException ex) {
+        ErrorCode code = ErrorCode.UNAUTHORIZED;
         return build(code.getStatus(), code, code.getDefaultMessage(), null);
     }
 

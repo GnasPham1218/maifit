@@ -21,3 +21,8 @@ management:
     web:
       exposure:
         include: health
+app:
+  jwt:
+    secret: ${JWT_SECRET}      # Base64, >= 32 bytes; only in .env / GitHub Secrets
+    issuer: maifit
+    access-token-ttl: 15m
