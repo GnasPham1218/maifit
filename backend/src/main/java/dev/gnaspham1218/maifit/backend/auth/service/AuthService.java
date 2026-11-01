@@ -10,7 +10,8 @@ import dev.gnaspham1218.maifit.backend.auth.entity.EmailTokenType;
 import dev.gnaspham1218.maifit.backend.auth.entity.RefreshToken;
 import dev.gnaspham1218.maifit.backend.auth.repository.EmailTokenRepository;
 import dev.gnaspham1218.maifit.backend.auth.repository.RefreshTokenRepository;
-import dev.gnaspham1218.maifit.backend.common.email.EmailSender;
+import dev.gnaspham1218.maifit.backend.common.email.PasswordResetEmailEvent;
+import dev.gnaspham1218.maifit.backend.common.email.VerificationEmailEvent;
 import dev.gnaspham1218.maifit.backend.common.exception.AppException;
 import dev.gnaspham1218.maifit.backend.common.exception.ErrorCode;
 import dev.gnaspham1218.maifit.backend.config.AuthProperties;
@@ -20,6 +21,7 @@ import dev.gnaspham1218.maifit.backend.user.mapper.UserMapper;
 import dev.gnaspham1218.maifit.backend.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,7 +40,7 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
-    private final EmailSender emailSender;
+    private final ApplicationEventPublisher eventPublisher;
     private final AuthProperties authProperties;
     private final UserMapper userMapper;
     private final JwtService jwtService;
@@ -193,7 +195,8 @@ public class AuthService {
                 user, token.hash(), EmailTokenType.VERIFY, now.plus(authProperties.verifyTokenTtl())));
 
         String link = authProperties.frontendUrl() + "/verify-email?token=" + token.raw();
-        emailSender.sendVerificationEmail(user.getEmail(), user.getDisplayName(), link);
+        // Sent by EmailEventListener after the transaction commits, on a background thread
+        eventPublisher.publishEvent(new VerificationEmailEvent(user.getEmail(), user.getDisplayName(), link));
     }
 
     private void sendPasswordResetEmail(User user, Instant now) {
@@ -205,7 +208,7 @@ public class AuthService {
                 user, token.hash(), EmailTokenType.RESET, now.plus(authProperties.resetTokenTtl())));
 
         String link = authProperties.frontendUrl() + "/reset-password?token=" + token.raw();
-        emailSender.sendPasswordResetEmail(user.getEmail(), user.getDisplayName(), link);
+        eventPublisher.publishEvent(new PasswordResetEmailEvent(user.getEmail(), user.getDisplayName(), link));
     }
 
     private static String normalize(String value) {
