@@ -13,6 +13,18 @@ spring:
     open-in-view: false
   flyway:
     enabled: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}          # Gmail App Password, never the real account password
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true   # encrypt the connection
+      mail.smtp.starttls.required: true
+      mail.smtp.connectiontimeout: 5000 # ms: never hang a thread forever on a slow SMTP server
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
 server:
   servlet:
     context-path: /api
@@ -21,3 +33,21 @@ management:
     web:
       exposure:
         include: health
+  health:
+    mail:
+      enabled: false   # otherwise /health connects to Gmail on every check and turns DOWN if Gmail is slow
+app:
+  jwt:
+    secret: ${JWT_SECRET}      # Base64, >= 32 bytes; only in .env / GitHub Secrets
+    issuer: maifit
+    access-token-ttl: 15m
+  auth:
+    frontend-url: ${FRONTEND_URL:http://localhost:5173}   # Vite dev server; prod sets FRONTEND_URL
+    verify-token-ttl: 24h
+    reset-token-ttl: 30m
+    refresh-token-ttl: 7d
+    refresh-cookie-secure: ${REFRESH_COOKIE_SECURE:true}  # set false in local .env only if a tool refuses Secure cookies over HTTP
+    refresh-cookie-path: /api/auth
+  mail:
+    from: ${MAIL_USERNAME}
+    from-name: MAIFit

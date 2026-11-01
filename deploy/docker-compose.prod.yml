@@ -41,6 +41,12 @@ services:
       DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # Auth: ":?" makes Compose refuse to start if the variable is missing or empty in .env,
+      # with a clear message, instead of starting a backend that crashes
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in deploy/.env}
+      FRONTEND_URL: ${FRONTEND_URL:?set FRONTEND_URL in deploy/.env}
+      MAIL_USERNAME: ${MAIL_USERNAME:?set MAIL_USERNAME in deploy/.env}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:?set MAIL_PASSWORD in deploy/.env}
     ports:
       # 127.0.0.1 : 8080         : 8080
       # chỉ VPS   : cổng trên VPS : cổng trong container
