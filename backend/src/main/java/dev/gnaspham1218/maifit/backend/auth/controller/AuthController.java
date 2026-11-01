@@ -1,8 +1,10 @@
 package dev.gnaspham1218.maifit.backend.auth.controller;
 
+import dev.gnaspham1218.maifit.backend.auth.dto.ForgotPasswordRequest;
 import dev.gnaspham1218.maifit.backend.auth.dto.LoginRequest;
 import dev.gnaspham1218.maifit.backend.auth.dto.LoginResponse;
 import dev.gnaspham1218.maifit.backend.auth.dto.RegisterRequest;
+import dev.gnaspham1218.maifit.backend.auth.dto.ResetPasswordRequest;
 import dev.gnaspham1218.maifit.backend.auth.dto.VerifyEmailRequest;
 import dev.gnaspham1218.maifit.backend.auth.service.AuthService;
 import dev.gnaspham1218.maifit.backend.common.response.ApiResponse;
@@ -69,6 +71,19 @@ public class AuthController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, refreshCookie("", Duration.ZERO).toString()) // delete cookie
                 .body(ApiResponse.ok("Logged out", null));
+    }
+
+    @PostMapping("/forgot-password")
+    public ApiResponse<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        authService.forgotPassword(request);
+        // Same answer whether the email exists or not
+        return ApiResponse.ok("If an account exists for this email, a reset link has been sent", null);
+    }
+
+    @PostMapping("/reset-password")
+    public ApiResponse<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request);
+        return ApiResponse.ok("Password has been reset. Please sign in again", null);
     }
 
     // Not in PUBLIC_ENDPOINTS: Spring Security has already validated the JWT before we get here

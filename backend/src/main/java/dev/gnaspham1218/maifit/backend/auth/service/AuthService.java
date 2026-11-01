@@ -1,8 +1,10 @@
 package dev.gnaspham1218.maifit.backend.auth.service;
 
+import dev.gnaspham1218.maifit.backend.auth.dto.ForgotPasswordRequest;
 import dev.gnaspham1218.maifit.backend.auth.dto.LoginRequest;
 import dev.gnaspham1218.maifit.backend.auth.dto.LoginResponse;
 import dev.gnaspham1218.maifit.backend.auth.dto.RegisterRequest;
+import dev.gnaspham1218.maifit.backend.auth.dto.ResetPasswordRequest;
 import dev.gnaspham1218.maifit.backend.auth.entity.EmailToken;
 import dev.gnaspham1218.maifit.backend.auth.entity.EmailTokenType;
 import dev.gnaspham1218.maifit.backend.auth.entity.RefreshToken;
@@ -135,6 +137,33 @@ public class AuthService {
                 .ifPresent(t -> t.revoke(Instant.now()));
     }
 
+    // Always succeeds from the caller's point of view: the response is the same whether the email
+    // exists or not, so this endpoint cannot be used to find out who has an account.
+    @Transactional
+    public void forgotPassword(ForgotPasswordRequest req) {
+        userRepository.findByEmail(normalize(req.email()))
+                .ifPresent(user -> sendPasswordResetEmail(user, Instant.now()));
+    }
+
+    @Transactional
+    public void resetPassword(ResetPasswordRequest req) {
+        Instant now = Instant.now();
+        EmailToken token = emailTokenRepository.findByTokenHash(tokenService.hash(req.token()))
+                .filter(t -> t.getType() == EmailTokenType.RESET && t.isUsable(now))
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_TOKEN));
+
+        User user = token.getUser();
+        token.markUsed(now);
+        user.changePasswordHash(passwordEncoder.encode(req.newPassword()));
+
+        // The person clicked a link sent to this inbox, which proves they own the email
+        user.markEmailVerified();
+
+        // Log out every device: if the password was reset because the account was stolen,
+        // the thief's refresh tokens must stop working too
+        refreshTokenRepository.revokeAllForUser(user.getId(), now);
+    }
+
     private AuthResult issueTokens(User user, Instant now) {
         TokenService.GeneratedToken refresh = tokenService.generate();
         refreshTokenRepository.save(new RefreshToken(user, refresh.hash(), now.plus(authProperties.refreshTokenTtl())));
@@ -165,6 +194,18 @@ public class AuthService {
 
         String link = authProperties.frontendUrl() + "/verify-email?token=" + token.raw();
         emailSender.sendVerificationEmail(user.getEmail(), user.getDisplayName(), link);
+    }
+
+    private void sendPasswordResetEmail(User user, Instant now) {
+        // Clicking "forgot password" again makes the older links useless
+        emailTokenRepository.invalidateAll(user.getId(), EmailTokenType.RESET, now);
+
+        TokenService.GeneratedToken token = tokenService.generate();
+        emailTokenRepository.save(new EmailToken(
+                user, token.hash(), EmailTokenType.RESET, now.plus(authProperties.resetTokenTtl())));
+
+        String link = authProperties.frontendUrl() + "/reset-password?token=" + token.raw();
+        emailSender.sendPasswordResetEmail(user.getEmail(), user.getDisplayName(), link);
     }
 
     private static String normalize(String value) {

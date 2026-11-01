@@ -4,4 +4,6 @@ package dev.gnaspham1218.maifit.backend.common.email;
 public interface EmailSender {
 
     void sendVerificationEmail(String to, String displayName, String link);
+
+    void sendPasswordResetEmail(String to, String displayName, String link);
 }
