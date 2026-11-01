@@ -30,3 +30,6 @@ app:
     frontend-url: ${FRONTEND_URL:http://localhost:5173}   # Vite dev server; prod sets FRONTEND_URL
     verify-token-ttl: 24h
     reset-token-ttl: 30m
+    refresh-token-ttl: 7d
+    refresh-cookie-secure: ${REFRESH_COOKIE_SECURE:true}  # set false in local .env only if a tool refuses Secure cookies over HTTP
+    refresh-cookie-path: /api/auth

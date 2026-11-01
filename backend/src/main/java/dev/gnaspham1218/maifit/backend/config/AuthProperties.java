@@ -9,6 +9,9 @@ import java.time.Duration;
 public record AuthProperties(
         String frontendUrl,       // used to build links in emails, e.g. <frontendUrl>/verify-email?token=...
         Duration verifyTokenTtl,
-        Duration resetTokenTtl
+        Duration resetTokenTtl,
+        Duration refreshTokenTtl,
+        boolean refreshCookieSecure, // true in production (HTTPS only); can be false for local HTTP testing
+        String refreshCookiePath     // the cookie is only sent to this path, e.g. /api/auth
 ) {
 }
