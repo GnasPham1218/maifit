@@ -5,6 +5,8 @@ import type { BodyCheckin } from '../types/profile';
 import { optionalNumber } from '../utils/number';
 import { Alert } from './Alert';
 import { FormField } from './FormField';
+import { Button } from './Button';
+import { Card } from './Card';
 
 interface Props {
   onChanged: () => void; // the profile reloads: a new latest weight changes TDEE
@@ -86,11 +88,10 @@ export function BodyCheckinSection({ onChanged }: Props) {
   const newestFirst = [...items].reverse();
 
   return (
-    <div className="card">
-      <h3 className="card-title">Cân nặng & số đo</h3>
+    <Card title="Cân nặng & số đo">
       {error && <Alert type="error">{error}</Alert>}
       <form
-        className="form form-grid"
+        className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] items-end gap-3.5"
         onSubmit={(e) => {
           e.preventDefault();
           void handleSubmit();
@@ -108,15 +109,15 @@ export function BodyCheckinSection({ onChanged }: Props) {
         <FormField label="Ghi chú" name="note" maxLength={500}
           value={form.note} error={fieldErrors.note}
           onChange={(e) => setForm({ ...form, note: e.target.value })} />
-        <button type="submit" className="btn btn-primary" disabled={submitting}>
+        <Button type="submit" disabled={submitting}>
           {submitting ? 'Đang lưu…' : 'Ghi lại'}
-        </button>
+        </Button>
       </form>
 
       {newestFirst.length === 0 ? (
-        <p className="muted">Chưa có lần ghi nào trong 90 ngày qua.</p>
+        <p className="text-sm text-muted">Chưa có lần ghi nào trong 90 ngày qua.</p>
       ) : (
-        <table className="table">
+        <table className="mt-4 w-full border-collapse text-sm [&_td]:border-b [&_td]:border-line [&_td]:p-2 [&_th]:border-b [&_th]:border-line [&_th]:p-2 [&_th]:text-left">
           <thead>
             <tr>
               <th>Thời gian</th>
@@ -136,15 +137,15 @@ export function BodyCheckinSection({ onChanged }: Props) {
                 <td>{c.waistCm != null ? `${c.waistCm} cm` : '—'}</td>
                 <td>{c.note ?? ''}</td>
                 <td>
-                  <button type="button" className="btn btn-secondary btn-small" onClick={() => void handleDelete(c.id)}>
+                  <Button type="button" variant="secondary" size="sm" onClick={() => void handleDelete(c.id)}>
                     Xóa
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-    </div>
+    </Card>
   );
 }

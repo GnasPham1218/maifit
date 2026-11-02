@@ -25,13 +25,13 @@ export default function VerifyEmailPage() {
 
   return (
     <>
-      <h2 className="page-title">Xác thực email</h2>
+      <h2 className="mb-5 text-lg font-semibold">Xác thực email</h2>
       {state === 'verifying' && <Alert type="info">Đang xác thực…</Alert>}
       {state === 'success' && <Alert type="success">Email đã được xác thực. Bạn có thể đăng nhập.</Alert>}
       {state === 'error' && (
         <Alert type="error">Liên kết không hợp lệ, đã được dùng hoặc đã hết hạn.</Alert>
       )}
-      <div className="links">
+      <div className="mt-4.5 flex flex-wrap justify-between gap-2 text-sm">
         <Link to="/login">Đến trang đăng nhập</Link>
       </div>
     </>

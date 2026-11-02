@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { authApi } from '../apis/authApi';
 import { getErrorMessage } from '../constants/errorMessages';
 import { useAuth } from '../hooks/useAuth';
+import { Button } from '../components/Button';
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -27,17 +28,17 @@ export default function HomePage() {
   }
 
   return (
-    <section>
-      <h2>Xin chào, {user?.displayName}!</h2>
+    <section className="grid gap-3">
+      <h2 className="mb-2 text-xl font-semibold">Xin chào, {user?.displayName}!</h2>
       <p>
         Email: {user?.email} · Username: {user?.username}
       </p>
       <p>
         Backend: <strong>{health}</strong>
       </p>
-      <button type="button" className="btn btn-secondary" onClick={() => void checkSession()}>
+      <Button type="button" variant="secondary" onClick={() => void checkSession()}>
         Gọi /auth/me
-      </button>
+      </Button>
       {meResult && <p>{meResult}</p>}
     </section>
   );

@@ -5,6 +5,7 @@ import { Alert } from '../components/Alert';
 import { FormField } from '../components/FormField';
 import { getErrorMessage, getFieldErrors } from '../constants/errorMessages';
 import { validatePassword } from '../utils/validation';
+import { Button } from '../components/Button';
 
 export default function ResetPasswordPage() {
   const [params] = useSearchParams();
@@ -41,9 +42,9 @@ export default function ResetPasswordPage() {
   if (!token) {
     return (
       <>
-        <h2 className="page-title">Đặt lại mật khẩu</h2>
+        <h2 className="mb-5 text-lg font-semibold">Đặt lại mật khẩu</h2>
         <Alert type="error">Liên kết không hợp lệ.</Alert>
-        <div className="links">
+        <div className="mt-4.5 flex flex-wrap justify-between gap-2 text-sm">
           <Link to="/forgot-password">Gửi lại liên kết</Link>
         </div>
       </>
@@ -53,11 +54,11 @@ export default function ResetPasswordPage() {
   if (done) {
     return (
       <>
-        <h2 className="page-title">Đặt lại mật khẩu</h2>
+        <h2 className="mb-5 text-lg font-semibold">Đặt lại mật khẩu</h2>
         <Alert type="success">
           Đã đặt mật khẩu mới. Mọi thiết bị đã bị đăng xuất, hãy đăng nhập lại.
         </Alert>
-        <div className="links">
+        <div className="mt-4.5 flex flex-wrap justify-between gap-2 text-sm">
           <Link to="/login">Đăng nhập</Link>
         </div>
       </>
@@ -66,10 +67,10 @@ export default function ResetPasswordPage() {
 
   return (
     <>
-      <h2 className="page-title">Đặt mật khẩu mới</h2>
+      <h2 className="mb-5 text-lg font-semibold">Đặt mật khẩu mới</h2>
       {error && <Alert type="error">{error}</Alert>}
       <form
-        className="form"
+        className="grid gap-3.5"
         onSubmit={(e) => {
           e.preventDefault();
           void handleSubmit();
@@ -81,11 +82,11 @@ export default function ResetPasswordPage() {
         <FormField label="Nhập lại mật khẩu" name="confirmPassword" type="password" autoComplete="new-password" required
           value={form.confirmPassword} error={fieldErrors.confirmPassword}
           onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })} />
-        <button type="submit" className="btn btn-primary" disabled={submitting}>
+        <Button type="submit" disabled={submitting}>
           {submitting ? 'Đang lưu…' : 'Đặt mật khẩu'}
-        </button>
+        </Button>
       </form>
-      <div className="links">
+      <div className="mt-4.5 flex flex-wrap justify-between gap-2 text-sm">
         <Link to="/forgot-password">Gửi lại liên kết</Link>
       </div>
     </>

@@ -4,6 +4,7 @@ import { authApi } from '../apis/authApi';
 import { Alert } from '../components/Alert';
 import { FormField } from '../components/FormField';
 import { getErrorMessage } from '../constants/errorMessages';
+import { Button } from '../components/Button';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -26,7 +27,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <>
-      <h2 className="page-title">Quên mật khẩu</h2>
+      <h2 className="mb-5 text-lg font-semibold">Quên mật khẩu</h2>
       {sent ? (
         // Same text whether the account exists or not (the backend does the same)
         <Alert type="success">
@@ -36,7 +37,7 @@ export default function ForgotPasswordPage() {
         <>
           {error && <Alert type="error">{error}</Alert>}
           <form
-            className="form"
+            className="grid gap-3.5"
             onSubmit={(e) => {
               e.preventDefault();
               void handleSubmit();
@@ -44,13 +45,13 @@ export default function ForgotPasswordPage() {
           >
             <FormField label="Email" name="email" type="email" autoComplete="email" required
               value={email} onChange={(e) => setEmail(e.target.value)} />
-            <button type="submit" className="btn btn-primary" disabled={submitting}>
+            <Button type="submit" disabled={submitting}>
               {submitting ? 'Đang gửi…' : 'Gửi liên kết đặt lại'}
-            </button>
+            </Button>
           </form>
         </>
       )}
-      <div className="links">
+      <div className="mt-4.5 flex flex-wrap justify-between gap-2 text-sm">
         <Link to="/login">Về trang đăng nhập</Link>
       </div>
     </>
