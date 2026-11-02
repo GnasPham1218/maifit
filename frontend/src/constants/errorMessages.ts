@@ -15,6 +15,10 @@ const MESSAGES: Record<string, string> = {
   INVALID_CREDENTIALS: 'Email hoặc mật khẩu không đúng.',
   EMAIL_NOT_VERIFIED: 'Bạn cần xác thực email trước khi đăng nhập. Hãy kiểm tra hộp thư.',
   INVALID_TOKEN: 'Liên kết không hợp lệ hoặc đã hết hạn.',
+  PROFILE_NOT_FOUND: 'Bạn chưa thiết lập hồ sơ.',
+  AGE_OUT_OF_RANGE: 'Tuổi phải từ 13 đến 100.',
+  CHECKIN_IN_FUTURE: 'Thời gian ghi không được ở tương lai.',
+  INVALID_DATE_RANGE: 'Khoảng ngày không hợp lệ (tối đa 366 ngày).',
 };
 
 export function getErrorMessage(error: unknown): string {
@@ -28,6 +32,13 @@ const FIELD_LABELS: Record<string, string> = {
   password: 'Mật khẩu',
   newPassword: 'Mật khẩu mới',
   displayName: 'Tên hiển thị',
+  birthDate: 'Ngày sinh',
+  heightCm: 'Chiều cao',
+  weightKg: 'Cân nặng',
+  bodyFatPct: '% mỡ',
+  waistCm: 'Vòng eo',
+  customTargetKcal: 'Calo tự đặt',
+  note: 'Ghi chú',
 };
 
 // Field-level messages for forms (VALIDATION_FAILED from the backend)

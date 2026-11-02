@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router';
+import { NavLink, Outlet, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 
 export default function MainLayout() {
@@ -13,7 +13,13 @@ export default function MainLayout() {
   return (
     <>
       <header className="app-header">
-        <strong className="brand">MAIFit</strong>
+        <div className="nav">
+          <strong className="brand">MAIFit</strong>
+          <NavLink to="/" end>
+            Trang chủ
+          </NavLink>
+          <NavLink to="/profile">Hồ sơ</NavLink>
+        </div>
         <div>
           <span style={{ marginRight: 12 }}>{user?.displayName}</span>
           <button type="button" className="btn btn-secondary" onClick={() => void handleLogout()}>
