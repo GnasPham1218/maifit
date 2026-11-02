@@ -17,7 +17,7 @@ export function Alert({ type, children }: AlertProps) {
   // role="alert" makes screen readers announce errors as soon as they appear
   return (
     <div
-      className={`mb-3.5 rounded-lg px-3 py-2.5 text-sm ${STYLES[type]}`}
+      className={`mb-4 rounded-2xl px-4 py-3 text-sm ${STYLES[type]}`}
       role={type === 'error' ? 'alert' : 'status'}
     >
       {children}

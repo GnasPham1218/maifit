@@ -1,10 +1,14 @@
+import { Dumbbell } from 'lucide-react';
 import { Outlet } from 'react-router';
 
 export default function AuthLayout() {
   return (
-    <main className="grid min-h-screen place-items-center px-4 py-6">
-      <div className="w-full max-w-[420px] rounded-xl border border-line bg-surface px-6 py-7">
-        <h1 className="mb-1 text-2xl font-bold text-primary">MAIFit</h1>
+    <main className="grid min-h-screen place-items-center px-4 py-8">
+      <div className="w-full max-w-[440px] rounded-card bg-surface px-7 py-8">
+        <div className="mb-6 flex items-center gap-2">
+          <Dumbbell aria-hidden="true" className="size-7 text-sky-strong" />
+          <span className="text-2xl font-bold tracking-tight">MAIFit</span>
+        </div>
         <Outlet />
       </div>
     </main>

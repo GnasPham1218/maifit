@@ -91,7 +91,7 @@ export function BodyCheckinSection({ onChanged }: Props) {
     <Card title="Cân nặng & số đo">
       {error && <Alert type="error">{error}</Alert>}
       <form
-        className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] items-end gap-3.5"
+        className="grid grid-cols-[repeat(auto-fit,minmax(min(220px,100%),1fr))] items-end gap-3.5"
         onSubmit={(e) => {
           e.preventDefault();
           void handleSubmit();

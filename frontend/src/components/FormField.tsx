@@ -11,7 +11,7 @@ export function FormField({ label, name, error, ...inputProps }: FormFieldProps)
   const id = `field-${name}`;
   const errorId = `${id}-error`;
   return (
-    <div className="grid gap-1.5">
+    <div className="grid min-w-0 gap-1.5">
       <label htmlFor={id} className={FIELD_LABEL}>
         {label}
       </label>

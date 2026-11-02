@@ -2,6 +2,7 @@ import { FORMULA_LABELS, MACRO_SPLIT_LABELS } from '../constants/profile';
 import type { EnergyTargets } from '../types/profile';
 import { Alert } from './Alert';
 import { Card } from './Card';
+import { StatTile } from './StatTile';
 
 export function EnergySummary({ energy }: { energy: EnergyTargets }) {
   const custom = energy.targetKcal !== energy.suggestedKcal;
@@ -13,20 +14,11 @@ export function EnergySummary({ energy }: { energy: EnergyTargets }) {
           được đặt bằng mức duy trì.
         </Alert>
       )}
-      <div className="mb-3 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-3">
-        <div className="grid gap-0.5 rounded-lg bg-bg p-3">
-          <span className="text-sm text-muted">Mục tiêu</span>
-          <strong className="text-xl">{energy.targetKcal} kcal</strong>
-          {custom && <span className="text-xs text-muted">Gợi ý: {energy.suggestedKcal} kcal</span>}
-        </div>
-        <div className="grid gap-0.5 rounded-lg bg-bg p-3">
-          <span className="text-sm text-muted">TDEE (duy trì)</span>
-          <strong className="text-xl">{energy.tdee} kcal</strong>
-        </div>
-        <div className="grid gap-0.5 rounded-lg bg-bg p-3">
-          <span className="text-sm text-muted">BMR</span>
-          <strong className="text-xl">{energy.bmr} kcal</strong>
-        </div>
+      <div className="mb-2 grid gap-3 sm:grid-cols-3">
+        <StatTile tone="sky" label="Mục tiêu" value={energy.targetKcal} unit="kcal"
+          hint={custom ? `Gợi ý: ${energy.suggestedKcal} kcal` : undefined} />
+        <StatTile tone="lime" label="TDEE (duy trì)" value={energy.tdee} unit="kcal" />
+        <StatTile tone="peach" label="BMR" value={energy.bmr} unit="kcal" />
       </div>
 
       <table className="mt-4 w-full border-collapse text-sm [&_td]:border-b [&_td]:border-line [&_td]:p-2 [&_th]:border-b [&_th]:border-line [&_th]:p-2 [&_th]:text-left">

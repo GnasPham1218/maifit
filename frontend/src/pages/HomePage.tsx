@@ -28,8 +28,7 @@ export default function HomePage() {
   }
 
   return (
-    <section className="grid gap-3">
-      <h2 className="mb-2 text-xl font-semibold">Xin chào, {user?.displayName}!</h2>
+    <section className="grid gap-3 rounded-card bg-surface p-6">
       <p>
         Email: {user?.email} · Username: {user?.username}
       </p>

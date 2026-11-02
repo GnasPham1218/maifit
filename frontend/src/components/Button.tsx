@@ -10,16 +10,18 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 // One place for button styles instead of repeating ~10 utility classes on every <button>
 const BASE =
-  'cursor-pointer rounded-lg border font-semibold disabled:cursor-not-allowed disabled:opacity-60';
+  'inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border font-medium transition-colors ' +
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-strong ' +
+  'disabled:cursor-not-allowed disabled:opacity-60';
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'border-transparent bg-primary text-white enabled:hover:bg-primary-hover',
+  primary: 'border-transparent bg-ink text-white enabled:hover:bg-ink-soft',
   secondary: 'border-line bg-surface text-ink enabled:hover:bg-bg',
 };
 
 const SIZES: Record<Size, string> = {
-  md: 'px-3.5 py-2.5',
-  sm: 'px-2.5 py-1 text-sm',
+  md: 'px-5 py-2.5',
+  sm: 'px-3 py-1 text-sm',
 };
 
 // type defaults to "button": a plain <button> inside a <form> would submit it by accident

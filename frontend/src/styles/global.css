@@ -1,31 +1,41 @@
 @import 'tailwindcss';
 
-/* Design tokens: Tailwind 4 reads these and generates utilities, e.g. --color-primary -> bg-primary,
-   text-primary, border-primary. Change a color here and it changes everywhere. */
+/* Design tokens: Tailwind 4 reads these and generates utilities, e.g. --color-sky -> bg-sky, text-sky.
+   Style: soft gray canvas, white cards with large radius, pastel accent tiles, big light numbers. */
 @theme {
-  --color-bg: #f4f6f8;
+  --color-bg: #eef0f1;
   --color-surface: #ffffff;
-  --color-ink: #1c2430;
-  --color-muted: #5d6b7b;
-  --color-line: #d5dce4;
-  --color-primary: #1f7a5c;
-  --color-primary-hover: #17614a;
-  --color-danger: #a12a2a;
-  --color-danger-bg: #fdecec;
-  --color-success: #17614a;
-  --color-success-bg: #e8f6ef;
-  --color-info: #1f4f7f;
-  --color-info-bg: #eaf2fb;
+  --color-ink: #161616;
+  --color-ink-soft: #3a3a3a;
+  --color-muted: #6e7480;
+  --color-line: #e3e6e9;
 
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Pastel tiles + a stronger tone of each for chips, icons, rings */
+  --color-sky: #bfe4f1;
+  --color-sky-strong: #2f8fb0;
+  --color-lime: #dcf0b9;
+  --color-lime-strong: #6fa52a;
+  --color-peach: #f9c6b1;
+  --color-peach-strong: #e9764f;
+
+  --color-danger: #b42318;
+  --color-danger-bg: #fdecea;
+  --color-success: #3f7d1c;
+  --color-success-bg: #eaf6d6;
+  --color-info: #1f5f7a;
+  --color-info-bg: #e3f3f9;
+
+  --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --radius-card: 1.75rem; /* 28px -> rounded-card */
 }
 
 /* Preflight (Tailwind's reset) removes default styles; put back the few we rely on */
 @layer base {
   body {
-    @apply min-h-screen bg-bg font-sans text-ink;
+    @apply min-h-screen bg-bg font-sans text-ink antialiased;
   }
   a {
-    @apply text-primary underline;
+    @apply text-sky-strong underline underline-offset-2;
   }
 }

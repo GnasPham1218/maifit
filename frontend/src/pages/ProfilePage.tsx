@@ -143,7 +143,7 @@ export default function ProfilePage() {
         {error && <Alert type="error">{error}</Alert>}
         {saved && <Alert type="success">Đã lưu hồ sơ.</Alert>}
         <form
-          className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] items-end gap-3.5"
+          className="grid grid-cols-[repeat(auto-fit,minmax(min(220px,100%),1fr))] items-end gap-3.5"
           onSubmit={(e) => {
             e.preventDefault();
             void handleSubmit();
@@ -167,7 +167,7 @@ export default function ProfilePage() {
             onChange={(e) => setForm({ ...form, activityLevel: e.target.value as ActivityLevel })} />
           <SelectField label="Mục tiêu" name="goal" options={GOAL_OPTIONS} value={form.goal}
             onChange={(e) => setForm({ ...form, goal: e.target.value as Goal })} />
-          <FormField label="Tự đặt calo/ngày (bỏ trống = dùng gợi ý)" name="customTargetKcal" type="number"
+          <FormField label="Calo tự đặt (không bắt buộc)" name="customTargetKcal" type="number"
             min="1000" max="6000" value={form.customTargetKcal} error={fieldErrors.customTargetKcal}
             onChange={(e) => setForm({ ...form, customTargetKcal: e.target.value })} />
           <Button type="submit" disabled={submitting}>
