@@ -1,35 +1,27 @@
 import { FORMULA_LABELS, MACRO_SPLIT_LABELS } from '../constants/profile';
 import type { EnergyTargets } from '../types/profile';
 import { Alert } from './Alert';
+import { Card } from './Card';
+import { StatTile } from './StatTile';
 
 export function EnergySummary({ energy }: { energy: EnergyTargets }) {
   const custom = energy.targetKcal !== energy.suggestedKcal;
   return (
-    <div className="card">
-      <h3 className="card-title">Mục tiêu mỗi ngày</h3>
+    <Card title="Mục tiêu mỗi ngày">
       {energy.deficitSkippedForMinor && (
         <Alert type="info">
           Bạn dưới 18 tuổi nên MAIFit không trừ calo để giảm cân: cơ thể đang phát triển cần đủ năng lượng. Mục tiêu
           được đặt bằng mức duy trì.
         </Alert>
       )}
-      <div className="stats">
-        <div className="stat">
-          <span className="stat-label">Mục tiêu</span>
-          <strong className="stat-value">{energy.targetKcal} kcal</strong>
-          {custom && <span className="stat-hint">Gợi ý: {energy.suggestedKcal} kcal</span>}
-        </div>
-        <div className="stat">
-          <span className="stat-label">TDEE (duy trì)</span>
-          <strong className="stat-value">{energy.tdee} kcal</strong>
-        </div>
-        <div className="stat">
-          <span className="stat-label">BMR</span>
-          <strong className="stat-value">{energy.bmr} kcal</strong>
-        </div>
+      <div className="mb-2 grid gap-3 sm:grid-cols-3">
+        <StatTile tone="sky" label="Mục tiêu" value={energy.targetKcal} unit="kcal"
+          hint={custom ? `Gợi ý: ${energy.suggestedKcal} kcal` : undefined} />
+        <StatTile tone="lime" label="TDEE (duy trì)" value={energy.tdee} unit="kcal" />
+        <StatTile tone="peach" label="BMR" value={energy.bmr} unit="kcal" />
       </div>
 
-      <table className="table">
+      <table className="mt-4 w-full border-collapse text-sm [&_td]:border-b [&_td]:border-line [&_td]:p-2 [&_th]:border-b [&_th]:border-line [&_th]:p-2 [&_th]:text-left">
         <thead>
           <tr>
             <th>Tỉ lệ (đạm/béo/carb)</th>
@@ -49,9 +41,9 @@ export function EnergySummary({ energy }: { energy: EnergyTargets }) {
           ))}
         </tbody>
       </table>
-      <p className="muted">
+      <p className="text-sm text-muted">
         Công thức BMR: {FORMULA_LABELS[energy.formula]}. Đây là ước tính, chỉ mang tính tham khảo.
       </p>
-    </div>
+    </Card>
   );
 }

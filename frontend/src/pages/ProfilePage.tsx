@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { ApiError } from '../apis/client';
 import { bodyCheckinApi, profileApi } from '../apis/profileApi';
 import { Alert } from '../components/Alert';
 import { BodyCheckinSection } from '../components/BodyCheckinSection';
@@ -10,6 +9,8 @@ import { ACTIVITY_OPTIONS, GOAL_OPTIONS, SEX_OPTIONS } from '../constants/profil
 import { getErrorMessage, getFieldErrors } from '../constants/errorMessages';
 import type { ActivityLevel, Goal, Profile, Sex } from '../types/profile';
 import { optionalNumber } from '../utils/number';
+import { Button } from '../components/Button';
+import { Card } from '../components/Card';
 
 interface FormState {
   sex: Sex;
@@ -43,16 +44,6 @@ function toForm(p: Profile): FormState {
   };
 }
 
-// No profile yet -> null (the page shows the empty onboarding form). Pure: no setState here.
-async function fetchProfile(): Promise<Profile | null> {
-  try {
-    return await profileApi.get();
-  } catch (err) {
-    if (err instanceof ApiError && err.code === 'PROFILE_NOT_FOUND') return null;
-    throw err;
-  }
-}
-
 export default function ProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -66,7 +57,7 @@ export default function ProfilePage() {
   // (react-hooks/set-state-in-effect). `ignore` drops a late response after unmount.
   useEffect(() => {
     let ignore = false;
-    fetchProfile()
+    profileApi.find()
       .then((p) => {
         if (ignore) return;
         setProfile(p);
@@ -87,7 +78,7 @@ export default function ProfilePage() {
   // Called from event handlers only.
   async function reloadProfile(): Promise<Profile | null> {
     try {
-      const p = await fetchProfile();
+      const p = await profileApi.find();
       setProfile(p);
       return p;
     } catch (err) {
@@ -126,23 +117,22 @@ export default function ProfilePage() {
     }
   }
 
-  if (loading) return <p className="muted">Đang tải…</p>;
+  if (loading) return <p className="text-sm text-muted">Đang tải…</p>;
 
   return (
-    <section className="stack">
-      <h2>Hồ sơ của bạn</h2>
+    <section className="grid gap-4">
+      <h2 className="mb-2 text-xl font-semibold">Hồ sơ của bạn</h2>
       {!profile && (
         <Alert type="info">Nhập vài thông tin để MAIFit tính lượng calo phù hợp cho bạn mỗi ngày.</Alert>
       )}
 
       {profile?.energy && <EnergySummary energy={profile.energy} />}
 
-      <div className="card">
-        <h3 className="card-title">Thông tin cơ bản</h3>
+      <Card title="Thông tin cơ bản">
         {error && <Alert type="error">{error}</Alert>}
         {saved && <Alert type="success">Đã lưu hồ sơ.</Alert>}
         <form
-          className="form form-grid"
+          className="grid grid-cols-[repeat(auto-fit,minmax(min(220px,100%),1fr))] items-end gap-3.5"
           onSubmit={(e) => {
             e.preventDefault();
             void handleSubmit();
@@ -166,14 +156,14 @@ export default function ProfilePage() {
             onChange={(e) => setForm({ ...form, activityLevel: e.target.value as ActivityLevel })} />
           <SelectField label="Mục tiêu" name="goal" options={GOAL_OPTIONS} value={form.goal}
             onChange={(e) => setForm({ ...form, goal: e.target.value as Goal })} />
-          <FormField label="Tự đặt calo/ngày (bỏ trống = dùng gợi ý)" name="customTargetKcal" type="number"
+          <FormField label="Calo tự đặt (không bắt buộc)" name="customTargetKcal" type="number"
             min="1000" max="6000" value={form.customTargetKcal} error={fieldErrors.customTargetKcal}
             onChange={(e) => setForm({ ...form, customTargetKcal: e.target.value })} />
-          <button type="submit" className="btn btn-primary" disabled={submitting}>
+          <Button type="submit" disabled={submitting}>
             {submitting ? 'Đang lưu…' : 'Lưu hồ sơ'}
-          </button>
+          </Button>
         </form>
-      </div>
+      </Card>
 
       {/* Check-ins need a profile first, so TDEE can be recomputed right away */}
       {profile && <BodyCheckinSection onChanged={() => void reloadProfile()} />}

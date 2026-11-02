@@ -5,6 +5,7 @@ import { Alert } from '../components/Alert';
 import { FormField } from '../components/FormField';
 import { getErrorMessage, getFieldErrors } from '../constants/errorMessages';
 import { validatePassword, validateUsername } from '../utils/validation';
+import { Button } from '../components/Button';
 
 const EMPTY = { email: '', username: '', displayName: '', password: '', confirmPassword: '' };
 
@@ -55,12 +56,12 @@ export default function RegisterPage() {
   if (registeredEmail) {
     return (
       <>
-        <h2 className="page-title">Kiểm tra email của bạn</h2>
+        <h2 className="mb-5 text-lg font-semibold">Kiểm tra email của bạn</h2>
         <Alert type="success">
           Đã gửi liên kết xác thực tới <strong>{registeredEmail}</strong>. Liên kết có hiệu lực trong 24 giờ.
           Nếu không thấy, hãy kiểm tra cả mục Spam.
         </Alert>
-        <div className="links">
+        <div className="mt-4.5 flex flex-wrap justify-between gap-2 text-sm">
           <Link to="/login">Về trang đăng nhập</Link>
         </div>
       </>
@@ -69,10 +70,10 @@ export default function RegisterPage() {
 
   return (
     <>
-      <h2 className="page-title">Tạo tài khoản</h2>
+      <h2 className="mb-5 text-lg font-semibold">Tạo tài khoản</h2>
       {error && <Alert type="error">{error}</Alert>}
       <form
-        className="form"
+        className="grid gap-3.5"
         onSubmit={(e) => {
           e.preventDefault();
           void handleSubmit();
@@ -89,11 +90,11 @@ export default function RegisterPage() {
         <FormField label="Nhập lại mật khẩu" name="confirmPassword" type="password" autoComplete="new-password" required
           value={form.confirmPassword} error={fieldErrors.confirmPassword}
           onChange={(e) => update('confirmPassword', e.target.value)} />
-        <button type="submit" className="btn btn-primary" disabled={submitting}>
+        <Button type="submit" disabled={submitting}>
           {submitting ? 'Đang tạo tài khoản…' : 'Đăng ký'}
-        </button>
+        </Button>
       </form>
-      <div className="links">
+      <div className="mt-4.5 flex flex-wrap justify-between gap-2 text-sm">
         <span>
           Đã có tài khoản? <Link to="/login">Đăng nhập</Link>
         </span>

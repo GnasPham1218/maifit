@@ -1,9 +1,19 @@
 import type { BodyCheckin, CreateBodyCheckinRequest, Profile, ProfileRequest } from '../types/profile';
-import { api } from './client';
+import { api, ApiError } from './client';
 
 export const profileApi = {
   // Throws ApiError with code PROFILE_NOT_FOUND when the user has not set up a profile yet
   get: () => api<Profile>('/profile'),
+
+  // Same as get, but "no profile yet" -> null instead of an error
+  find: async (): Promise<Profile | null> => {
+    try {
+      return await api<Profile>('/profile');
+    } catch (err) {
+      if (err instanceof ApiError && err.code === 'PROFILE_NOT_FOUND') return null;
+      throw err;
+    }
+  },
 
   save: (data: ProfileRequest) => api<Profile>('/profile', { method: 'PUT', body: data }),
 };

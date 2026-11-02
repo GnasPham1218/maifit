@@ -4,6 +4,7 @@ import { Alert } from '../components/Alert';
 import { FormField } from '../components/FormField';
 import { getErrorMessage } from '../constants/errorMessages';
 import { useAuth } from '../hooks/useAuth';
+import { Button } from '../components/Button';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -30,10 +31,10 @@ export default function LoginPage() {
 
   return (
     <>
-      <h2 className="page-title">Đăng nhập</h2>
+      <h2 className="mb-5 text-lg font-semibold">Đăng nhập</h2>
       {error && <Alert type="error">{error}</Alert>}
       <form
-        className="form"
+        className="grid gap-3.5"
         onSubmit={(e) => {
           e.preventDefault();
           void handleSubmit();
@@ -57,11 +58,11 @@ export default function LoginPage() {
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
-        <button type="submit" className="btn btn-primary" disabled={submitting}>
+        <Button type="submit" disabled={submitting}>
           {submitting ? 'Đang đăng nhập…' : 'Đăng nhập'}
-        </button>
+        </Button>
       </form>
-      <div className="links">
+      <div className="mt-4.5 flex flex-wrap justify-between gap-2 text-sm">
         <Link to="/forgot-password">Quên mật khẩu?</Link>
         <Link to="/register">Tạo tài khoản</Link>
       </div>
