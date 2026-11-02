@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { bodyCheckinApi } from '../apis/profileApi';
 import { getErrorMessage, getFieldErrors } from '../constants/errorMessages';
 import type { BodyCheckin } from '../types/profile';
-import { optionalNumber } from '../utils/number';
+import { formatDelta, formatNumber, optionalNumber } from '../utils/number';
 import { Alert } from './Alert';
 import { FormField } from './FormField';
 import { Button } from './Button';
@@ -24,16 +24,6 @@ function formatTime(iso: string): string {
     hour: '2-digit',
     minute: '2-digit',
   });
-}
-
-// 70.5 -> "70,5" (Vietnamese decimal comma); also hides float noise like 0.30000000000000004
-function formatNumber(n: number): string {
-  return n.toLocaleString('vi-VN', { maximumFractionDigits: 1 });
-}
-
-function formatDelta(n: number): string {
-  const rounded = Math.round(n * 10) / 10;
-  return `${rounded > 0 ? '+' : ''}${formatNumber(rounded)}`;
 }
 
 // Neutral colors on purpose: losing or gaining is "good" depending on the user's goal

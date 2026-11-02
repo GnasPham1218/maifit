@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { ApiError } from '../apis/client';
 import { bodyCheckinApi, profileApi } from '../apis/profileApi';
 import { Alert } from '../components/Alert';
 import { BodyCheckinSection } from '../components/BodyCheckinSection';
@@ -45,16 +44,6 @@ function toForm(p: Profile): FormState {
   };
 }
 
-// No profile yet -> null (the page shows the empty onboarding form). Pure: no setState here.
-async function fetchProfile(): Promise<Profile | null> {
-  try {
-    return await profileApi.get();
-  } catch (err) {
-    if (err instanceof ApiError && err.code === 'PROFILE_NOT_FOUND') return null;
-    throw err;
-  }
-}
-
 export default function ProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -68,7 +57,7 @@ export default function ProfilePage() {
   // (react-hooks/set-state-in-effect). `ignore` drops a late response after unmount.
   useEffect(() => {
     let ignore = false;
-    fetchProfile()
+    profileApi.find()
       .then((p) => {
         if (ignore) return;
         setProfile(p);
@@ -89,7 +78,7 @@ export default function ProfilePage() {
   // Called from event handlers only.
   async function reloadProfile(): Promise<Profile | null> {
     try {
-      const p = await fetchProfile();
+      const p = await profileApi.find();
       setProfile(p);
       return p;
     } catch (err) {
