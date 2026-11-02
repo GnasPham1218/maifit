@@ -18,7 +18,14 @@ public enum ErrorCode {
     USERNAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "Username is already taken"),
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "Invalid email or password"),
     EMAIL_NOT_VERIFIED(HttpStatus.FORBIDDEN, "Please verify your email before signing in"),
-    INVALID_TOKEN(HttpStatus.BAD_REQUEST, "The link is invalid or has expired");
+    INVALID_TOKEN(HttpStatus.BAD_REQUEST, "The link is invalid or has expired"),
+
+    // ---- Profile & body ----
+    PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "Profile has not been set up yet"),
+    AGE_OUT_OF_RANGE(HttpStatus.BAD_REQUEST, "Age must be between 13 and 100"),
+    CHECKIN_IN_FUTURE(HttpStatus.BAD_REQUEST, "Check-in time cannot be in the future"),
+    INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "Invalid date range (max 366 days)");
+
     private final HttpStatus status;
     private final String defaultMessage;
     ErrorCode(HttpStatus status, String defaultMessage){

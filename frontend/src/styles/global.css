@@ -29,9 +29,9 @@ a { color: var(--primary); }
 .form { display: grid; gap: 14px; }
 .field { display: grid; gap: 6px; }
 .field label { font-size: 0.9rem; font-weight: 600; }
-.field input { font: inherit; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; }
-.field input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
-.field input[aria-invalid='true'] { border-color: var(--danger-text); }
+.field input, .field select { font: inherit; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; }
+.field input:focus, .field select:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+.field input[aria-invalid='true'], .field select[aria-invalid='true'] { border-color: var(--danger-text); }
 .field-error { margin: 0; font-size: 0.85rem; color: var(--danger-text); }
 
 .btn { font: inherit; font-weight: 600; padding: 10px 14px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; }
@@ -50,3 +50,22 @@ a { color: var(--primary); }
 
 .app-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: var(--surface); border-bottom: 1px solid var(--border); }
 .app-main { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+
+/* App pages */
+.nav { display: flex; align-items: center; gap: 16px; }
+.nav .brand { margin: 0; }
+.nav a { text-decoration: none; color: var(--muted); font-weight: 600; }
+.nav a.active { color: var(--primary); }
+.stack { display: grid; gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.card-title { margin: 0 0 14px; font-size: 1.05rem; }
+.form-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); align-items: end; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 12px; }
+.stat { display: grid; gap: 2px; padding: 12px; border-radius: 8px; background: var(--bg); }
+.stat-label { font-size: 0.85rem; color: var(--muted); }
+.stat-value { font-size: 1.25rem; }
+.stat-hint { font-size: 0.8rem; color: var(--muted); }
+.muted { color: var(--muted); font-size: 0.9rem; }
+.table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.92rem; }
+.table th, .table td { text-align: left; padding: 8px; border-bottom: 1px solid var(--border); }
+.btn-small { padding: 4px 10px; font-size: 0.85rem; }
