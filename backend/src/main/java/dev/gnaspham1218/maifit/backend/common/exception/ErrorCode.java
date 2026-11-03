@@ -24,7 +24,13 @@ public enum ErrorCode {
     PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "Profile has not been set up yet"),
     AGE_OUT_OF_RANGE(HttpStatus.BAD_REQUEST, "Age must be between 13 and 100"),
     CHECKIN_IN_FUTURE(HttpStatus.BAD_REQUEST, "Check-in time cannot be in the future"),
-    INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "Invalid date range (max 366 days)");
+    INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "Invalid date range (max 366 days)"),
+
+    // ---- Meals ----
+    FOOD_NOT_FOUND(HttpStatus.BAD_REQUEST, "One or more foods do not exist"),
+    MEAL_IN_FUTURE(HttpStatus.BAD_REQUEST, "Meal time cannot be in the future"),
+    MEAL_ITEMS_LIMIT(HttpStatus.BAD_REQUEST, "A meal can have at most 30 items"),
+    MEAL_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "At most 10 meals can be logged per day");
 
     private final HttpStatus status;
     private final String defaultMessage;

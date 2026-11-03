@@ -6,6 +6,7 @@ import MainLayout from './layouts/MainLayout';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import MealsPage from './pages/MealsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
           { path: '/', element: <HomePage /> },
+          { path: '/meals', element: <MealsPage /> },
           { path: '/profile', element: <ProfilePage /> },
         ],
       },

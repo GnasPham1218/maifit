@@ -19,6 +19,10 @@ const MESSAGES: Record<string, string> = {
   AGE_OUT_OF_RANGE: 'Tuổi phải từ 13 đến 100.',
   CHECKIN_IN_FUTURE: 'Thời gian ghi không được ở tương lai.',
   INVALID_DATE_RANGE: 'Khoảng ngày không hợp lệ (tối đa 366 ngày).',
+  FOOD_NOT_FOUND: 'Món ăn không có trong danh sách. Hãy tải lại trang.',
+  MEAL_IN_FUTURE: 'Thời gian ăn không được ở tương lai.',
+  MEAL_ITEMS_LIMIT: 'Mỗi bữa có tối đa 30 món.',
+  MEAL_DAILY_LIMIT: 'Mỗi ngày chỉ ghi được tối đa 10 bữa.',
 };
 
 export function getErrorMessage(error: unknown): string {
@@ -39,6 +43,7 @@ const FIELD_LABELS: Record<string, string> = {
   waistCm: 'Vòng eo',
   customTargetKcal: 'Calo tự đặt',
   note: 'Ghi chú',
+  grams: 'Số gram',
 };
 
 // Field-level messages for forms (VALIDATION_FAILED from the backend)
