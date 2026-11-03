@@ -1,0 +1,11 @@
+package dev.gnaspham1218.maifit.backend.food.repository;
+
+import dev.gnaspham1218.maifit.backend.food.entity.Food;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface FoodRepository extends JpaRepository<Food, Long> {
+
+    List<Food> findAllByOrderByNameAscPreparationAsc();
+}
