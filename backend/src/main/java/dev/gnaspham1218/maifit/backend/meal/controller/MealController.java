@@ -5,6 +5,7 @@ import dev.gnaspham1218.maifit.backend.meal.dto.CreateMealRequest;
 import dev.gnaspham1218.maifit.backend.meal.dto.DailyMealsResponse;
 import dev.gnaspham1218.maifit.backend.meal.dto.MealItemRequest;
 import dev.gnaspham1218.maifit.backend.meal.dto.MealResponse;
+import dev.gnaspham1218.maifit.backend.meal.dto.MonthlySummaryResponse;
 import dev.gnaspham1218.maifit.backend.meal.dto.UpdateMealItemRequest;
 import dev.gnaspham1218.maifit.backend.meal.service.MealService;
 import jakarta.validation.Valid;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 @RestController
 @RequestMapping("/meals") // full path: /api/meals
@@ -46,6 +48,14 @@ public class MealController {
             @AuthenticationPrincipal Jwt jwt,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return ApiResponse.ok(service.listDay(userId(jwt), date));
+    }
+
+    // GET /api/meals/summary?month=2026-11 (default: this month): kcal per day, for the calendar + chart
+    @GetMapping("/summary")
+    public ApiResponse<MonthlySummaryResponse> monthlySummary(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth month) {
+        return ApiResponse.ok(service.monthlySummary(userId(jwt), month));
     }
 
     @PostMapping("/{mealId}/items")

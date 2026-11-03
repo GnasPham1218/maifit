@@ -6,9 +6,11 @@ import dev.gnaspham1218.maifit.backend.common.time.AppTime;
 import dev.gnaspham1218.maifit.backend.food.entity.Food;
 import dev.gnaspham1218.maifit.backend.food.repository.FoodRepository;
 import dev.gnaspham1218.maifit.backend.meal.dto.CreateMealRequest;
+import dev.gnaspham1218.maifit.backend.meal.dto.DailyKcal;
 import dev.gnaspham1218.maifit.backend.meal.dto.DailyMealsResponse;
 import dev.gnaspham1218.maifit.backend.meal.dto.MealItemRequest;
 import dev.gnaspham1218.maifit.backend.meal.dto.MealResponse;
+import dev.gnaspham1218.maifit.backend.meal.dto.MonthlySummaryResponse;
 import dev.gnaspham1218.maifit.backend.meal.dto.UpdateMealItemRequest;
 import dev.gnaspham1218.maifit.backend.meal.entity.MealItem;
 import dev.gnaspham1218.maifit.backend.meal.entity.MealLog;
@@ -18,9 +20,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -66,6 +70,18 @@ public class MealService {
         return new DailyMealsResponse(day,
                 NutritionCalculator.sum(meals.stream().map(MealResponse::totals).toList()),
                 meals);
+    }
+
+    // month = calendar month in Vietnam time, default this month
+    @Transactional(readOnly = true)
+    public MonthlySummaryResponse monthlySummary(Long userId, YearMonth month) {
+        YearMonth m = month != null ? month : YearMonth.now(AppTime.ZONE);
+        Instant from = m.atDay(1).atStartOfDay(AppTime.ZONE).toInstant();
+        Instant to = m.plusMonths(1).atDay(1).atStartOfDay(AppTime.ZONE).toInstant(); // exclusive
+        List<DailyKcal> days = mealRepository.sumKcalPerDay(userId, from, to, AppTime.ZONE.getId()).stream()
+                .map(row -> new DailyKcal(toLocalDate(row[0]), (BigDecimal) row[1]))
+                .toList();
+        return new MonthlySummaryResponse(m.toString(), days);
     }
 
     @Transactional
@@ -135,6 +151,11 @@ public class MealService {
             throw new AppException(ErrorCode.FOOD_NOT_FOUND);
         }
         return foods;
+    }
+
+    // The JDBC driver may return a DATE column as java.sql.Date or LocalDate depending on the version
+    private static LocalDate toLocalDate(Object value) {
+        return value instanceof java.sql.Date d ? d.toLocalDate() : (LocalDate) value;
     }
 
     private static Instant resolveEatenAt(Instant requested) {
