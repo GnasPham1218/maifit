@@ -89,7 +89,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
   }
 
   // "Dùng ảnh gốc": no crop, just shrink like before
-  async function useOriginal() {
+  async function analyzeOriginal() {
     const file = pendingFile.current;
     if (!file) return;
     try {
@@ -224,7 +224,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
 
       {status === 'cropping' && preview && (
         <PhotoCropper src={preview} onConfirm={(square) => void analyze(square)}
-          onUseOriginal={() => void useOriginal()} onCancel={pickAgain} onLoadError={cropFailed} />
+          onUseOriginal={() => void analyzeOriginal()} onCancel={pickAgain} onLoadError={cropFailed} />
       )}
 
       {preview && (status === 'analyzing' || status === 'review') && (
