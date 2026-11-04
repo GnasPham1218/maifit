@@ -1,4 +1,4 @@
-import type { Food, FoodSuggestion } from '../types/meal';
+import type { Food, FoodRequestResponse, FoodSuggestion } from '../types/meal';
 import { api } from './client';
 
 // The food list only changes when a new migration is deployed, so it is fetched ONCE per page load
@@ -20,4 +20,8 @@ export const foodApi = {
   // Fuzzy search on the server (trigram + aliases): only called when the local search finds nothing
   suggest: (q: string): Promise<FoodSuggestion[]> =>
     api<FoodSuggestion[]>(`/foods/search?q=${encodeURIComponent(q)}`),
+
+  // "Báo thiếu món": the same name reported twice, or by many users, stays one row on the server
+  reportMissing: (name: string): Promise<FoodRequestResponse> =>
+    api<FoodRequestResponse>('/food-requests', { method: 'POST', body: { name } }),
 };

@@ -23,6 +23,7 @@ const MESSAGES: Record<string, string> = {
   MEAL_IN_FUTURE: 'Thời gian ăn không được ở tương lai.',
   MEAL_ITEMS_LIMIT: 'Mỗi bữa có tối đa 30 món.',
   MEAL_DAILY_LIMIT: 'Mỗi ngày chỉ ghi được tối đa 10 bữa.',
+  FOOD_REQUEST_DAILY_LIMIT: 'Hôm nay bạn đã báo đủ 5 món thiếu. Ngày mai bạn báo tiếp nhé.',
   AI_DAILY_LIMIT: 'Bạn đã dùng hết lượt nhận diện ảnh hôm nay. Hãy thêm món thủ công hoặc thử lại vào ngày mai.',
   AI_UNAVAILABLE: 'Dịch vụ AI đang bận, chưa nhận diện được. Lượt này không bị trừ, bạn thử lại sau nhé.',
   IMAGE_INVALID: 'Chỉ nhận ảnh JPEG, PNG hoặc WebP, tối đa 2 MB.',

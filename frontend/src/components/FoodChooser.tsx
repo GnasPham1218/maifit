@@ -4,6 +4,7 @@ import { PREPARATIONS, WEIGHED_WHEN_LABELS } from '../constants/meal';
 import type { Food } from '../types/meal';
 import { normalize } from '../utils/text';
 import { FormField } from './FormField';
+import { ReportMissingFood } from './ReportMissingFood';
 
 interface Props {
   foods: Food[];
@@ -87,21 +88,27 @@ export function FoodChooser({ foods, idPrefix, autoFocus, initialQuery = '', onC
           <p className="text-sm text-muted">Gõ ít nhất 2 chữ để tìm.</p>
         ) : suggestions == null ? (
           <p className="text-sm text-muted" role="status">Đang tìm món gần giống…</p>
-        ) : suggestions.length === 0 ? (
-          <p className="text-sm text-muted">Chưa có món này trong danh sách.</p>
         ) : (
-          <div className="grid gap-2">
-            <p className="text-sm text-ink-soft">
-              Chưa có đúng “{query.trim()}”. Món gần giống (chọn món gần nhất, calo sẽ là số xấp xỉ):
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {suggestions.map((n) => (
-                <button key={n} type="button" className={chipClass(n === name)} aria-pressed={n === name}
-                  onClick={() => pickName(n)}>
-                  {n}
-                </button>
-              ))}
-            </div>
+          <div className="grid gap-3">
+            {suggestions.length === 0 ? (
+              <p className="text-sm text-muted">Chưa có món này trong danh sách.</p>
+            ) : (
+              <div className="grid gap-2">
+                <p className="text-sm text-ink-soft">
+                  Chưa có đúng “{query.trim()}”. Món gần giống (chọn món gần nhất, calo sẽ là số xấp xỉ):
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {suggestions.map((n) => (
+                    <button key={n} type="button" className={chipClass(n === name)} aria-pressed={n === name}
+                      onClick={() => pickName(n)}>
+                      {n}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* key: a new search gets a fresh button instead of the previous result */}
+            <ReportMissingFood key={q} name={query} />
           </div>
         )
       )}

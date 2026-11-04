@@ -9,6 +9,7 @@ import dev.gnaspham1218.maifit.backend.food.entity.Food;
 import dev.gnaspham1218.maifit.backend.food.entity.Preparation;
 import dev.gnaspham1218.maifit.backend.food.repository.FoodRepository;
 import dev.gnaspham1218.maifit.backend.food.service.FoodMatcher;
+import dev.gnaspham1218.maifit.backend.food.service.FoodRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
@@ -68,13 +69,15 @@ public class FoodVisionService {
     private final FoodRepository foodRepository;
     private final FoodMatcher foodMatcher;
     private final AiUsageService aiUsageService;
+    private final FoodRequestService foodRequestService;
 
     public FoodVisionService(ChatModel chatModel, FoodRepository foodRepository, FoodMatcher foodMatcher,
-                             AiUsageService aiUsageService) {
+                             AiUsageService aiUsageService, FoodRequestService foodRequestService) {
         this.chatClient = ChatClient.builder(chatModel).build();
         this.foodRepository = foodRepository;
         this.foodMatcher = foodMatcher;
         this.aiUsageService = aiUsageService;
+        this.foodRequestService = foodRequestService;
     }
 
     /**
@@ -108,7 +111,17 @@ public class FoodVisionService {
         }
 
         // 4. Map names to OUR table (outside the try: a DB bug must not refund nor hide as "AI unavailable")
-        return mapToFoods(raw, remaining);
+        RecognizeResponse response = mapToFoods(raw, remaining);
+
+        // 5. Remember what the AI saw but we do not have, to grow the foods table (best effort)
+        if (!response.unmatched().isEmpty()) {
+            try {
+                foodRequestService.recordAiMisses(response.unmatched());
+            } catch (RuntimeException e) {
+                log.warn("Could not record unmatched foods", e);
+            }
+        }
+        return response;
     }
 
     // ---- helpers ----

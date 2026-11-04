@@ -31,6 +31,7 @@ public enum ErrorCode {
     MEAL_IN_FUTURE(HttpStatus.BAD_REQUEST, "Meal time cannot be in the future"),
     MEAL_ITEMS_LIMIT(HttpStatus.BAD_REQUEST, "A meal can have at most 30 items"),
     MEAL_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "At most 10 meals can be logged per day"),
+    FOOD_REQUEST_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "Daily limit for reporting missing foods reached"),
 
     // ---- AI ----
     AI_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "Daily AI usage limit reached"),

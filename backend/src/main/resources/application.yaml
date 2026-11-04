@@ -49,6 +49,8 @@ management:
     mail:
       enabled: false   # otherwise /health connects to Gmail on every check and turns DOWN if Gmail is slow
 app:
+  food-request:
+    daily-limit: 5   # "Báo thiếu món": distinct names per user per day (Vietnam time)
   jwt:
     secret: ${JWT_SECRET}      # Base64, >= 32 bytes; only in .env / GitHub Secrets
     issuer: maifit

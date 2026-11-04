@@ -21,6 +21,12 @@ export interface FoodSuggestion {
   score: number; // 0..1
 }
 
+// POST /food-requests ("Báo thiếu món")
+export interface FoodRequestResponse {
+  result: 'RECORDED' | 'ALREADY_REPORTED' | 'FOOD_EXISTS';
+  remainingToday: number;
+}
+
 export interface Nutrition {
   kcal: number;
   proteinG: number | null;
