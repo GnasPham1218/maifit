@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { getErrorMessage } from '../constants/errorMessages';
 import { MEAL_TYPE_LABELS } from '../constants/meal';
 import type { Food, MealType } from '../types/meal';
@@ -7,6 +7,7 @@ import { edibleHint, leanHint } from '../utils/edible';
 import { formatNumber } from '../utils/number';
 import { kcalFor, nutritionFor, parseGrams } from '../utils/nutrition';
 import { Button } from './Button';
+import { FatTrimSlider } from './FatTrimSlider';
 import { FoodChooser } from './FoodChooser';
 import { FormField } from './FormField';
 import { MacroLine } from './MacroLine';
@@ -14,7 +15,7 @@ import { MacroLine } from './MacroLine';
 interface Props {
   mealType: MealType;
   foods: Food[] | null; // null while loading
-  onAdd: (foodId: number, grams: number) => Promise<void>;
+  onAdd: (foodId: number, grams: number, fatPercent: number | null) => Promise<void>;
   onClose: () => void;
 }
 
@@ -22,17 +23,21 @@ interface Props {
 export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
   const [food, setFood] = useState<Food | null>(null);
   const [grams, setGrams] = useState('');
+  const [fatPercent, setFatPercent] = useState(100); // 100 = as listed (mua về, chưa lọc mỡ)
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   const parsed = parseGrams(grams);
+  const foodsById = useMemo(() => new Map((foods ?? []).map((f) => [f.id, f])), [foods]);
+  const leanFood = food?.leanVersionId != null ? foodsById.get(food.leanVersionId) : undefined;
+  const trim = food?.leanVersionId && leanFood ? { leanFood, fatPercent } : undefined;
 
   async function handleSubmit() {
     if (!food || parsed == null) return;
     setError(null);
     setBusy(true);
     try {
-      await onAdd(food.id, parsed); // the parent closes the picker on success
+      await onAdd(food.id, parsed, trim ? fatPercent : null); // the parent closes the picker on success
     } catch (err) {
       setError(getErrorMessage(err));
       setBusy(false);
@@ -54,7 +59,7 @@ export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
       ) : (
         <>
           <FoodChooser foods={foods} idPrefix={`food-${mealType}`} autoFocus
-            onChange={(f) => { setFood(f); setError(null); }} />
+            onChange={(f) => { setFood(f); setFatPercent(100); setError(null); }} />
 
           {food && (
             <form className="flex flex-wrap items-end gap-3"
@@ -65,7 +70,7 @@ export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
                   error={grams !== '' && parsed == null ? 'Từ 0,1 đến 5000 g' : undefined} />
               </div>
               <p className="pb-2.5 text-lg font-light">
-                {parsed != null ? `≈ ${formatNumber(kcalFor(food, parsed))}` : '—'}{' '}
+                {parsed != null ? `≈ ${formatNumber(kcalFor(food, parsed, trim))}` : '—'}{' '}
                 <span className="text-sm text-muted">kcal</span>
               </p>
               <Button type="submit" disabled={busy || parsed == null} className="mb-0.5">
@@ -73,7 +78,11 @@ export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
               </Button>
             </form>
           )}
-          {food && parsed != null && <MacroLine nutrition={nutritionFor(food, parsed)} />}
+          {food && parsed != null && <MacroLine nutrition={nutritionFor(food, parsed, trim)} />}
+          {trim && (
+            <FatTrimSlider id={`fat-trim-new-${mealType}`} food={food!} leanFood={leanFood!}
+              value={fatPercent} onChange={setFatPercent} />
+          )}
           {food && edibleHint(food) && <p className="text-xs text-ink-soft">{edibleHint(food)}</p>}
           {food && leanHint(food) && <p className="text-xs text-ink-soft">{leanHint(food)}</p>}
           {/* USDA measures fried foods AFTER frying, so the absorbed oil is already counted */}

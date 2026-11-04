@@ -52,7 +52,9 @@ public class MealService {
 
         MealLog meal = new MealLog(userId, eatenAt, req.mealType());
         for (MealItemRequest item : req.items()) {
-            meal.addItem(foods.get(item.foodId()), item.grams(), item.aiGrams()); // aiGrams null = typed by hand
+            Food food = foods.get(item.foodId());
+            checkFatPercent(food, item.fatPercent());
+            meal.addItem(food, item.grams(), item.aiGrams(), item.fatPercent()); // aiGrams null = typed by hand
         }
         return mapper.toResponse(mealRepository.save(meal)); // cascade inserts the items
     }
@@ -92,7 +94,8 @@ public class MealService {
         }
         Food food = foodRepository.findById(req.foodId())
                 .orElseThrow(() -> new AppException(ErrorCode.FOOD_NOT_FOUND));
-        meal.addItem(food, req.grams(), req.aiGrams());
+        checkFatPercent(food, req.fatPercent());
+        meal.addItem(food, req.grams(), req.aiGrams(), req.fatPercent());
         // flush now so the new item gets its id before we build the response
         return mapper.toResponse(mealRepository.saveAndFlush(meal));
     }
@@ -100,7 +103,10 @@ public class MealService {
     @Transactional
     public MealResponse updateItemGrams(Long userId, Long mealId, Long itemId, UpdateMealItemRequest req) {
         MealLog meal = findOwned(userId, mealId);
-        findItem(meal, itemId).changeGrams(req.grams()); // saved by dirty checking at commit
+        MealItem item = findItem(meal, itemId);
+        checkFatPercent(item.getFood(), req.fatPercent());
+        item.changeGrams(req.grams());
+        item.changeFatPercent(req.fatPercent()); // saved by dirty checking at commit
         return mapper.toResponse(meal);
     }
 
@@ -140,6 +146,13 @@ public class MealService {
 
     private static MealItem findItem(MealLog meal, Long itemId) {
         return meal.findItem(itemId).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+    }
+
+    // fatPercent only makes sense for a food that has a lean/fat pair (V11)
+    private static void checkFatPercent(Food food, Integer fatPercent) {
+        if (fatPercent != null && food.getLeanVersion() == null) {
+            throw new AppException(ErrorCode.FAT_PERCENT_NOT_APPLICABLE);
+        }
     }
 
     // One query for all foods of the request; any unknown id -> 400

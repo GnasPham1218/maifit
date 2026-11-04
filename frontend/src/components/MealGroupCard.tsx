@@ -12,7 +12,7 @@ interface Props {
   foodsById: Map<number, Food>;
   editingItemId: number | null;
   onEdit: (itemId: number | null) => void;
-  onSaveGrams: (meal: Meal, item: MealItem, grams: number) => Promise<void>;
+  onSaveGrams: (meal: Meal, item: MealItem, grams: number, fatPercent: number | null) => Promise<void>;
   onRemoveItem: (meal: Meal, item: MealItem) => Promise<void>;
   onAddClick: () => void;
   onPhotoClick: () => void;
@@ -81,7 +81,11 @@ export function MealGroupCard(props: Props) {
                 <MealItemEditor
                   item={item}
                   food={foodsById.get(item.foodId)}
-                  onSave={(grams) => onSaveGrams(meal, item, grams)}
+                  leanFood={(() => {
+                    const leanId = foodsById.get(item.foodId)?.leanVersionId;
+                    return leanId != null ? foodsById.get(leanId) : undefined;
+                  })()}
+                  onSave={(grams, fatPercent) => onSaveGrams(meal, item, grams, fatPercent)}
                   onRemove={() => onRemoveItem(meal, item)}
                   onCancel={() => onEdit(null)}
                 />

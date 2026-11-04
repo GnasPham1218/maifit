@@ -110,12 +110,12 @@ export default function MealsPage() {
   }
 
   // One meal per meal type and day: add to it if it exists, otherwise create it
-  async function addFood(mealType: MealType, foodId: number, grams: number) {
+  async function addFood(mealType: MealType, foodId: number, grams: number, fatPercent: number | null) {
     const existing = day?.meals.find((m) => m.mealType === mealType);
     if (existing) {
-      await mealApi.addItem(existing.id, { foodId, grams });
+      await mealApi.addItem(existing.id, { foodId, grams, fatPercent });
     } else {
-      await mealApi.create({ mealType, eatenAt: eatenAtFor(date, mealType), items: [{ foodId, grams }] });
+      await mealApi.create({ mealType, eatenAt: eatenAtFor(date, mealType), items: [{ foodId, grams, fatPercent }] });
     }
     await reload();
     setPickerFor(null);
@@ -134,8 +134,8 @@ export default function MealsPage() {
     setPhotoFor(null);
   }
 
-  async function saveGrams(meal: Meal, item: MealItem, grams: number) {
-    await mealApi.updateItemGrams(meal.id, item.id, grams);
+  async function saveGrams(meal: Meal, item: MealItem, grams: number, fatPercent: number | null) {
+    await mealApi.updateItemGrams(meal.id, item.id, grams, fatPercent);
     await reload();
     setEditingItemId(null);
   }
@@ -218,7 +218,7 @@ export default function MealsPage() {
                     <FoodPicker
                       mealType={type}
                       foods={foods}
-                      onAdd={(foodId, grams) => addFood(type, foodId, grams)}
+                      onAdd={(foodId, grams, fatPercent) => addFood(type, foodId, grams, fatPercent)}
                       onClose={() => setPickerFor(null)}
                     />
                   ) : photoFor === type && !loading ? (

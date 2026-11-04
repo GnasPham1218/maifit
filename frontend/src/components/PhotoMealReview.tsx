@@ -7,11 +7,12 @@ import type { Food, MealItemRequest, MealType, Preparation } from '../types/meal
 import { resizeForUpload } from '../utils/image';
 import { edibleHint, leanHint } from '../utils/edible';
 import { formatNumber } from '../utils/number';
-import { kcalFor, nutritionFor, parseGrams, sumNutrition } from '../utils/nutrition';
+import { kcalFor, nutritionFor, parseGrams, sumNutrition, type FatTrim } from '../utils/nutrition';
 import { normalize } from '../utils/text';
 import { Button } from './Button';
 import { FoodChooser } from './FoodChooser';
 import { FormField } from './FormField';
+import { FatTrimSlider } from './FatTrimSlider';
 import { MacroLine } from './MacroLine';
 import { PhotoCropper } from './PhotoCropper';
 
@@ -34,6 +35,7 @@ interface Row {
   aiName: string | null; // what the AI saw ("cơm trắng"); null for a food added by hand
   lowConfidence: boolean; // weak match: shown with a "Kiểm tra lại" badge until the user changes the food
   grams: string; // what the user sees and edits
+  fatPercent: number; // 0-100; only used when the row's food has leanVersionId, else ignored
 }
 
 // Which row the food chooser is open for: a row key, 'new' for "add a missed food", or none
@@ -121,6 +123,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
         aiName: item.aiName,
         lowConfidence: item.lowConfidence,
         grams: String(item.grams),
+        fatPercent: 100, // as listed; the AI cannot tell lean from fatty in a photo
       })));
       setUnmatched(result.unmatched);
       setStatus('review');
@@ -134,10 +137,15 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
   const parsed = rows.map((r) => parseGrams(r.grams));
   const allValid = rows.length > 0 && parsed.every((g) => g != null);
   // Rows with invalid grams are left out of the total until fixed
+  const trimFor = (row: Row): FatTrim | undefined => {
+    const food = foodsById.get(row.foodId);
+    const leanFood = food?.leanVersionId != null ? foodsById.get(food.leanVersionId) : undefined;
+    return leanFood ? { leanFood, fatPercent: row.fatPercent } : undefined;
+  };
   const { total, incomplete } = sumNutrition(rows.flatMap((r, i) => {
     const food = foodsById.get(r.foodId);
     const g = parsed[i];
-    return food && g != null ? [nutritionFor(food, g)] : [];
+    return food && g != null ? [nutritionFor(food, g, trimFor(r))] : [];
   }));
 
   async function handleSave() {
@@ -145,7 +153,12 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
     setError(null);
     setBusy(true);
     try {
-      await onSave(rows.map((r, i) => ({ foodId: r.foodId, grams: parsed[i]!, aiGrams: r.aiGrams })));
+      await onSave(rows.map((r, i) => ({
+        foodId: r.foodId,
+        grams: parsed[i]!,
+        aiGrams: r.aiGrams,
+        fatPercent: trimFor(r) ? r.fatPercent : null,
+      })));
       // the parent closes the panel on success
     } catch (err) {
       setError(getErrorMessage(err));
@@ -164,7 +177,10 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
   // Wrong food: keep the grams (the portion is still on the plate), drop the AI estimate
   function changeFood(key: number, food: Food) {
     setRows(rows.map((r) => (r.key === key
-      ? { ...r, foodId: food.id, name: food.name, preparation: food.preparation, aiGrams: null, lowConfidence: false }
+      ? {
+          ...r, foodId: food.id, name: food.name, preparation: food.preparation,
+          aiGrams: null, lowConfidence: false, fatPercent: 100,
+        }
       : r)));
     setChoosing(null);
   }
@@ -175,7 +191,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
     const forUnmatched = unmatched.includes(newQuery) ? newQuery : null;
     setRows([...rows, {
       key, foodId: food.id, name: food.name, preparation: food.preparation,
-      aiGrams: null, aiName: forUnmatched, lowConfidence: false, grams: '',
+      aiGrams: null, aiName: forUnmatched, lowConfidence: false, grams: '', fatPercent: 100,
     }]);
     if (forUnmatched) setUnmatched(unmatched.filter((n) => n !== forUnmatched)); // handled
     setChoosing(null);
@@ -310,11 +326,16 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
                           error={g == null ? '0,1–5000 g' : undefined} />
                       </div>
                       <p className="pb-2.5 text-lg font-light">
-                        {food && g != null ? `≈ ${formatNumber(kcalFor(food, g))}` : '—'}{' '}
+                        {food && g != null ? `≈ ${formatNumber(kcalFor(food, g, trimFor(row)))}` : '—'}{' '}
                         <span className="text-sm text-muted">kcal</span>
                       </p>
                     </div>
-                    {food && g != null && <MacroLine nutrition={nutritionFor(food, g)} />}
+                    {food && g != null && <MacroLine nutrition={nutritionFor(food, g, trimFor(row))} />}
+                    {food?.leanVersionId != null && foodsById.get(food.leanVersionId) && (
+                      <FatTrimSlider id={`photo-fat-trim-${row.key}`} food={food} leanFood={foodsById.get(food.leanVersionId)!}
+                        value={row.fatPercent}
+                        onChange={(v) => setRows(rows.map((r) => (r.key === row.key ? { ...r, fatPercent: v } : r)))} />
+                    )}
                     {food && edibleHint(food) && <p className="text-xs text-ink-soft">{edibleHint(food)}</p>}
                     {food && leanHint(food) && <p className="text-xs text-ink-soft">{leanHint(food)}</p>}
 

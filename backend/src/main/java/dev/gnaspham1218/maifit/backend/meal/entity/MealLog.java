@@ -65,9 +65,10 @@ public class MealLog {
         this.createdAt = Instant.now();
     }
 
-    // aiGrams: the AI's original estimate (photo flow), null when entered by hand
-    public MealItem addItem(Food food, BigDecimal grams, BigDecimal aiGrams) {
-        MealItem item = new MealItem(this, food, grams, aiGrams);
+    // aiGrams: the AI's original estimate (photo flow), null when entered by hand.
+    // fatPercent: 0-100 fat-trim ratio (V11), null for foods without a lean/fat pair.
+    public MealItem addItem(Food food, BigDecimal grams, BigDecimal aiGrams, Integer fatPercent) {
+        MealItem item = new MealItem(this, food, grams, aiGrams, fatPercent);
         items.add(item);
         return item;
     }

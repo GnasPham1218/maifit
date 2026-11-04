@@ -21,8 +21,8 @@ export const mealApi = {
   addItem: (mealId: number, data: MealItemRequest) =>
     api<Meal>(`/meals/${mealId}/items`, { method: 'POST', body: data }),
 
-  updateItemGrams: (mealId: number, itemId: number, grams: number) =>
-    api<Meal>(`/meals/${mealId}/items/${itemId}`, { method: 'PATCH', body: { grams } }),
+  updateItemGrams: (mealId: number, itemId: number, grams: number, fatPercent?: number | null) =>
+    api<Meal>(`/meals/${mealId}/items/${itemId}`, { method: 'PATCH', body: { grams, fatPercent } }),
 
   // Removing the last item deletes the meal on the backend
   removeItem: (mealId: number, itemId: number) =>

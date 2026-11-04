@@ -13,6 +13,7 @@ export interface Food {
   fatG: number | null;
   fiberG: number | null;
   source: string;
+  leanVersionId: number | null; // non-null -> this food can be logged with a 0-100 fat-trim slider
 }
 
 // GET /foods/search: a close food name when the local search finds nothing
@@ -42,6 +43,8 @@ export interface MealItem {
   preparation: Preparation;
   grams: number;
   aiGrams: number | null; // the AI's original estimate (photo flow); null when typed by hand
+  fatPercent: number | null; // 0-100 fat-trim ratio (V11); null = food logged as listed
+  leanVersionId: number | null; // mirrors Food.leanVersionId, so the row knows to offer the slider
   nutrition: Nutrition; // for these grams
 }
 
@@ -63,6 +66,7 @@ export interface MealItemRequest {
   foodId: number;
   grams: number;
   aiGrams?: number | null; // the AI's estimate when the item came from a photo
+  fatPercent?: number | null; // 0-100, only when the food has a leanVersionId
 }
 
 // POST /meals/recognize: suggestions only, nothing is saved yet.

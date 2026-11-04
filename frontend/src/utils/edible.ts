@@ -18,12 +18,12 @@ export function edibleHint(food: Food): string | null {
   return null;
 }
 
-// Rib rows WITH fat -> the lean-only row to pick when the fat is trimmed before eating (V10).
-// "Sườn heo" (spareribs) has no lean-only USDA row, so it points to the lean loin ribs.
+// "Sườn heo" (spareribs) has no lean-only USDA row (V10/V11), so trimming the fat means
+// switching food entirely, not sliding a ratio. Sườn thăn heo / Sườn lưng heo DO have a real
+// lean-only row each (food.leanVersionId, V11) and get an actual 0-100% slider instead -
+// see FatTrimSlider, so they are not in this map.
 const LEAN_VERSION: Record<string, string> = {
   'suon heo': 'Sườn thăn heo nạc',
-  'suon than heo': 'Sườn thăn heo nạc',
-  'suon lung heo': 'Sườn lưng heo nạc',
 };
 
 export function leanHint(food: Food): string | null {

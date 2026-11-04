@@ -14,6 +14,7 @@ public record FoodResponse(
         BigDecimal carbG,
         BigDecimal fatG,
         BigDecimal fiberG,
-        String source
+        String source,
+        Long leanVersionId // non-null -> this food can be logged with a 0-100 fat-trim slider
 ) {
 }

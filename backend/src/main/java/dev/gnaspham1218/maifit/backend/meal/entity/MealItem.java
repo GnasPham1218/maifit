@@ -43,20 +43,29 @@ public class MealItem {
     @Column(precision = 6, scale = 1)
     private BigDecimal aiGrams;
 
+    // 0-100, only meaningful when food.leanVersion != null (V11). null = use food as listed.
+    @Column(name = "fat_percent")
+    private Integer fatPercent;
+
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
     // Package-private: only MealLog.addItem creates items
-    MealItem(MealLog mealLog, Food food, BigDecimal grams, BigDecimal aiGrams) {
+    MealItem(MealLog mealLog, Food food, BigDecimal grams, BigDecimal aiGrams, Integer fatPercent) {
         this.mealLog = mealLog;
         this.food = food;
         this.grams = grams;
         this.aiGrams = aiGrams;
+        this.fatPercent = fatPercent;
         this.createdAt = Instant.now();
     }
 
     // aiGrams is never changed: it keeps the AI's original guess to compare with
     public void changeGrams(BigDecimal grams) {
         this.grams = grams;
+    }
+
+    public void changeFatPercent(Integer fatPercent) {
+        this.fatPercent = fatPercent;
     }
 }

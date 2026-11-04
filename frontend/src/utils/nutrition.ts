@@ -4,20 +4,44 @@ import type { Food, Nutrition } from '../types/meal';
 // so the live preview matches what the server saves. The saved value always comes from the server.
 const scale = (per100g: number, grams: number) => Math.round((per100g * grams) / 10) / 10;
 
+// per-100g value at ratio r between lean (r=0) and fatty/as-listed (r=1). Mirrors the backend's
+// NutritionCalculator.interpolate: both ends are real USDA rows, everything between is linear.
+const interpolate = (lean: number, fatty: number, r: number) => lean + (fatty - lean) * r;
+
+// fatPercent: 0-100, how much of food's as-listed fat is kept. Only meaningful when food has a
+// lean counterpart (food.leanVersionId != null); pass leanFood for that counterpart's values.
+export interface FatTrim {
+  leanFood: Food;
+  fatPercent: number;
+}
+
 // Live preview while typing grams
-export function kcalFor(food: Food, grams: number): number {
-  return scale(food.kcal, grams);
+export function kcalFor(food: Food, grams: number, trim?: FatTrim): number {
+  if (!trim) return scale(food.kcal, grams);
+  return scale(interpolate(trim.leanFood.kcal, food.kcal, trim.fatPercent / 100), grams);
 }
 
 // Calories + macros for these grams. A null in the food stays null: "no data", not 0
-export function nutritionFor(food: Food, grams: number): Nutrition {
-  const part = (v: number | null) => (v == null ? null : scale(v, grams));
+export function nutritionFor(food: Food, grams: number, trim?: FatTrim): Nutrition {
+  if (!trim) {
+    const part = (v: number | null) => (v == null ? null : scale(v, grams));
+    return {
+      kcal: scale(food.kcal, grams),
+      proteinG: part(food.proteinG),
+      carbG: part(food.carbG),
+      fatG: part(food.fatG),
+      fiberG: part(food.fiberG),
+    };
+  }
+  const r = trim.fatPercent / 100;
+  const part = (lean: number | null, fatty: number | null) =>
+    lean == null || fatty == null ? null : scale(interpolate(lean, fatty, r), grams);
   return {
-    kcal: scale(food.kcal, grams),
-    proteinG: part(food.proteinG),
-    carbG: part(food.carbG),
-    fatG: part(food.fatG),
-    fiberG: part(food.fiberG),
+    kcal: scale(interpolate(trim.leanFood.kcal, food.kcal, r), grams),
+    proteinG: part(trim.leanFood.proteinG, food.proteinG),
+    carbG: part(trim.leanFood.carbG, food.carbG),
+    fatG: part(trim.leanFood.fatG, food.fatG),
+    fiberG: part(trim.leanFood.fiberG, food.fiberG),
   };
 }
 

@@ -11,6 +11,8 @@ public record MealItemResponse(
         Preparation preparation,
         BigDecimal grams,
         BigDecimal aiGrams,
+        Integer fatPercent,
+        Long leanVersionId, // non-null -> the frontend may show the fat-trim slider for this item
         Nutrition nutrition // for these grams, not per 100 g
 ) {
 }
