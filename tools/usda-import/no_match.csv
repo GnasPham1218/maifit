@@ -1,0 +1,117 @@
+﻿use,viet_name,preparation,fdc_id,usda_description,kcal,protein_g,carb_g,fat_g,fiber_g,aliases,status,note,alt1,alt2,group
+0,Xà lách,BOILED,,,,,,,,Rau xà lách,NO_MATCH,,,,veg
+0,Hành lá,BOILED,,,,,,,,Hành hoa,NO_MATCH,,,,veg
+0,Khoai mì,BOILED,,,,,,,,Sắn,NO_MATCH,,,,veg
+0,Nấm kim châm,BOILED,,,,,,,,Nấm enoki,NO_MATCH,,,,veg
+0,Nấm bào ngư,BOILED,,,,,,,,,NO_MATCH,,,,veg
+0,Mộc nhĩ,BOILED,,,,,,,,Nấm mèo,NO_MATCH,,,,veg
+0,Bơ,BOILED,,,,,,,,Trái bơ,NO_MATCH,,,,veg
+0,Thịt heo xay,BOILED,,,,,,,,Heo xay|Thịt xay,NO_MATCH,,,,meat
+0,Thịt heo xay,GRILLED,,,,,,,,Heo xay|Thịt xay,NO_MATCH,,,,meat
+0,Thịt heo xay,FRIED,,,,,,,,Heo xay|Thịt xay,NO_MATCH,,,,meat
+0,Thịt heo xay,BRAISED,,,,,,,,Heo xay|Thịt xay,NO_MATCH,,,,meat
+0,Heo thăn,BOILED,,,,,,,,Thịt thăn heo,NO_MATCH,,,,meat
+0,Heo thăn,FRIED,,,,,,,,Thịt thăn heo,NO_MATCH,,,,meat
+0,Heo thăn,BRAISED,,,,,,,,Thịt thăn heo,NO_MATCH,,,,meat
+0,Nạc vai heo,BOILED,,,,,,,,Thịt vai,NO_MATCH,,,,meat
+0,Nạc vai heo,FRIED,,,,,,,,Thịt vai,NO_MATCH,,,,meat
+0,Nạc vai heo,BRAISED,,,,,,,,Thịt vai,NO_MATCH,,,,meat
+0,Chân giò heo,BOILED,,,,,,,,Giò heo|Giò,NO_MATCH,,,,meat
+0,Chân giò heo,FRIED,,,,,,,,Giò heo|Giò,NO_MATCH,,,,meat
+0,Chân giò heo,BRAISED,,,,,,,,Giò heo|Giò,NO_MATCH,,,,meat
+0,Bò xay,BOILED,,,,,,,,Thịt bò xay,NO_MATCH,,,,meat
+0,Bò xay,FRIED,,,,,,,,Thịt bò xay,NO_MATCH,,,,meat
+0,Bò xay,BRAISED,,,,,,,,Thịt bò xay,NO_MATCH,,,,meat
+0,Thăn bò,BOILED,,,,,,,,Thịt thăn bò,NO_MATCH,,,,meat
+0,Thăn bò,FRIED,,,,,,,,Thịt thăn bò,NO_MATCH,,,,meat
+0,Thăn bò,BRAISED,,,,,,,,Thịt thăn bò,NO_MATCH,,,,meat
+0,Bắp bò,GRILLED,,,,,,,,Nạm bò,NO_MATCH,,,,meat
+0,Bắp bò,FRIED,,,,,,,,Nạm bò,NO_MATCH,,,,meat
+0,Bắp bò,BRAISED,,,,,,,,Nạm bò,NO_MATCH,,,,meat
+0,Gầu bò,BOILED,,,,,,,,Ba chỉ bò,NO_MATCH,,,,meat
+0,Gầu bò,GRILLED,,,,,,,,Ba chỉ bò,NO_MATCH,,,,meat
+0,Gầu bò,FRIED,,,,,,,,Ba chỉ bò,NO_MATCH,,,,meat
+0,Sườn bò,BOILED,,,,,,,,,NO_MATCH,,,,meat
+0,Sườn bò,GRILLED,,,,,,,,,NO_MATCH,,,,meat
+0,Sườn bò,FRIED,,,,,,,,,NO_MATCH,,,,meat
+0,Cánh gà,BRAISED,,,,,,,,,NO_MATCH,,,,meat
+0,Chim cút,BOILED,,,,,,,,Cút,NO_MATCH,,,,meat
+0,Chim cút,GRILLED,,,,,,,,Cút,NO_MATCH,,,,meat
+0,Chim cút,FRIED,,,,,,,,Cút,NO_MATCH,,,,meat
+0,Chim cút,BRAISED,,,,,,,,Cút,NO_MATCH,,,,meat
+0,Chim bồ câu,BOILED,,,,,,,,Bồ câu,NO_MATCH,,,,meat
+0,Chim bồ câu,GRILLED,,,,,,,,Bồ câu,NO_MATCH,,,,meat
+0,Chim bồ câu,FRIED,,,,,,,,Bồ câu,NO_MATCH,,,,meat
+0,Chim bồ câu,BRAISED,,,,,,,,Bồ câu,NO_MATCH,,,,meat
+0,Thịt dê,BOILED,,,,,,,,Dê,NO_MATCH,,,,meat
+0,Thịt dê,FRIED,,,,,,,,Dê,NO_MATCH,,,,meat
+0,Thịt dê,BRAISED,,,,,,,,Dê,NO_MATCH,,,,meat
+0,Thịt trâu,BOILED,,,,,,,,,NO_MATCH,,,,meat
+0,Thịt trâu,FRIED,,,,,,,,,NO_MATCH,,,,meat
+0,Thịt trâu,BRAISED,,,,,,,,,NO_MATCH,,,,meat
+0,Thịt thỏ,FRIED,,,,,,,,,NO_MATCH,,,,meat
+0,Thịt thỏ,BRAISED,,,,,,,,,NO_MATCH,,,,meat
+0,Gan heo,BOILED,,,,,,,,,NO_MATCH,,,,organ
+0,Gan heo,FRIED,,,,,,,,,NO_MATCH,,,,organ
+0,Tim heo,BOILED,,,,,,,,,NO_MATCH,,,,organ
+0,Tim heo,FRIED,,,,,,,,,NO_MATCH,,,,organ
+0,Gan bò,BOILED,,,,,,,,,NO_MATCH,,,,organ
+0,Gan gà,BRAISED,,,,,,,,,NO_MATCH,,,,organ
+0,Mề gà,FRIED,,,,,,,,Sề gà,NO_MATCH,,,,organ
+0,Mề gà,BRAISED,,,,,,,,Sề gà,NO_MATCH,,,,organ
+0,Tim gà,FRIED,,,,,,,,,NO_MATCH,,,,organ
+0,Tim gà,BRAISED,,,,,,,,,NO_MATCH,,,,organ
+0,Trứng vịt,BOILED,,,,,,,,,NO_MATCH,,,,egg
+0,Trứng vịt,FRIED,,,,,,,,,NO_MATCH,,,,egg
+0,Trứng cút,BOILED,,,,,,,,,NO_MATCH,,,,egg
+0,Trứng cút,FRIED,,,,,,,,,NO_MATCH,,,,egg
+0,Lòng đỏ trứng gà,BOILED,,,,,,,,Lòng đỏ,NO_MATCH,,,,egg
+0,Lòng đỏ trứng gà,FRIED,,,,,,,,Lòng đỏ,NO_MATCH,,,,egg
+0,Lòng trắng trứng gà,BOILED,,,,,,,,Lòng trắng,NO_MATCH,,,,egg
+0,Lòng trắng trứng gà,FRIED,,,,,,,,Lòng trắng,NO_MATCH,,,,egg
+0,Cá rô phi,STEAMED,,,,,,,,Cá diêu hồng,NO_MATCH,,,,fish
+0,Cá rô phi,FRIED,,,,,,,,Cá diêu hồng,NO_MATCH,,,,fish
+0,Cá thu,STEAMED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá thu,FRIED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá ngừ,STEAMED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá ngừ,FRIED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá chép,STEAMED,,,,,,,,Cá trắm,NO_MATCH,,,,fish
+0,Cá chép,FRIED,,,,,,,,Cá trắm,NO_MATCH,,,,fish
+0,Cá chình,STEAMED,,,,,,,,Lươn,NO_MATCH,,,,fish
+0,Cá chình,FRIED,,,,,,,,Lươn,NO_MATCH,,,,fish
+0,Cá trích,STEAMED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá trích,FRIED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá cơm,GRILLED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá cơm,STEAMED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá cơm,FRIED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá bơn,STEAMED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá bơn,FRIED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá tra,STEAMED,,,,,,,,Cá da trơn,NO_MATCH,,,,fish
+0,Cá tra,FRIED,,,,,,,,Cá da trơn,NO_MATCH,,,,fish
+0,Cá chim,STEAMED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá chim,FRIED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá mòi hộp,GRILLED,,,,,,,,Cá mòi|Cá mòi đóng hộp,NO_MATCH,,,,fish
+0,Cá mòi hộp,STEAMED,,,,,,,,Cá mòi|Cá mòi đóng hộp,NO_MATCH,,,,fish
+0,Cá mòi hộp,FRIED,,,,,,,,Cá mòi|Cá mòi đóng hộp,NO_MATCH,,,,fish
+0,Cá tuyết,STEAMED,,,,,,,,,NO_MATCH,,,,fish
+0,Cá tuyết,FRIED,,,,,,,,,NO_MATCH,,,,fish
+0,Mực,STEAMED,,,,,,,,Mực ống,NO_MATCH,,,,shell
+0,Bạch tuộc,FRIED,,,,,,,,,NO_MATCH,,,,shell
+0,Nghêu,FRIED,,,,,,,,Ngao|Nghêu trắng,NO_MATCH,,,,shell
+0,Sò điệp,FRIED,,,,,,,,,NO_MATCH,,,,shell
+0,Hàu,FRIED,,,,,,,,,NO_MATCH,,,,shell
+0,Ốc,STEAMED,,,,,,,,,NO_MATCH,,,,shell
+0,Ốc,FRIED,,,,,,,,,NO_MATCH,,,,shell
+0,Cua,FRIED,,,,,,,,Cua biển|Ghẹ,NO_MATCH,,,,shell
+0,Tôm hùm,FRIED,,,,,,,,,NO_MATCH,,,,shell
+0,Tôm càng,FRIED,,,,,,,,Tôm nước ngọt,NO_MATCH,,,,shell
+0,Sữa đậu nành,BOILED,,,,,,,,,NO_MATCH,,,,legume
+0,Bột gạo,BOILED,,,,,,,,,NO_MATCH,,,,grain
+0,Bún khô,BOILED,,,,,,,,Bún gạo khô,NO_MATCH,,,,grain
+0,Miến,BOILED,,,,,,,,Miến dong|Miến đậu xanh,NO_MATCH,,,,grain
+0,Bột mì,BOILED,,,,,,,,,NO_MATCH,,,,grain
+0,Bột bắp,BOILED,,,,,,,,,NO_MATCH,,,,grain
+0,Bột năng,BOILED,,,,,,,,Bột sắn dây,NO_MATCH,,,,grain
+0,Củ năng,BOILED,,,,,,,,Củ mã thầy,NO_MATCH,,,,veg
+0,Cải xoong,BOILED,,,,,,,,Xà lách xoong,NO_MATCH,,,,veg
+0,Rau lang,BOILED,,,,,,,,,NO_MATCH,,,,veg
