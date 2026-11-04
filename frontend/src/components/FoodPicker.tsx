@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { getErrorMessage } from '../constants/errorMessages';
 import { MEAL_TYPE_LABELS } from '../constants/meal';
 import type { Food, MealType } from '../types/meal';
-import { edibleHint } from '../utils/edible';
+import { edibleHint, leanHint } from '../utils/edible';
 import { formatNumber } from '../utils/number';
 import { kcalFor, nutritionFor, parseGrams } from '../utils/nutrition';
 import { Button } from './Button';
@@ -75,6 +75,7 @@ export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
           )}
           {food && parsed != null && <MacroLine nutrition={nutritionFor(food, parsed)} />}
           {food && edibleHint(food) && <p className="text-xs text-ink-soft">{edibleHint(food)}</p>}
+          {food && leanHint(food) && <p className="text-xs text-ink-soft">{leanHint(food)}</p>}
           {/* USDA measures fried foods AFTER frying, so the absorbed oil is already counted */}
           {food?.preparation === 'FRIED' && (
             <p className="text-sm text-ink-soft">Số liệu món chiên đã gồm dầu ngấm vào món, không cần thêm Dầu ăn.</p>

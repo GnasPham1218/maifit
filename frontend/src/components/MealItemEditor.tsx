@@ -2,7 +2,7 @@ import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { getErrorMessage } from '../constants/errorMessages';
 import type { Food, MealItem } from '../types/meal';
-import { edibleHint } from '../utils/edible';
+import { edibleHint, leanHint } from '../utils/edible';
 import { formatNumber } from '../utils/number';
 import { kcalFor, nutritionFor, parseGrams } from '../utils/nutrition';
 import { Button } from './Button';
@@ -58,6 +58,7 @@ export function MealItemEditor({ item, food, onSave, onRemove, onCancel }: Props
       </div>
       {food && parsed != null && <MacroLine nutrition={nutritionFor(food, parsed)} />}
       {food && edibleHint(food) && <p className="text-xs text-ink-soft">{edibleHint(food)}</p>}
+      {food && leanHint(food) && <p className="text-xs text-ink-soft">{leanHint(food)}</p>}
       {item.aiGrams != null && (
         <p className="text-sm text-muted">AI ước lượng ban đầu: {formatNumber(item.aiGrams)} g</p>
       )}
