@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { foodApi } from '../apis/foodApi';
 import { PREPARATIONS, WEIGHED_WHEN_LABELS } from '../constants/meal';
 import type { Food } from '../types/meal';
 import { normalize } from '../utils/text';
@@ -8,18 +9,20 @@ interface Props {
   foods: Food[];
   idPrefix: string; // keeps input ids unique when several choosers are on the page
   autoFocus?: boolean;
+  initialQuery?: string; // e.g. what the AI saw ("bún mọc"), so close foods show without typing
   onChange: (food: Food | null) => void; // null = no complete choice yet
 }
 
 const MAX_RESULTS = 12;
+const SUGGEST_DELAY_MS = 300; // wait until the user stops typing before asking the server
 
 const CHIP = 'cursor-pointer rounded-full border px-3 py-1.5 text-sm transition-colors';
 const chipClass = (selected: boolean) =>
   `${CHIP} ${selected ? 'border-ink bg-ink text-white' : 'border-line bg-surface hover:bg-bg'}`;
 
 // Search a food by name (accent-insensitive), then "weighed raw or cooked?" when it has several states
-export function FoodChooser({ foods, idPrefix, autoFocus, onChange }: Props) {
-  const [query, setQuery] = useState('');
+export function FoodChooser({ foods, idPrefix, autoFocus, initialQuery = '', onChange }: Props) {
+  const [query, setQuery] = useState(initialQuery);
   const [name, setName] = useState<string | null>(null);
   const [foodId, setFoodId] = useState<number | null>(null);
 
@@ -37,6 +40,27 @@ export function FoodChooser({ foods, idPrefix, autoFocus, onChange }: Props) {
     const q = normalize(query);
     return [...byName.keys()].filter((n) => normalize(n).includes(q)).slice(0, MAX_RESULTS);
   }, [byName, query]);
+
+  // Nothing found locally -> ask the server for close names ("bún mọc" -> "Bún tươi").
+  // The answer is kept with the query it belongs to, so a late answer for an old query is never shown.
+  const q = normalize(query);
+  const needServer = results.length === 0 && q.length >= 2;
+  const [remote, setRemote] = useState<{ query: string; names: string[] } | null>(null);
+  useEffect(() => {
+    if (!needServer) return;
+    let cancelled = false;
+    const timer = setTimeout(() => {
+      foodApi.suggest(query.trim())
+        .then((list) => { if (!cancelled) setRemote({ query: q, names: list.map((s) => s.name) }); })
+        .catch(() => { if (!cancelled) setRemote({ query: q, names: [] }); }); // suggestions are optional
+    }, SUGGEST_DELAY_MS);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [needServer, q, query]);
+  // null = still asking; only names we have rows for (the food list is loaded once per page)
+  const suggestions = needServer && remote?.query === q ? remote.names.filter((n) => byName.has(n)) : null;
 
   const variants = name ? (byName.get(name) ?? []) : [];
 
@@ -58,9 +82,31 @@ export function FoodChooser({ foods, idPrefix, autoFocus, onChange }: Props) {
       <FormField label="Tìm món" name={`${idPrefix}-search`} type="search" autoFocus={autoFocus}
         placeholder="vd. gà, cơm, chuối" value={query} onChange={(e) => setQuery(e.target.value)} />
 
-      {results.length === 0 ? (
-        <p className="text-sm text-muted">Chưa có món này trong danh sách.</p>
-      ) : (
+      {results.length === 0 && (
+        !needServer ? (
+          <p className="text-sm text-muted">Gõ ít nhất 2 chữ để tìm.</p>
+        ) : suggestions == null ? (
+          <p className="text-sm text-muted" role="status">Đang tìm món gần giống…</p>
+        ) : suggestions.length === 0 ? (
+          <p className="text-sm text-muted">Chưa có món này trong danh sách.</p>
+        ) : (
+          <div className="grid gap-2">
+            <p className="text-sm text-ink-soft">
+              Chưa có đúng “{query.trim()}”. Món gần giống (chọn món gần nhất, calo sẽ là số xấp xỉ):
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {suggestions.map((n) => (
+                <button key={n} type="button" className={chipClass(n === name)} aria-pressed={n === name}
+                  onClick={() => pickName(n)}>
+                  {n}
+                </button>
+              ))}
+            </div>
+          </div>
+        )
+      )}
+
+      {results.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {results.map((n) => (
             <button key={n} type="button" className={chipClass(n === name)} aria-pressed={n === name}

@@ -1,4 +1,4 @@
-import type { Food } from '../types/meal';
+import type { Food, FoodSuggestion } from '../types/meal';
 import { api } from './client';
 
 // The food list only changes when a new migration is deployed, so it is fetched ONCE per page load
@@ -16,4 +16,8 @@ export const foodApi = {
     }
     return cache;
   },
+
+  // Fuzzy search on the server (trigram + aliases): only called when the local search finds nothing
+  suggest: (q: string): Promise<FoodSuggestion[]> =>
+    api<FoodSuggestion[]>(`/foods/search?q=${encodeURIComponent(q)}`),
 };

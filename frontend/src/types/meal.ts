@@ -15,6 +15,12 @@ export interface Food {
   source: string;
 }
 
+// GET /foods/search: a close food name when the local search finds nothing
+export interface FoodSuggestion {
+  name: string;
+  score: number; // 0..1
+}
+
 export interface Nutrition {
   kcal: number;
   proteinG: number | null;

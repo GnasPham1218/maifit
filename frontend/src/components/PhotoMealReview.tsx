@@ -57,6 +57,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [choosing, setChoosing] = useState<Choosing>(null);
+  const [newQuery, setNewQuery] = useState(''); // prefilled search for 'new' (an unmatched AI name, or empty)
   const cameraInput = useRef<HTMLInputElement>(null);
   const galleryInput = useRef<HTMLInputElement>(null);
   const pendingFile = useRef<File | null>(null); // the chosen photo while the user frames it
@@ -167,19 +168,24 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
     setChoosing(null);
   }
 
-  // A food the AI missed: the user types the grams
+  // A food the AI missed (or a close food for an unmatched AI name): the user types the grams
   function addMissed(food: Food) {
     const key = rows.reduce((max, r) => Math.max(max, r.key), -1) + 1; // unique within this list
+    const forUnmatched = unmatched.includes(newQuery) ? newQuery : null;
     setRows([...rows, {
       key, foodId: food.id, name: food.name, preparation: food.preparation,
-      aiGrams: null, aiName: null, lowConfidence: false, grams: '',
+      aiGrams: null, aiName: forUnmatched, lowConfidence: false, grams: '',
     }]);
+    if (forUnmatched) setUnmatched(unmatched.filter((n) => n !== forUnmatched)); // handled
     setChoosing(null);
   }
 
-  const chooser = (onPick: (food: Food) => void, idPrefix: string) => foods && (
+  // initialQuery = what the AI saw, so the closest foods show without typing.
+  // key: a new initial query starts a fresh chooser instead of keeping the old search.
+  const chooser = (onPick: (food: Food) => void, idPrefix: string, initialQuery = '') => foods && (
     <div className="grid gap-3 rounded-2xl bg-surface p-4">
-      <FoodChooser foods={foods} idPrefix={idPrefix} autoFocus onChange={(f) => { if (f) onPick(f); }} />
+      <FoodChooser key={`${idPrefix}-${initialQuery}`} foods={foods} idPrefix={idPrefix} autoFocus
+        initialQuery={initialQuery} onChange={(f) => { if (f) onPick(f); }} />
       <div>
         <Button variant="secondary" size="sm" onClick={() => setChoosing(null)}>Hủy</Button>
       </div>
@@ -309,7 +315,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
                     </div>
                     {food && g != null && <MacroLine nutrition={nutritionFor(food, g)} />}
 
-                    {choosing === row.key && chooser((f) => changeFood(row.key, f), `swap-${row.key}`)}
+                    {choosing === row.key && chooser((f) => changeFood(row.key, f), `swap-${row.key}`, row.aiName ?? '')}
                   </li>
                 );
               })}
@@ -317,17 +323,27 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
           )}
 
           {unmatched.length > 0 && (
-            <p className="text-sm text-ink-soft">
-              AI còn thấy: <span className="font-medium">{unmatched.join(', ')}</span>. Các món này chưa có trong
-              danh sách, bạn có thể thêm món gần giống bên dưới.
-            </p>
+            <div className="grid gap-2">
+              <p className="text-sm text-ink-soft">
+                AI còn thấy các món chưa có trong danh sách. Bấm vào một món để chọn món gần giống:
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {unmatched.map((n) => (
+                  <button key={n} type="button" disabled={!foods}
+                    onClick={() => { setNewQuery(n); setChoosing('new'); }}
+                    className="cursor-pointer rounded-full border border-dashed border-line bg-surface px-3 py-1.5 text-sm hover:bg-bg disabled:cursor-not-allowed">
+                    {n}
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
 
           {choosing === 'new' ? (
-            chooser(addMissed, 'photo-add')
+            chooser(addMissed, 'photo-add', newQuery)
           ) : (
             <div>
-              <Button variant="secondary" size="sm" onClick={() => setChoosing('new')} disabled={!foods}>
+              <Button variant="secondary" size="sm" onClick={() => { setNewQuery(''); setChoosing('new'); }} disabled={!foods}>
                 <Plus aria-hidden="true" className="size-4" /> Thêm món bị sót
               </Button>
             </div>
