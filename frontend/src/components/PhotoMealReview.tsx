@@ -5,6 +5,7 @@ import { getErrorMessage } from '../constants/errorMessages';
 import { MEAL_TYPE_LABELS, PREPARATION_LABELS } from '../constants/meal';
 import type { Food, MealItemRequest, MealType, Preparation } from '../types/meal';
 import { resizeForUpload } from '../utils/image';
+import { edibleHint } from '../utils/edible';
 import { formatNumber } from '../utils/number';
 import { kcalFor, nutritionFor, parseGrams, sumNutrition } from '../utils/nutrition';
 import { normalize } from '../utils/text';
@@ -314,6 +315,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
                       </p>
                     </div>
                     {food && g != null && <MacroLine nutrition={nutritionFor(food, g)} />}
+                    {food && edibleHint(food) && <p className="text-xs text-ink-soft">{edibleHint(food)}</p>}
 
                     {choosing === row.key && chooser((f) => changeFood(row.key, f), `swap-${row.key}`, row.aiName ?? '')}
                   </li>
