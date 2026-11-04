@@ -13,6 +13,8 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -44,7 +46,10 @@ public class MealItem {
     private BigDecimal aiGrams;
 
     // 0-100, only meaningful when food.leanVersion != null (V11). null = use food as listed.
+    // The column is SMALLINT; Hibernate maps Integer to INTEGER by default, and ddl-auto=validate
+    // rejects the mismatch at startup, so the JDBC type is pinned here.
     @Column(name = "fat_percent")
+    @JdbcTypeCode(SqlTypes.SMALLINT)
     private Integer fatPercent;
 
     @Column(nullable = false, updatable = false)
