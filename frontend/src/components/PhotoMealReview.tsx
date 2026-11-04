@@ -6,11 +6,12 @@ import { MEAL_TYPE_LABELS, PREPARATION_LABELS } from '../constants/meal';
 import type { Food, MealItemRequest, MealType, Preparation } from '../types/meal';
 import { resizeForUpload } from '../utils/image';
 import { formatNumber } from '../utils/number';
-import { kcalFor, parseGrams } from '../utils/nutrition';
+import { kcalFor, nutritionFor, parseGrams, sumNutrition } from '../utils/nutrition';
 import { normalize } from '../utils/text';
 import { Button } from './Button';
 import { FoodChooser } from './FoodChooser';
 import { FormField } from './FormField';
+import { MacroLine } from './MacroLine';
 import { PhotoCropper } from './PhotoCropper';
 
 interface Props {
@@ -130,11 +131,12 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
 
   const parsed = rows.map((r) => parseGrams(r.grams));
   const allValid = rows.length > 0 && parsed.every((g) => g != null);
-  const totalKcal = rows.reduce((sum, r, i) => {
+  // Rows with invalid grams are left out of the total until fixed
+  const { total, incomplete } = sumNutrition(rows.flatMap((r, i) => {
     const food = foodsById.get(r.foodId);
     const g = parsed[i];
-    return food && g != null ? sum + kcalFor(food, g) : sum;
-  }, 0);
+    return food && g != null ? [nutritionFor(food, g)] : [];
+  }));
 
   async function handleSave() {
     if (!allValid) return;
@@ -305,6 +307,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
                         <span className="text-sm text-muted">kcal</span>
                       </p>
                     </div>
+                    {food && g != null && <MacroLine nutrition={nutritionFor(food, g)} />}
 
                     {choosing === row.key && chooser((f) => changeFood(row.key, f), `swap-${row.key}`)}
                   </li>
@@ -331,10 +334,16 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
           )}
 
           {rows.length > 0 && (
-            <p className="text-lg">
-              Tổng ≈ <span className="font-semibold">{formatNumber(Math.round(totalKcal * 10) / 10)}</span>{' '}
-              <span className="text-sm text-muted">kcal (tính từ bảng dữ liệu, không phải do AI)</span>
-            </p>
+            <div className="grid gap-1">
+              <p className="text-lg">
+                Tổng ≈ <span className="font-semibold">{formatNumber(total.kcal)}</span>{' '}
+                <span className="text-sm text-muted">kcal (tính từ bảng dữ liệu, không phải do AI)</span>
+              </p>
+              <MacroLine nutrition={total} className="block text-sm text-ink-soft" />
+              {incomplete && (
+                <p className="text-xs text-muted">Một số món chưa đủ số liệu dinh dưỡng, tổng trên chỉ tính phần đã biết.</p>
+              )}
+            </div>
           )}
 
           <div className="flex flex-wrap items-center gap-2">

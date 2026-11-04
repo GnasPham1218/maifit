@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { getErrorMessage } from '../constants/errorMessages';
 import type { Food, MealItem } from '../types/meal';
 import { formatNumber } from '../utils/number';
-import { kcalFor, parseGrams } from '../utils/nutrition';
+import { kcalFor, nutritionFor, parseGrams } from '../utils/nutrition';
 import { Button } from './Button';
 import { FormField } from './FormField';
+import { MacroLine } from './MacroLine';
 
 interface Props {
   item: MealItem;
@@ -54,6 +55,7 @@ export function MealItemEditor({ item, food, onSave, onRemove, onCancel }: Props
           {preview != null ? `≈ ${formatNumber(preview)}` : '—'} <span className="text-sm text-muted">kcal</span>
         </p>
       </div>
+      {food && parsed != null && <MacroLine nutrition={nutritionFor(food, parsed)} />}
       {item.aiGrams != null && (
         <p className="text-sm text-muted">AI ước lượng ban đầu: {formatNumber(item.aiGrams)} g</p>
       )}

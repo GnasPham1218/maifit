@@ -4,10 +4,11 @@ import { getErrorMessage } from '../constants/errorMessages';
 import { MEAL_TYPE_LABELS } from '../constants/meal';
 import type { Food, MealType } from '../types/meal';
 import { formatNumber } from '../utils/number';
-import { kcalFor, parseGrams } from '../utils/nutrition';
+import { kcalFor, nutritionFor, parseGrams } from '../utils/nutrition';
 import { Button } from './Button';
 import { FoodChooser } from './FoodChooser';
 import { FormField } from './FormField';
+import { MacroLine } from './MacroLine';
 
 interface Props {
   mealType: MealType;
@@ -71,6 +72,7 @@ export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
               </Button>
             </form>
           )}
+          {food && parsed != null && <MacroLine nutrition={nutritionFor(food, parsed)} />}
           {/* USDA measures fried foods AFTER frying, so the absorbed oil is already counted */}
           {food?.preparation === 'FRIED' && (
             <p className="text-sm text-ink-soft">Số liệu món chiên đã gồm dầu ngấm vào món, không cần thêm Dầu ăn.</p>

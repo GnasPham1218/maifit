@@ -3,6 +3,7 @@ import { useState, type ReactNode } from 'react';
 import { MEAL_TYPE_LABELS, PREPARATION_LABELS } from '../constants/meal';
 import type { Food, Meal, MealItem, MealType } from '../types/meal';
 import { formatNumber } from '../utils/number';
+import { MacroLine } from './MacroLine';
 import { MealItemEditor } from './MealItemEditor';
 
 interface Props {
@@ -97,7 +98,8 @@ export function MealGroupCard(props: Props) {
                         </span>
                       )}
                     </span>
-                    <span className="text-sm text-muted">{formatNumber(item.grams)} g</span>
+                    <span className="block text-sm text-muted">{formatNumber(item.grams)} g</span>
+                    <MacroLine nutrition={item.nutrition} />
                   </span>
                   <span className="shrink-0 text-lg font-light">
                     {formatNumber(item.nutrition.kcal)} <span className="text-sm text-muted">kcal</span>
