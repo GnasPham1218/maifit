@@ -11,6 +11,10 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
+  servlet:
+    multipart:
+      max-file-size: 2MB     # the frontend resizes photos to ~1024 px JPEG (~200 KB) before upload
+      max-request-size: 3MB
   flyway:
     enabled: true
   mail:
@@ -25,6 +29,14 @@ spring:
       mail.smtp.connectiontimeout: 5000 # ms: never hang a thread forever on a slow SMTP server
       mail.smtp.timeout: 5000
       mail.smtp.writetimeout: 5000
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY}
+        chat:
+          options:
+            model: ${GEMINI_MODEL:gemini-3.5-flash-lite}   # override in .env when Google retires a model
+            temperature: 0.3
 server:
   servlet:
     context-path: /api
@@ -51,3 +63,7 @@ app:
   mail:
     from: ${MAIL_USERNAME}
     from-name: MAIFit
+  ai:
+    daily-limit:
+      food-vision: 10   # food recognition calls per user per day
+      chat: 20           # chatbot calls per user per day

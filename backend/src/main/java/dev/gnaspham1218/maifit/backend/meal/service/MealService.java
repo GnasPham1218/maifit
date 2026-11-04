@@ -52,7 +52,7 @@ public class MealService {
 
         MealLog meal = new MealLog(userId, eatenAt, req.mealType());
         for (MealItemRequest item : req.items()) {
-            meal.addItem(foods.get(item.foodId()), item.grams(), null); // typed by hand: no AI estimate
+            meal.addItem(foods.get(item.foodId()), item.grams(), item.aiGrams()); // aiGrams null = typed by hand
         }
         return mapper.toResponse(mealRepository.save(meal)); // cascade inserts the items
     }
@@ -92,7 +92,7 @@ public class MealService {
         }
         Food food = foodRepository.findById(req.foodId())
                 .orElseThrow(() -> new AppException(ErrorCode.FOOD_NOT_FOUND));
-        meal.addItem(food, req.grams(), null);
+        meal.addItem(food, req.grams(), req.aiGrams());
         // flush now so the new item gets its id before we build the response
         return mapper.toResponse(mealRepository.saveAndFlush(meal));
     }
