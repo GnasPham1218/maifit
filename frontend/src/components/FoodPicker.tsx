@@ -1,12 +1,12 @@
 import { X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { getErrorMessage } from '../constants/errorMessages';
-import { MEAL_TYPE_LABELS, PREPARATIONS, WEIGHED_WHEN_LABELS } from '../constants/meal';
+import { MEAL_TYPE_LABELS } from '../constants/meal';
 import type { Food, MealType } from '../types/meal';
 import { formatNumber } from '../utils/number';
 import { kcalFor, parseGrams } from '../utils/nutrition';
-import { normalize } from '../utils/text';
 import { Button } from './Button';
+import { FoodChooser } from './FoodChooser';
 import { FormField } from './FormField';
 
 interface Props {
@@ -16,46 +16,14 @@ interface Props {
   onClose: () => void;
 }
 
-const MAX_RESULTS = 12;
-
-const CHIP = 'cursor-pointer rounded-full border px-3 py-1.5 text-sm transition-colors';
-const chipClass = (selected: boolean) =>
-  `${CHIP} ${selected ? 'border-ink bg-ink text-white' : 'border-line bg-surface hover:bg-bg'}`;
-
 // Add one food to a meal: search by name -> "weighed raw or cooked?" -> grams (calories shown live)
 export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
-  const [query, setQuery] = useState('');
-  const [name, setName] = useState<string | null>(null);
-  const [foodId, setFoodId] = useState<number | null>(null);
+  const [food, setFood] = useState<Food | null>(null);
   const [grams, setGrams] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  // One entry per food name; its rows are the preparation states, RAW first
-  const byName = useMemo(() => {
-    const map = new Map<string, Food[]>();
-    for (const f of foods ?? []) map.set(f.name, [...(map.get(f.name) ?? []), f]);
-    for (const list of map.values()) {
-      list.sort((a, b) => PREPARATIONS.indexOf(a.preparation) - PREPARATIONS.indexOf(b.preparation));
-    }
-    return map;
-  }, [foods]);
-
-  const results = useMemo(() => {
-    const q = normalize(query);
-    return [...byName.keys()].filter((n) => normalize(n).includes(q)).slice(0, MAX_RESULTS);
-  }, [byName, query]);
-
-  const variants = name ? (byName.get(name) ?? []) : [];
-  const food = variants.find((f) => f.id === foodId);
   const parsed = parseGrams(grams);
-
-  function pickName(n: string) {
-    const list = byName.get(n) ?? [];
-    setName(n);
-    setFoodId(list.length === 1 ? list[0].id : null); // only one state: nothing to ask
-    setError(null);
-  }
 
   async function handleSubmit() {
     if (!food || parsed == null) return;
@@ -83,36 +51,8 @@ export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
         <p className="text-sm text-muted">Đang tải danh sách món…</p>
       ) : (
         <>
-          <FormField label="Tìm món" name={`food-search-${mealType}`} type="search" autoFocus
-            placeholder="vd. gà, cơm, chuối" value={query} onChange={(e) => setQuery(e.target.value)} />
-
-          {results.length === 0 ? (
-            <p className="text-sm text-muted">Chưa có món này trong danh sách.</p>
-          ) : (
-            <div className="flex flex-wrap gap-2">
-              {results.map((n) => (
-                <button key={n} type="button" className={chipClass(n === name)} aria-pressed={n === name}
-                  onClick={() => pickName(n)}>
-                  {n}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* The same food has very different calories raw vs cooked (rice: 365 vs 130 kcal/100 g) */}
-          {variants.length > 1 && (
-            <fieldset className="grid gap-2">
-              <legend className="mb-2 text-sm font-medium">Bạn cân {name} lúc nào?</legend>
-              <div className="flex flex-wrap gap-2">
-                {variants.map((v) => (
-                  <button key={v.id} type="button" className={chipClass(v.id === foodId)}
-                    aria-pressed={v.id === foodId} onClick={() => setFoodId(v.id)}>
-                    {WEIGHED_WHEN_LABELS[v.preparation]}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-          )}
+          <FoodChooser foods={foods} idPrefix={`food-${mealType}`} autoFocus
+            onChange={(f) => { setFood(f); setError(null); }} />
 
           {food && (
             <form className="flex flex-wrap items-end gap-3"

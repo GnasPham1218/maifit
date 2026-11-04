@@ -50,6 +50,24 @@ export interface DailyMeals {
 export interface MealItemRequest {
   foodId: number;
   grams: number;
+  aiGrams?: number | null; // the AI's estimate when the item came from a photo
+}
+
+// POST /meals/recognize: suggestions only, nothing is saved yet.
+// No calories here: they are computed from the foods table (kcalFor), never by the AI.
+export interface RecognizedFood {
+  foodId: number;
+  name: string; // from the foods table
+  preparation: Preparation;
+  grams: number;
+  aiName: string; // what the AI saw, e.g. "cơm trắng" (matched to "Gạo tẻ", boiled)
+  lowConfidence: boolean; // weak name match or a cooking state we do not have: ask the user to check
+}
+
+export interface RecognizeResponse {
+  items: RecognizedFood[];
+  unmatched: string[]; // names the AI saw that match no food in our table
+  remainingToday: number;
 }
 
 export interface CreateMealRequest {

@@ -10,9 +10,10 @@ import { FoodPicker } from '../components/FoodPicker';
 import { MealGroupCard } from '../components/MealGroupCard';
 import { MonthCalendar } from '../components/MonthCalendar';
 import { MonthlyKcalChart } from '../components/MonthlyKcalChart';
+import { PhotoMealReview } from '../components/PhotoMealReview';
 import { getErrorMessage } from '../constants/errorMessages';
 import { MEAL_TYPES } from '../constants/meal';
-import type { DailyMeals, Food, Meal, MealItem, MealType, MonthlySummary } from '../types/meal';
+import type { DailyMeals, Food, Meal, MealItem, MealItemRequest, MealType, MonthlySummary } from '../types/meal';
 import type { EnergyTargets } from '../types/profile';
 import { addDays, eatenAtFor, formatDayLabel, monthOf, todayVn } from '../utils/date';
 
@@ -29,6 +30,7 @@ export default function MealsPage() {
   const [foods, setFoods] = useState<Food[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pickerFor, setPickerFor] = useState<MealType | null>(null);
+  const [photoFor, setPhotoFor] = useState<MealType | null>(null); // photo review panel
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
 
   // Reference data, loaded once: the calorie target and the food list (cached for the whole session)
@@ -102,6 +104,7 @@ export default function MealsPage() {
     setDate(newDate);
     setViewMonth(monthOf(newDate));
     setPickerFor(null);
+    setPhotoFor(null);
     setEditingItemId(null);
     setError(null);
   }
@@ -116,6 +119,19 @@ export default function MealsPage() {
     }
     await reload();
     setPickerFor(null);
+  }
+
+  // Photo flow: all reviewed items at once. A new meal gets them in one request;
+  // an existing meal gets them one by one (the backend checks the 30-item limit each time)
+  async function addRecognized(mealType: MealType, items: MealItemRequest[]) {
+    const existing = day?.meals.find((m) => m.mealType === mealType);
+    if (existing) {
+      for (const item of items) await mealApi.addItem(existing.id, item);
+    } else {
+      await mealApi.create({ mealType, eatenAt: eatenAtFor(date, mealType), items });
+    }
+    await reload();
+    setPhotoFor(null);
   }
 
   async function saveGrams(meal: Meal, item: MealItem, grams: number) {
@@ -183,11 +199,18 @@ export default function MealsPage() {
                 onEdit={(id) => {
                   setEditingItemId(id);
                   setPickerFor(null);
+                  setPhotoFor(null);
                 }}
                 onSaveGrams={saveGrams}
                 onRemoveItem={removeItem}
                 onAddClick={() => {
                   setPickerFor(type);
+                  setPhotoFor(null);
+                  setEditingItemId(null);
+                }}
+                onPhotoClick={() => {
+                  setPhotoFor(type);
+                  setPickerFor(null);
                   setEditingItemId(null);
                 }}
                 picker={
@@ -197,6 +220,14 @@ export default function MealsPage() {
                       foods={foods}
                       onAdd={(foodId, grams) => addFood(type, foodId, grams)}
                       onClose={() => setPickerFor(null)}
+                    />
+                  ) : photoFor === type && !loading ? (
+                    <PhotoMealReview
+                      mealType={type}
+                      foods={foods}
+                      foodsById={foodsById}
+                      onSave={(items) => addRecognized(type, items)}
+                      onClose={() => setPhotoFor(null)}
                     />
                   ) : null
                 }

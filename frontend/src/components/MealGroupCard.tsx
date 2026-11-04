@@ -1,4 +1,4 @@
-import { ChevronDown, Plus } from 'lucide-react';
+import { Camera, ChevronDown, Plus } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { MEAL_TYPE_LABELS, PREPARATION_LABELS } from '../constants/meal';
 import type { Food, Meal, MealItem, MealType } from '../types/meal';
@@ -14,7 +14,8 @@ interface Props {
   onSaveGrams: (meal: Meal, item: MealItem, grams: number) => Promise<void>;
   onRemoveItem: (meal: Meal, item: MealItem) => Promise<void>;
   onAddClick: () => void;
-  picker: ReactNode; // the FoodPicker when it is open for this meal type
+  onPhotoClick: () => void;
+  picker: ReactNode; // the FoodPicker or the photo review when open for this meal type
 }
 
 // Long lists are cut to the first rows; "Xem thêm" shows the rest
@@ -23,7 +24,7 @@ const VISIBLE_ROWS = 6;
 // One meal of the day (MyFitnessPal style). Collapsed by default: the header shows the meal's calories
 // and item count; tap it to unfold the food rows, then tap a row to edit its grams.
 export function MealGroupCard(props: Props) {
-  const { mealType, meals, foodsById, editingItemId, onEdit, onSaveGrams, onRemoveItem, onAddClick, picker } = props;
+  const { mealType, meals, foodsById, editingItemId, onEdit, onSaveGrams, onRemoveItem, onAddClick, onPhotoClick, picker } = props;
   const rows = meals.flatMap((meal) => meal.items.map((item) => ({ meal, item })));
   const [open, setOpen] = useState(false); // food rows unfolded
   const [expanded, setExpanded] = useState(false); // all rows instead of the first VISIBLE_ROWS
@@ -49,6 +50,15 @@ export function MealGroupCard(props: Props) {
         ) : (
           <h2 className="flex-1 text-lg font-semibold">{MEAL_TYPE_LABELS[mealType]}</h2>
         )}
+        <button type="button"
+          onClick={() => {
+            setOpen(true);
+            onPhotoClick();
+          }}
+          className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-bg text-ink hover:bg-line"
+          aria-label={`Nhận diện ảnh cho ${MEAL_TYPE_LABELS[mealType].toLowerCase()}`} title="Thêm bằng ảnh">
+          <Camera aria-hidden="true" className="size-4" />
+        </button>
         <button type="button"
           onClick={() => {
             setOpen(true); // show the list so the new food appears where the user expects it
