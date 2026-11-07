@@ -8,10 +8,11 @@ export type RepPhase = 'WAITING' | 'UP' | 'DOWN';
 
 // What just happened, for the on-screen feedback. seq grows on every event so the UI can replay
 // an animation even when the same kind happens twice in a row.
-export type RepEventKind = 'COUNTED' | 'TOO_SHALLOW' | 'BAD_FORM';
+export type RepEventKind = 'COUNTED' | 'TOO_SHALLOW' | 'BAD_FORM' | 'TOO_FAST';
 export interface RepEvent {
   kind: RepEventKind;
-  seq: number;
+  seq: number; // attempt number in the set (every attempt, counted or not)
+  low: number | null; // lowest angle reached in this attempt (for the set log)
   message?: string; // BAD_FORM: which rule was broken
 }
 
@@ -21,7 +22,7 @@ export interface RepCounterState {
   angle: number | null; // smoothed angle of the last usable frame (shown on screen)
   missingSince: number | null; // time of the first frame in a row without a usable angle
   lastRepAt: number | null;
-  repMin: number | null; // lowest angle since the last top: tells a half rep from no rep
+  repMin: number | null; // lowest angle since the last top (half-rep check and the set log)
   topHeight: number | null; // body height (m) at the top of the current rep
   lowHeight: number | null; // lowest body height (m) during the current rep
   limb: number | null; // latest limb length (m) the drop is compared to
@@ -75,10 +76,11 @@ export interface FrameInput {
 type Thresholds = Pick<ExerciseConfig, 'downBelow' | 'upAbove'> &
   Partial<Pick<ExerciseConfig, 'minDropRatio' | 'dropMessage'>>;
 
-const nextEvent = (state: RepCounterState, kind: RepEventKind, message?: string): RepEvent => ({
+const nextEvent = (state: RepCounterState, kind: RepEventKind, low: number | null, message?: string): RepEvent => ({
   kind,
   seq: (state.event?.seq ?? 0) + 1,
-  message,
+  low: low == null ? null : Math.round(low),
+  ...(message ? { message } : {}),
 });
 
 // A new rep starts from a clean slate
@@ -126,27 +128,28 @@ export function stepRepCounter(
       return atTopNow ? { ...next, ...atTop, phase: 'UP' } : next;
 
     case 'UP': {
-      if (angle < thresholds.downBelow) return { ...next, phase: 'DOWN' };
+      if (angle < thresholds.downBelow) return { ...next, phase: 'DOWN', repMin: Math.min(state.repMin ?? angle, angle) };
       if (!atTopNow) return { ...next, repMin: Math.min(state.repMin ?? angle, angle) };
       // Back at the top without reaching the bottom: a half rep if it went down noticeably
       const halfRep = state.repMin != null && state.repMin < thresholds.upAbove - options.shallowMargin;
-      return { ...next, ...atTop, event: halfRep ? nextEvent(state, 'TOO_SHALLOW') : state.event };
+      return { ...next, ...atTop, event: halfRep ? nextEvent(state, 'TOO_SHALLOW', state.repMin) : state.event };
     }
 
     case 'DOWN': {
-      if (!atTopNow) return next;
+      if (!atTopNow) return { ...next, repMin: Math.min(state.repMin ?? angle, angle) };
+      const low = state.repMin;
       const up = { ...next, ...atTop, phase: 'UP' as const };
-      if (repBadForm) return { ...up, event: nextEvent(state, 'BAD_FORM', repBadForm) };
+      if (repBadForm) return { ...up, event: nextEvent(state, 'BAD_FORM', low, repBadForm) };
       // The joint bent, but did the body really go down? (only judged when the heights were seen)
       if (thresholds.minDropRatio && state.topHeight != null && lowHeight != null && limb) {
         const drop = state.topHeight - lowHeight;
         if (drop < thresholds.minDropRatio * limb) {
-          return { ...up, event: nextEvent(state, 'BAD_FORM', thresholds.dropMessage ?? 'Hạ người xuống thấp hơn') };
+          return { ...up, event: nextEvent(state, 'BAD_FORM', low, thresholds.dropMessage ?? 'Hạ người xuống thấp hơn') };
         }
       }
       const tooFast = state.lastRepAt != null && now - state.lastRepAt < options.minRepMs;
-      if (tooFast) return up;
-      return { ...up, reps: state.reps + 1, lastRepAt: now, event: nextEvent(state, 'COUNTED') };
+      if (tooFast) return { ...up, event: nextEvent(state, 'TOO_FAST', low) };
+      return { ...up, reps: state.reps + 1, lastRepAt: now, event: nextEvent(state, 'COUNTED', low) };
     }
   }
 }

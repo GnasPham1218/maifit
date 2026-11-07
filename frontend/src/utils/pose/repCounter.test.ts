@@ -103,7 +103,7 @@ describe('stepRepCounter: feedback', () => {
     const forms = angles.map((a) => (a < 150 ? BAD : OK)); // knees down during the movement
     const state = run(angles, { forms });
     expect(state.reps).toBe(0);
-    expect(state.event).toEqual({ kind: 'BAD_FORM', seq: 1, message: 'Giữ thẳng chân' });
+    expect(state.event).toEqual({ kind: 'BAD_FORM', seq: 1, low: 85, message: 'Giữ thẳng chân' });
   });
 
   it('ignores a single bad-form frame (landmark noise)', () => {
@@ -128,6 +128,17 @@ describe('stepRepCounter: feedback', () => {
     const angles = [170, 140, 130, 120];
     expect(run(angles.slice(0, 3), { forms: [OK, BAD, BAD] }).formMessage).toBeNull();
     expect(run(angles, { forms: [OK, BAD, BAD, BAD] }).formMessage).toBe('Giữ thẳng chân');
+  });
+
+  it('reports the lowest angle of each attempt, for the set log', () => {
+    expect(run(fullRep).event).toEqual({ kind: 'COUNTED', seq: 1, low: 85 });
+    expect(run([170, 150, 120, 110, 120, 150, 170]).event).toEqual({ kind: 'TOO_SHALLOW', seq: 1, low: 110 });
+  });
+
+  it('logs a rep that came too fast instead of dropping it silently', () => {
+    const state = run([170, 90, 170, 90, 170]);
+    expect(state.reps).toBe(1);
+    expect(state.event?.kind).toBe('TOO_FAST');
   });
 
   it('numbers events so the screen can replay the same feedback twice', () => {

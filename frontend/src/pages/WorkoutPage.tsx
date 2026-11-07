@@ -75,6 +75,30 @@ function debugLine(analysis: FrameAnalysis, session: SessionState, fps: number):
   ].join(' · ');
 }
 
+// One line per attempt in the set log: what the lowest angle was and whether it counted
+interface Attempt {
+  seq: number;
+  rep: number | null; // rep number when it counted
+  low: number | null;
+  ok: boolean;
+  reason: string | null;
+}
+
+function toAttempt(event: RepEvent, reps: number, downBelow: number): Attempt {
+  const reason =
+    event.kind === 'TOO_SHALLOW' ? `chưa đủ sâu (cần dưới ${downBelow}°)`
+      : event.kind === 'TOO_FAST' ? 'quá nhanh'
+        : event.kind === 'BAD_FORM' ? (event.message ?? 'sai tư thế')
+          : null;
+  return { seq: event.seq, rep: event.kind === 'COUNTED' ? reps : null, low: event.low, ok: event.kind === 'COUNTED', reason };
+}
+
+function attemptText(a: Attempt): string {
+  const head = a.ok ? `Rep ${a.rep}` : `Lần ${a.seq}`;
+  const low = a.low != null ? ` · xuống ${a.low}°` : '';
+  return a.ok ? `${head}${low} · đạt` : `${head}${low} · chưa đạt: ${a.reason}`;
+}
+
 function cameraErrorMessage(err: unknown): string {
   const name = err instanceof DOMException ? err.name : '';
   if (name === 'NotAllowedError') return 'Bạn đã chặn quyền dùng camera. Mở cài đặt trang trên trình duyệt để cho phép rồi thử lại.';
@@ -93,6 +117,7 @@ export default function WorkoutPage() {
   const [view, setView] = useState<View>(INITIAL_VIEW);
   const [error, setError] = useState<string | null>(null);
   const [showDebug, setShowDebug] = useState(false);
+  const [attempts, setAttempts] = useState<Attempt[]>([]); // the set log, newest last
 
   const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -105,6 +130,7 @@ export default function WorkoutPage() {
   function resetCounter() {
     sessionRef.current = INITIAL_SESSION;
     setView(INITIAL_VIEW);
+    setAttempts([]);
   }
 
   async function startCamera() {
@@ -198,6 +224,7 @@ export default function WorkoutPage() {
     const filterWorld = createLandmarkFilter();
     let fps = 0;
     let lastFrameAt = 0;
+    let loggedSeq = sessionRef.current.counter.event?.seq ?? 0;
 
     const loop = () => {
       frameId = requestAnimationFrame(loop);
@@ -242,6 +269,13 @@ export default function WorkoutPage() {
         ctx.strokeText(label, size * 0.4, -size * 0.4);
         ctx.fillText(label, size * 0.4, -size * 0.4);
         ctx.restore();
+      }
+
+      // A finished attempt (counted or not) goes into the set log once
+      if (state.event && state.event.seq !== loggedSeq) {
+        loggedSeq = state.event.seq;
+        const attempt = toAttempt(state.event, state.reps, current.downBelow);
+        setAttempts((list) => [...list.slice(-49), attempt]);
       }
 
       // Re-render only when something on screen changes, not 30 times a second
@@ -319,6 +353,16 @@ export default function WorkoutPage() {
               {view.angle != null && <span className="text-white/70"> · {view.angle}°</span>}
             </p>
           </div>
+
+          {attempts.length > 0 && (
+            <ol className="absolute top-28 left-3 grid gap-1 text-xs sm:top-32" aria-label="Các lần gần nhất">
+              {attempts.slice(-4).map((a) => (
+                <li key={a.seq} className={`rounded-lg px-2 py-1 ${a.ok ? 'bg-lime-strong/80' : 'bg-black/60'}`}>
+                  {attemptText(a)}
+                </li>
+              ))}
+            </ol>
+          )}
 
           {view.debug && (
             <p className="absolute top-3 right-3 max-w-[60%] rounded-xl bg-black/70 px-3 py-2 text-right font-mono text-xs">
@@ -425,6 +469,18 @@ export default function WorkoutPage() {
           <p className="text-sm text-ink-soft">{exercise.label}: số rep</p>
           <p className="text-6xl font-bold tabular-nums">{view.reps}</p>
         </Card>
+
+        {attempts.length > 0 && (
+          <Card title="Nhật ký set">
+            <ol className="grid max-h-64 gap-1 overflow-y-auto text-sm">
+              {[...attempts].reverse().map((a) => (
+                <li key={a.seq} className={a.ok ? 'text-success' : 'text-ink-soft'}>
+                  {a.ok ? '✓ ' : '✗ '}{attemptText(a)}
+                </li>
+              ))}
+            </ol>
+          </Card>
+        )}
 
         <div className="flex flex-wrap gap-2">
           {running ? (

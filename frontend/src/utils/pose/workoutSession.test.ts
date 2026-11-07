@@ -83,7 +83,8 @@ describe('stepSession: counting while in position', () => {
     const fake = squat.map((f) => ({ ...f, height: 0.9 }));
     const state = run([...ready, ...fake]);
     expect(state.counter.reps).toBe(0);
-    expect(state.counter.event).toEqual({ kind: 'BAD_FORM', seq: 1, message: SQUAT.dropMessage });
+    // low = the smoothed angle shown on screen (default smoothing), so 88 rather than the raw 85
+    expect(state.counter.event).toEqual({ kind: 'BAD_FORM', seq: 1, low: 88, message: SQUAT.dropMessage });
   });
 
   it('nothing counts before getting into position', () => {

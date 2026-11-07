@@ -67,8 +67,8 @@ export const EXERCISES: Record<ExerciseId, ExerciseConfig> = {
     ],
     // Filmed straight on, the model underestimates the elbow bend (the forearm points at the
     // camera): chest touching the floor measured only ~100-105 on a phone, never 90.
-    // Real depth is also guarded by the body drop (minDropRatio).
-    downBelow: 115,
+    // 120 chosen after testing; real depth is also guarded by the body drop (minDropRatio).
+    downBelow: 120,
     upAbove: 150, // fast reps rarely lock the elbows fully
     // Filmed straight on the legs are hidden behind the shoulders: they cannot be checked
     formRules: [],
