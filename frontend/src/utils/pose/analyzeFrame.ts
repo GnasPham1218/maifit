@@ -8,16 +8,64 @@ export interface Landmark extends Point {
 
 // Below this a point is a guess by the model: no angle is better than a wrong one
 export const MIN_VISIBILITY = 0.6;
-// Form checks accept slightly less visible points (legs are often half hidden on the floor),
+// Form, posture and anchors accept less visible points (legs are often half hidden on the floor),
 // but not hidden ones: facing the camera in a push-up, the shoulders cover the legs
-export const MIN_FORM_VISIBILITY = 0.5;
+export const MIN_SOFT_VISIBILITY = 0.5;
 
-export type FormResult = { kind: 'ok' } | { kind: 'bad'; message: string } | { kind: 'unknown' };
+// Plank: the shoulder-to-hip line must lean at least this far from vertical (90 = flat)
+const PLANK_MIN_TILT = 55;
+// Standing: the hip-to-shoulder line may lean at most this far (a deep squat leans ~45)
+const STANDING_MAX_TILT = 60;
+// Plank: hands at least this far (meters) below the shoulders
+const HANDS_BELOW_SHOULDERS = 0.1;
+// Left and right counting angles further apart than this = one-sided movement
+const MAX_SIDE_DIFF = 30;
+
+export type Check = { kind: 'ok' } | { kind: 'bad'; message: string } | { kind: 'unknown' };
+export type FormResult = Check;
 
 export interface FrameAnalysis {
   angle: number | null; // the counting joint, null when not seen well enough
   joint: Point | null; // that joint on screen (normalized 0..1), to draw the angle next to it
-  form: FormResult;
+  form: Check; // straight body lines + both sides moving together
+  posture: Check; // in the exercise's body position (plank / standing)
+  height: number | null; // meters: shoulders above the hands (push-up) / hips above the feet (squat)
+  limb: number | null; // meters: arm (push-up) / thigh (squat), what the height drop is compared to
+  anchors: (Point | null)[]; // exercise.anchors on screen, in pixels; null when not seen
+  scale: number | null; // pixels: size of the seen body on screen, to judge how far an anchor moved
+}
+
+export const EMPTY_ANALYSIS: FrameAnalysis = {
+  angle: null,
+  joint: null,
+  form: { kind: 'unknown' },
+  posture: { kind: 'unknown' },
+  height: null,
+  limb: null,
+  anchors: [],
+  scale: null,
+};
+
+type Pose = readonly Landmark[];
+
+const seen = (image: Pose, i: number, min: number) => (image[i]?.visibility ?? 0) >= min;
+
+const dist = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y, (a.z ?? 0) - (b.z ?? 0));
+
+// Middle of the listed points that are seen enough (world coordinates); null if none is
+function midpoint(image: Pose, world: Pose, indices: readonly number[], min = MIN_SOFT_VISIBILITY): Point | null {
+  const points = indices.filter((i) => seen(image, i, min) && world[i]).map((i) => world[i]!);
+  if (points.length === 0) return null;
+  const sum = points.reduce((s, p) => ({ x: s.x + p.x, y: s.y + p.y, z: (s.z ?? 0) + (p.z ?? 0) }), { x: 0, y: 0, z: 0 });
+  return { x: sum.x / points.length, y: sum.y / points.length, z: (sum.z ?? 0) / points.length };
+}
+
+// Angle between a segment and the vertical, 0 (upright) .. 90 (flat).
+// World y points down along the camera's vertical, so the phone must stand upright (not tilted much).
+function tiltFromVertical(from: Point, to: Point): number {
+  const len = dist(from, to);
+  if (len === 0) return NaN;
+  return (Math.acos(Math.min(1, Math.abs(to.y - from.y) / len)) * 180) / Math.PI;
 }
 
 interface Measured {
@@ -26,59 +74,127 @@ interface Measured {
   visibility: number;
 }
 
-// The angle of one chain on the better seen side.
+// Angle of one chain per side that is seen well enough.
 // Angles come from the WORLD landmarks: 3D in meters, centered on the hips. A joint bending
 // towards the camera (a knee in a squat filmed from the front) barely changes in 2D, but does in 3D.
 // Visibility comes from the image landmarks: it says whether the point is really seen in this frame.
-function measure(
-  image: readonly Landmark[],
-  world: readonly Landmark[],
-  sides: readonly JointChain[],
-  minVisibility: number,
-): Measured | null {
-  let best: Measured | null = null;
+function measureSides(image: Pose, world: Pose, sides: readonly JointChain[], min: number): Measured[] {
+  const result: Measured[] = [];
   for (const [ia, ib, ic] of sides) {
-    const a = image[ia];
     const b = image[ib];
-    const c = image[ic];
-    const wa = world[ia];
-    const wb = world[ib];
-    const wc = world[ic];
-    if (!a || !b || !c || !wa || !wb || !wc) continue;
-
-    const visibility = Math.min(a.visibility ?? 0, b.visibility ?? 0, c.visibility ?? 0);
-    if (visibility < minVisibility) continue;
-
+    const [wa, wb, wc] = [world[ia], world[ib], world[ic]];
+    if (!b || !wa || !wb || !wc) continue;
+    const visibility = Math.min(image[ia]?.visibility ?? 0, b.visibility ?? 0, image[ic]?.visibility ?? 0);
+    if (visibility < min) continue;
     const angle = jointAngle(wa, wb, wc);
-    if (Number.isNaN(angle)) continue;
-    if (!best || visibility > best.visibility) best = { angle, joint: { x: b.x, y: b.y }, visibility };
+    if (!Number.isNaN(angle)) result.push({ angle, joint: { x: b.x, y: b.y }, visibility });
   }
-  return best;
+  return result;
 }
 
-// Everything the counter needs from one camera frame.
-// image: result.landmarks[0] (normalized), world: result.worldLandmarks[0] (meters), same indices.
-export function analyzeFrame(
-  image: readonly Landmark[] | undefined,
-  world: readonly Landmark[] | undefined,
-  exercise: Pick<ExerciseConfig, 'sides' | 'formRules'>,
-): FrameAnalysis {
-  if (!image || !world) return { angle: null, joint: null, form: { kind: 'unknown' } };
+const best = (measured: Measured[]) =>
+  measured.reduce<Measured | null>((top, m) => (!top || m.visibility > top.visibility ? m : top), null);
 
-  const counting = measure(image, world, exercise.sides, MIN_VISIBILITY);
-
-  let form: FormResult = { kind: 'ok' };
+function checkForm(image: Pose, world: Pose, exercise: ExerciseConfig, counting: Measured[]): Check {
+  let form: Check = { kind: 'ok' };
   for (const rule of exercise.formRules) {
-    const line = measure(image, world, rule.sides, MIN_FORM_VISIBILITY);
+    const line = best(measureSides(image, world, rule.sides, MIN_SOFT_VISIBILITY));
     if (!line) {
       form = { kind: 'unknown' }; // cannot see it: say so, never guess
       continue;
     }
-    if (line.angle < rule.minAngle) {
-      form = { kind: 'bad', message: rule.message }; // first broken rule wins
-      break;
-    }
+    if (line.angle < rule.minAngle) return { kind: 'bad', message: rule.message };
   }
+  // Both sides clearly seen: they must move together (no one-arm or one-leg tricks)
+  if (counting.length === 2 && Math.abs(counting[0].angle - counting[1].angle) > MAX_SIDE_DIFF) {
+    return { kind: 'bad', message: 'Làm đều hai bên' };
+  }
+  return form;
+}
 
-  return { angle: counting?.angle ?? null, joint: counting?.joint ?? null, form };
+const SHOULDERS = [11, 12];
+const WRISTS = [15, 16];
+const HIPS = [23, 24];
+
+function checkPosture(image: Pose, world: Pose, exercise: ExerciseConfig): Check {
+  const shoulders = midpoint(image, world, SHOULDERS);
+  const hips = midpoint(image, world, HIPS);
+  if (!shoulders || !hips) return { kind: 'unknown' };
+  const tilt = tiltFromVertical(hips, shoulders);
+  if (Number.isNaN(tilt)) return { kind: 'unknown' };
+
+  if (exercise.posture === 'STANDING') {
+    return tilt <= STANDING_MAX_TILT ? { kind: 'ok' } : { kind: 'bad', message: 'Đứng thẳng người lên' };
+  }
+  if (tilt < PLANK_MIN_TILT) return { kind: 'bad', message: 'Vào tư thế nằm sấp chống tay (plank)' };
+  const wrists = midpoint(image, world, WRISTS);
+  if (!wrists) return { kind: 'unknown' };
+  // World y points down: hands on the floor are below (greater y than) the shoulders
+  if (wrists.y - shoulders.y < HANDS_BELOW_SHOULDERS) return { kind: 'bad', message: 'Chống hai tay xuống sàn' };
+  return { kind: 'ok' };
+}
+
+// Average length (meters) of a chain of segments over the sides listed, e.g. shoulder-elbow-wrist
+function limbLength(world: Pose, chains: readonly (readonly number[])[]): number | null {
+  const lengths = chains
+    .filter((chain) => chain.every((i) => world[i]))
+    .map((chain) => chain.slice(1).reduce((sum, i, k) => sum + dist(world[chain[k]]!, world[i]!), 0));
+  return lengths.length ? lengths.reduce((s, l) => s + l, 0) / lengths.length : null;
+}
+
+// Heights are differences of two world points, so they do not move with the hip-centered origin
+function measureHeight(image: Pose, world: Pose, exercise: ExerciseConfig): { height: number | null; limb: number | null } {
+  if (exercise.posture === 'PLANK') {
+    const shoulders = midpoint(image, world, SHOULDERS);
+    const wrists = midpoint(image, world, WRISTS);
+    return {
+      height: shoulders && wrists ? wrists.y - shoulders.y : null,
+      limb: limbLength(world, [[11, 13, 15], [12, 14, 16]]), // whole arm
+    };
+  }
+  const hips = midpoint(image, world, HIPS);
+  // The lower foot is the floor: lifting one foot must not look like the hips going down
+  const feet = [27, 28].filter((i) => seen(image, i, MIN_SOFT_VISIBILITY) && world[i]).map((i) => world[i]!);
+  const floor = feet.length ? Math.max(...feet.map((p) => p.y)) : null;
+  return {
+    height: hips && floor != null ? floor - hips.y : null,
+    limb: limbLength(world, [[23, 25], [24, 26]]), // thigh
+  };
+}
+
+// Everything the counter needs from one camera frame.
+// image: result.landmarks[0] (normalized), world: result.worldLandmarks[0] (meters), same indices.
+// frame: the video size in pixels, to measure anchors and the body on screen.
+export function analyzeFrame(
+  image: Pose | undefined,
+  world: Pose | undefined,
+  exercise: ExerciseConfig,
+  frame: { width: number; height: number },
+): FrameAnalysis {
+  if (!image || !world) return EMPTY_ANALYSIS;
+
+  const counting = measureSides(image, world, exercise.sides, MIN_VISIBILITY);
+  const main = best(counting);
+
+  const toPx = (p: Landmark): Point => ({ x: p.x * frame.width, y: p.y * frame.height });
+  const anchors = exercise.anchors.map((i) => (seen(image, i, MIN_SOFT_VISIBILITY) ? toPx(image[i]!) : null));
+
+  // Body size on screen: diagonal of the box around the seen points
+  const visible = image.filter((p) => (p.visibility ?? 0) >= MIN_SOFT_VISIBILITY).map(toPx);
+  const scale = visible.length >= 4
+    ? Math.hypot(
+      Math.max(...visible.map((p) => p.x)) - Math.min(...visible.map((p) => p.x)),
+      Math.max(...visible.map((p) => p.y)) - Math.min(...visible.map((p) => p.y)),
+    )
+    : null;
+
+  return {
+    angle: main?.angle ?? null,
+    joint: main?.joint ?? null,
+    form: checkForm(image, world, exercise, counting),
+    posture: checkPosture(image, world, exercise),
+    ...measureHeight(image, world, exercise),
+    anchors,
+    scale,
+  };
 }

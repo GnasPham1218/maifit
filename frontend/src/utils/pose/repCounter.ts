@@ -1,5 +1,5 @@
 import type { ExerciseConfig } from '../../constants/exercises';
-import type { FormResult } from './analyzeFrame';
+import type { Check } from './analyzeFrame';
 
 // WAITING: not sure where the person is yet (start, or came back into the frame).
 //          A rep can only start from a clear top position, so stepping in half-bent counts nothing.
@@ -22,6 +22,9 @@ export interface RepCounterState {
   missingSince: number | null; // time of the first frame in a row without a usable angle
   lastRepAt: number | null;
   repMin: number | null; // lowest angle since the last top: tells a half rep from no rep
+  topHeight: number | null; // body height (m) at the top of the current rep
+  lowHeight: number | null; // lowest body height (m) during the current rep
+  limb: number | null; // latest limb length (m) the drop is compared to
   badFrames: number; // bad-form frames in a row
   repBadForm: string | null; // message of a form rule broken during the current rep
   formMessage: string | null; // form rule broken right now (for the live warning)
@@ -53,6 +56,9 @@ export const INITIAL_REP_STATE: RepCounterState = {
   missingSince: null,
   lastRepAt: null,
   repMin: null,
+  topHeight: null,
+  lowHeight: null,
+  limb: null,
   badFrames: 0,
   repBadForm: null,
   formMessage: null,
@@ -61,10 +67,13 @@ export const INITIAL_REP_STATE: RepCounterState = {
 
 export interface FrameInput {
   angle: number | null; // null when the body is not seen well enough in this frame
-  form: FormResult;
+  form: Check;
+  height?: number | null; // see FrameAnalysis.height
+  limb?: number | null;
 }
 
-type Thresholds = Pick<ExerciseConfig, 'downBelow' | 'upAbove'>;
+type Thresholds = Pick<ExerciseConfig, 'downBelow' | 'upAbove'> &
+  Partial<Pick<ExerciseConfig, 'minDropRatio' | 'dropMessage'>>;
 
 const nextEvent = (state: RepCounterState, kind: RepEventKind, message?: string): RepEvent => ({
   kind,
@@ -73,7 +82,7 @@ const nextEvent = (state: RepCounterState, kind: RepEventKind, message?: string)
 });
 
 // A new rep starts from a clean slate
-const atTop = { repMin: null, repBadForm: null } as const;
+const atTop = { repMin: null, repBadForm: null, lowHeight: null } as const;
 
 // One camera frame in, the next state out. Pure (no camera, no clock inside):
 // the whole counting logic is unit tested by feeding it a list of frames. now: frame time in ms.
@@ -102,7 +111,15 @@ export function stepRepCounter(
   const formMessage = frame.form.kind === 'bad' && badFrames >= options.badFormFrames ? frame.form.message : null;
   const repBadForm = !atTopNow && state.phase !== 'WAITING' ? (state.repBadForm ?? formMessage) : state.repBadForm;
 
-  const next: RepCounterState = { ...state, angle, missingSince: null, badFrames, formMessage, repBadForm };
+  // Body height: remember it at the top, and its lowest value during the rep
+  const height = frame.height ?? null;
+  const topHeight = atTopNow && height != null ? height : state.topHeight;
+  const lowHeight = !atTopNow && height != null ? Math.min(state.lowHeight ?? height, height) : state.lowHeight;
+  const limb = frame.limb ?? state.limb;
+
+  const next: RepCounterState = {
+    ...state, angle, missingSince: null, badFrames, formMessage, repBadForm, topHeight, lowHeight, limb,
+  };
 
   switch (state.phase) {
     case 'WAITING':
@@ -120,6 +137,13 @@ export function stepRepCounter(
       if (!atTopNow) return next;
       const up = { ...next, ...atTop, phase: 'UP' as const };
       if (repBadForm) return { ...up, event: nextEvent(state, 'BAD_FORM', repBadForm) };
+      // The joint bent, but did the body really go down? (only judged when the heights were seen)
+      if (thresholds.minDropRatio && state.topHeight != null && lowHeight != null && limb) {
+        const drop = state.topHeight - lowHeight;
+        if (drop < thresholds.minDropRatio * limb) {
+          return { ...up, event: nextEvent(state, 'BAD_FORM', thresholds.dropMessage ?? 'Hạ người xuống thấp hơn') };
+        }
+      }
       const tooFast = state.lastRepAt != null && now - state.lastRepAt < options.minRepMs;
       if (tooFast) return up;
       return { ...up, reps: state.reps + 1, lastRepAt: now, event: nextEvent(state, 'COUNTED') };

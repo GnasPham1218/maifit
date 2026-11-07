@@ -7,13 +7,14 @@ import { Card } from '../components/Card';
 import { EXERCISE_IDS, EXERCISES, type ExerciseId } from '../constants/exercises';
 import { usePoseLandmarker } from '../hooks/usePoseLandmarker';
 import { analyzeFrame } from '../utils/pose/analyzeFrame';
+import type { RepEvent, RepPhase } from '../utils/pose/repCounter';
 import {
-  INITIAL_REP_STATE,
-  stepRepCounter,
-  type RepCounterState,
-  type RepEvent,
-  type RepPhase,
-} from '../utils/pose/repCounter';
+  holdProgress,
+  INITIAL_SESSION,
+  stepSession,
+  type SessionStage,
+  type SessionState,
+} from '../utils/pose/workoutSession';
 
 const PHASE_LABELS: Record<RepPhase, string> = {
   WAITING: 'Vào tư thế bắt đầu',
@@ -26,6 +27,9 @@ const SKELETON_BAD = '#f87171';
 
 // What the screen shows; the full counter state lives in a ref and changes every frame
 interface View {
+  stage: SessionStage;
+  setupMessage: string | null; // SETUP: what to do to get into position
+  hold: number; // SETUP: 0..1 progress of holding still, in steps of 0.1
   reps: number;
   phase: RepPhase;
   angle: number | null; // rounded
@@ -36,6 +40,9 @@ interface View {
 }
 
 const INITIAL_VIEW: View = {
+  stage: 'SETUP',
+  setupMessage: null,
+  hold: 0,
   reps: 0,
   phase: 'WAITING',
   angle: null,
@@ -46,7 +53,7 @@ const INITIAL_VIEW: View = {
 };
 
 const sameView = (a: View, b: View) =>
-  a.reps === b.reps && a.phase === b.phase && a.angle === b.angle && a.seen === b.seen &&
+  a.stage === b.stage && a.setupMessage === b.setupMessage && a.hold === b.hold && a.reps === b.reps && a.phase === b.phase && a.angle === b.angle && a.seen === b.seen &&
   a.formMessage === b.formMessage && a.formUnknown === b.formUnknown && a.event?.seq === b.event?.seq;
 
 function cameraErrorMessage(err: unknown): string {
@@ -71,12 +78,12 @@ export default function WorkoutPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const counterRef = useRef<RepCounterState>(INITIAL_REP_STATE);
+  const sessionRef = useRef<SessionState>(INITIAL_SESSION);
 
   const exercise = EXERCISES[exerciseId];
 
   function resetCounter() {
-    counterRef.current = INITIAL_REP_STATE;
+    sessionRef.current = INITIAL_SESSION;
     setView(INITIAL_VIEW);
   }
 
@@ -176,9 +183,11 @@ export default function WorkoutPage() {
       const now = performance.now();
       const result = landmarker.detectForVideo(video, now);
       const image = result.landmarks[0];
-      const analysis = analyzeFrame(image, result.worldLandmarks[0], current);
-      const state = stepRepCounter(counterRef.current, analysis, now, current);
-      counterRef.current = state;
+      const frameSize = { width: video.videoWidth, height: video.videoHeight };
+      const analysis = analyzeFrame(image, result.worldLandmarks[0], current, frameSize);
+      const session = stepSession(sessionRef.current, analysis, result.landmarks.length, now, current);
+      sessionRef.current = session;
+      const state = session.counter;
 
       // Draw: skeleton (red while the form is wrong) + the angle next to the counting joint
       if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
@@ -209,6 +218,9 @@ export default function WorkoutPage() {
 
       // Re-render only when something on screen changes, not 30 times a second
       const next: View = {
+        stage: session.stage,
+        setupMessage: session.message,
+        hold: Math.round(holdProgress(session, now) * 10) / 10,
         reps: state.reps,
         phase: state.phase,
         angle: state.angle == null ? null : Math.round(state.angle),
@@ -239,7 +251,7 @@ export default function WorkoutPage() {
   );
 
   // Bottom line on the camera: the most useful message right now
-  const liveMessage = !running
+  const liveMessage = !running || view.stage === 'SETUP'
     ? null
     : !view.seen
       ? { tone: 'bg-black/70', text: 'Chưa thấy rõ người: lùi ra xa để camera thấy cả người.' }
@@ -274,10 +286,21 @@ export default function WorkoutPage() {
           <div className="absolute top-3 left-3 rounded-2xl bg-black/55 px-4 py-2">
             <p className="text-5xl leading-none font-bold tabular-nums sm:text-6xl" aria-live="polite">{view.reps}</p>
             <p className="mt-1 text-sm">
-              {exercise.label} · {PHASE_LABELS[view.phase]}
+              {exercise.label} · {view.stage === 'SETUP' ? 'Chưa đếm' : PHASE_LABELS[view.phase]}
               {view.angle != null && <span className="text-white/70"> · {view.angle}°</span>}
             </p>
           </div>
+
+          {/* Not counting yet (or paused): get into position and hold still */}
+          {view.stage === 'SETUP' && (
+            <div className="absolute inset-x-6 top-1/2 mx-auto max-w-sm -translate-y-1/2 rounded-2xl bg-black/70 p-4 text-center" role="status">
+              <p className="text-lg font-semibold">Vào vị trí</p>
+              <p className="mt-1 text-sm">{view.setupMessage ?? exercise.setupHint}</p>
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/25" aria-hidden="true">
+                <div className="h-full rounded-full bg-lime transition-[width] duration-100" style={{ width: `${view.hold * 100}%` }} />
+              </div>
+            </div>
+          )}
 
           {/* A counted rep: a check mark that pops in the middle */}
           {view.event?.kind === 'COUNTED' && (

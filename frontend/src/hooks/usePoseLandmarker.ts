@@ -17,7 +17,7 @@ async function createLandmarker(delegate: 'GPU' | 'CPU'): Promise<PoseLandmarker
   return PoseLandmarker.createFromOptions(fileset, {
     baseOptions: { modelAssetPath: MODEL_PATH, delegate },
     runningMode: 'VIDEO',
-    numPoses: 1, // one person per session; also cheaper
+    numPoses: 2, // 2, not 1: a second person in the frame must be noticed to pause counting
   });
 }
 

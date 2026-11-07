@@ -14,6 +14,12 @@ export interface FormRule {
   message: string; // shown while the rule is broken
 }
 
+// The body position the exercise is done in (checked every frame, see analyzeFrame).
+// Doing something else (curling the arms standing up "as push-ups") pauses counting.
+export type PostureKind =
+  | 'PLANK' // body roughly horizontal, hands under the shoulders
+  | 'STANDING'; // torso roughly upright
+
 export interface ExerciseConfig {
   id: ExerciseId;
   label: string;
@@ -21,6 +27,13 @@ export interface ExerciseConfig {
   downBelow: number; // angle under this = bottom of the rep
   upAbove: number; // angle over this = top of the rep (a rep is counted here)
   formRules: readonly FormRule[];
+  posture: PostureKind;
+  anchors: readonly number[]; // points that stay in place during a set (hands, feet)
+  // The body must really go down: the drop of a height (shoulders above the hands, hips above
+  // the feet) must be at least this share of a limb length (arm, thigh), or the rep is refused
+  minDropRatio: number;
+  dropMessage: string;
+  setupHint: string; // what to do to be "in position" before counting starts
   cameraHint: string;
 }
 
@@ -39,6 +52,11 @@ export const EXERCISES: Record<ExerciseId, ExerciseConfig> = {
     downBelow: 100,
     upAbove: 160,
     formRules: [],
+    posture: 'STANDING',
+    anchors: [27, 28], // feet
+    minDropRatio: 0.25,
+    dropMessage: 'Hạ hông xuống thật, không chỉ co gối',
+    setupHint: 'Đứng thẳng, hai chân rộng bằng vai, đứng yên 1 giây',
     cameraHint: 'Đứng chính diện hoặc nghiêng so với camera, cách khoảng 2–3 m, thấy cả người từ đầu tới bàn chân.',
   },
   PUSH_UP: {
@@ -68,6 +86,11 @@ export const EXERCISES: Record<ExerciseId, ExerciseConfig> = {
         message: 'Giữ thẳng chân, không quỳ gối',
       },
     ],
+    posture: 'PLANK',
+    anchors: [15, 16, 27, 28], // hands and feet
+    minDropRatio: 0.25,
+    dropMessage: 'Hạ cả người xuống, không chỉ gập tay',
+    setupHint: 'Vào tư thế plank, tay thẳng, giữ yên 1 giây',
     cameraHint:
       'Đặt điện thoại dưới sàn, chéo khoảng 45° phía trước hoặc ngang bên cạnh, thấy cả người từ đầu tới chân. ' +
       'Đặt thẳng chính diện thì vai che chân nên app không kiểm tra được chân thẳng.',
