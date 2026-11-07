@@ -5,7 +5,7 @@ import { Alert } from '../components/Alert';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { EXERCISE_IDS, EXERCISES, type ExerciseId } from '../exercises';
-import { usePoseLandmarker } from '../hooks/usePoseLandmarker';
+import { savedPoseModel, savePoseModel, usePoseLandmarker, type PoseModel } from '../hooks/usePoseLandmarker';
 import { analyzeFrame, type FrameAnalysis } from '../utils/pose/analyzeFrame';
 import { createLandmarkFilter } from '../utils/pose/landmarkFilter';
 import type { RepEvent, RepPhase } from '../utils/pose/repCounter';
@@ -22,6 +22,11 @@ const PHASE_LABELS: Record<RepPhase, string> = {
   UP: 'Lên',
   DOWN: 'Xuống',
 };
+
+// Under this many frames per second after the first seconds, the full model is too slow for the
+// phone: a fast rep then has only 1-2 frames near the bottom. Switch to lite.
+const MIN_FPS = 12;
+const FPS_WARMUP_MS = 3000;
 
 const SKELETON_OK = '#ffffff';
 const SKELETON_BAD = '#f87171';
@@ -62,7 +67,7 @@ const sameView = (a: View, b: View) =>
 const round = (n: number | null | undefined) => (n == null ? '—' : String(Math.round(n)));
 
 // One line of raw numbers to tune the thresholds on a real phone
-function debugLine(analysis: FrameAnalysis, session: SessionState, fps: number): string {
+function debugLine(analysis: FrameAnalysis, session: SessionState, fps: number, model: string): string {
   const { topHeight, lowHeight, limb } = session.counter;
   const drop = topHeight != null && lowHeight != null && limb ? ((topHeight - lowHeight) / limb) * 100 : null;
   return [
@@ -71,7 +76,7 @@ function debugLine(analysis: FrameAnalysis, session: SessionState, fps: number):
     `hạ ${round(drop)}%`,
     `tư thế ${analysis.posture.kind}`,
     `form ${analysis.form.kind}`,
-    `${round(fps)} fps`,
+    `${round(fps)} fps (${model})`,
   ].join(' · ');
 }
 
@@ -110,7 +115,8 @@ function cameraErrorMessage(err: unknown): string {
 // Rep counter: everything runs in the browser. Camera frames never leave the device:
 // only the final rep count will be sent to the server (when saving a session).
 export default function WorkoutPage() {
-  const pose = usePoseLandmarker();
+  const [model, setModel] = useState<PoseModel>(savedPoseModel);
+  const pose = usePoseLandmarker(model);
   const [exerciseId, setExerciseId] = useState<ExerciseId>('SQUAT');
   const [running, setRunning] = useState(false);
   const [focus, setFocus] = useState(false); // camera fills the screen
@@ -224,6 +230,8 @@ export default function WorkoutPage() {
     const filterWorld = createLandmarkFilter();
     let fps = 0;
     let lastFrameAt = 0;
+    let loopStartedAt = 0; // set on the first frame
+    let switchedModel = false;
     let loggedSeq = sessionRef.current.counter.event?.seq ?? 0;
 
     const loop = () => {
@@ -236,8 +244,15 @@ export default function WorkoutPage() {
       const result = landmarker.detectForVideo(video, now);
       const image = filterImage(result.landmarks[0], now);
       const world = filterWorld(result.worldLandmarks[0], now);
+      if (!loopStartedAt) loopStartedAt = now;
       if (lastFrameAt) fps = fps * 0.9 + (1000 / (now - lastFrameAt)) * 0.1;
       lastFrameAt = now;
+      // Too slow with the full model: use lite from now on (the set and its reps are kept)
+      if (!switchedModel && pose.model === 'full' && now - loopStartedAt > FPS_WARMUP_MS && fps < MIN_FPS) {
+        switchedModel = true;
+        savePoseModel('lite');
+        setModel('lite');
+      }
       const frameSize = { width: video.videoWidth, height: video.videoHeight };
       const analysis = analyzeFrame(image, world, current, frameSize);
       const session = stepSession(sessionRef.current, analysis, now, current);
@@ -290,7 +305,7 @@ export default function WorkoutPage() {
         formMessage: state.formMessage,
         formUnknown: current.formRules.length > 0 && analysis.form.kind === 'unknown',
         event: state.event,
-        debug: showDebug ? debugLine(analysis, session, fps) : null,
+        debug: showDebug ? debugLine(analysis, session, fps, pose.model) : null,
       };
       if (!sameView(next, shown)) {
         shown = next;
