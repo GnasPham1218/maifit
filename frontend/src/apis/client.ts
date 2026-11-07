@@ -40,7 +40,9 @@ export interface RequestOptions {
 
 async function send<T>(path: string, { method = 'GET', body, auth = true }: RequestOptions = {}): Promise<T> {
   const headers: Record<string, string> = {};
-  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  const isForm = body instanceof FormData;
+  // FormData: no Content-Type here, the browser adds 'multipart/form-data; boundary=...' itself
+  if (body !== undefined && !isForm) headers['Content-Type'] = 'application/json';
   // Public endpoints never get the header: an expired token would make Spring reject them
   if (auth && accessToken) headers.Authorization = `Bearer ${accessToken}`;
 
@@ -49,7 +51,7 @@ async function send<T>(path: string, { method = 'GET', body, auth = true }: Requ
     res = await fetch(`/api${path}`, {
       method,
       headers,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      body: isForm ? body : body !== undefined ? JSON.stringify(body) : undefined,
       credentials: 'same-origin', // send the refresh cookie (same origin thanks to the Vite proxy / Nginx)
     });
   } catch {

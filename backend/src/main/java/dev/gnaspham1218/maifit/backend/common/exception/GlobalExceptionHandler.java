@@ -14,6 +14,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -44,6 +46,20 @@ public class GlobalExceptionHandler {
     // JSON sai cú pháp, hoặc tham số sai kiểu (vd. /meals/abc thay vì /meals/1)
     @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ApiResponse<Void>> handleBadRequest(Exception ex) {
+        ErrorCode code = ErrorCode.BAD_REQUEST;
+        return build(code.getStatus(), code, code.getDefaultMessage(), null);
+    }
+
+    // Upload larger than spring.servlet.multipart.max-file-size
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUploadTooLarge(MaxUploadSizeExceededException ex) {
+        ErrorCode code = ErrorCode.IMAGE_INVALID;
+        return build(code.getStatus(), code, code.getDefaultMessage(), null);
+    }
+
+    // Multipart request without the expected part (e.g. no "image" field)
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMissingPart(MissingServletRequestPartException ex) {
         ErrorCode code = ErrorCode.BAD_REQUEST;
         return build(code.getStatus(), code, code.getDefaultMessage(), null);
     }

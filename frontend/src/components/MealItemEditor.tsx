@@ -2,27 +2,34 @@ import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { getErrorMessage } from '../constants/errorMessages';
 import type { Food, MealItem } from '../types/meal';
+import { edibleHint, leanHint } from '../utils/edible';
 import { formatNumber } from '../utils/number';
-import { kcalFor, parseGrams } from '../utils/nutrition';
+import { kcalFor, nutritionFor, parseGrams } from '../utils/nutrition';
 import { Button } from './Button';
+import { FatTrimSlider } from './FatTrimSlider';
 import { FormField } from './FormField';
+import { MacroLine } from './MacroLine';
 
 interface Props {
   item: MealItem;
   food: Food | undefined; // for the live calorie preview
-  onSave: (grams: number) => Promise<void>;
+  leanFood: Food | undefined; // food.leanVersionId resolved, when it has one
+  onSave: (grams: number, fatPercent: number | null) => Promise<void>;
   onRemove: () => Promise<void>;
   onCancel: () => void;
 }
 
 // Inline editor opened by tapping a food row: change grams, see calories update while typing
-export function MealItemEditor({ item, food, onSave, onRemove, onCancel }: Props) {
+export function MealItemEditor({ item, food, leanFood, onSave, onRemove, onCancel }: Props) {
   const [grams, setGrams] = useState(String(item.grams));
+  // 100 = as listed (the food's own numbers), matching a food without a trim pair at all
+  const [fatPercent, setFatPercent] = useState(item.fatPercent ?? 100);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   const parsed = parseGrams(grams);
-  const preview = food && parsed != null ? kcalFor(food, parsed) : null;
+  const trim = food?.leanVersionId && leanFood ? { leanFood, fatPercent } : undefined;
+  const preview = food && parsed != null ? kcalFor(food, parsed, trim) : null;
 
   async function submit(action: () => Promise<void>) {
     setError(null);
@@ -40,7 +47,7 @@ export function MealItemEditor({ item, food, onSave, onRemove, onCancel }: Props
       className="grid gap-3 rounded-2xl bg-bg p-4"
       onSubmit={(e) => {
         e.preventDefault();
-        if (parsed != null) void submit(() => onSave(parsed));
+        if (parsed != null) void submit(() => onSave(parsed, trim ? fatPercent : null));
       }}
     >
       <p className="font-medium">{item.foodName}</p>
@@ -54,6 +61,13 @@ export function MealItemEditor({ item, food, onSave, onRemove, onCancel }: Props
           {preview != null ? `≈ ${formatNumber(preview)}` : '—'} <span className="text-sm text-muted">kcal</span>
         </p>
       </div>
+      {food && parsed != null && <MacroLine nutrition={nutritionFor(food, parsed, trim)} />}
+      {trim && (
+        <FatTrimSlider id={`fat-trim-${item.id}`} food={food!} leanFood={leanFood!}
+          value={fatPercent} onChange={setFatPercent} />
+      )}
+      {food && edibleHint(food) && <p className="text-xs text-ink-soft">{edibleHint(food)}</p>}
+      {food && leanHint(food) && <p className="text-xs text-ink-soft">{leanHint(food)}</p>}
       {item.aiGrams != null && (
         <p className="text-sm text-muted">AI ước lượng ban đầu: {formatNumber(item.aiGrams)} g</p>
       )}

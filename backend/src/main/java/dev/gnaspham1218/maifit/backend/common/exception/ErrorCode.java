@@ -30,7 +30,14 @@ public enum ErrorCode {
     FOOD_NOT_FOUND(HttpStatus.BAD_REQUEST, "One or more foods do not exist"),
     MEAL_IN_FUTURE(HttpStatus.BAD_REQUEST, "Meal time cannot be in the future"),
     MEAL_ITEMS_LIMIT(HttpStatus.BAD_REQUEST, "A meal can have at most 30 items"),
-    MEAL_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "At most 10 meals can be logged per day");
+    MEAL_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "At most 10 meals can be logged per day"),
+    FOOD_REQUEST_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "Daily limit for reporting missing foods reached"),
+    FAT_PERCENT_NOT_APPLICABLE(HttpStatus.BAD_REQUEST, "This food has no lean/fat trim option"),
+
+    // ---- AI ----
+    AI_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "Daily AI usage limit reached"),
+    AI_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "The AI service is unavailable, please try again later"),
+    IMAGE_INVALID(HttpStatus.BAD_REQUEST, "Only JPEG, PNG or WebP images up to 2 MB are accepted");
 
     private final HttpStatus status;
     private final String defaultMessage;

@@ -1,0 +1,4 @@
+# USDA raw files (tens of MB each): download locally, never commit
+data/
+__pycache__/
+review.backup.csv

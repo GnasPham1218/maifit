@@ -32,6 +32,8 @@ public class MealResponseMapper {
                 food.getPreparation(),
                 item.getGrams(),
                 item.getAiGrams(),
-                NutritionCalculator.forItem(food, item.getGrams()));
+                item.getFatPercent(),
+                food.getLeanVersionId(),
+                NutritionCalculator.forItem(food, item.getGrams(), item.getFatPercent()));
     }
 }

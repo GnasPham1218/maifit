@@ -4,7 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -52,4 +55,16 @@ public class Food {
 
     @Column(nullable = false)
     private String source;
+
+    // Non-null only on the "as sold" (fatty) row of a pair that has a matching lean-only row
+    // (V11 — currently just Sườn thăn heo / Sườn lưng heo). Lets a meal item interpolate
+    // nutrition between this row and leanVersion using meal_items.fat_percent.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lean_version_id")
+    private Food leanVersion;
+
+    // For FoodMapper (MapStruct maps FoodResponse.leanVersionId from this getter)
+    public Long getLeanVersionId() {
+        return leanVersion == null ? null : leanVersion.getId();
+    }
 }

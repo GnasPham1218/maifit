@@ -1,68 +1,43 @@
 import { X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { getErrorMessage } from '../constants/errorMessages';
-import { MEAL_TYPE_LABELS, PREPARATIONS, WEIGHED_WHEN_LABELS } from '../constants/meal';
+import { MEAL_TYPE_LABELS } from '../constants/meal';
 import type { Food, MealType } from '../types/meal';
+import { edibleHint, leanHint } from '../utils/edible';
 import { formatNumber } from '../utils/number';
-import { kcalFor, parseGrams } from '../utils/nutrition';
-import { normalize } from '../utils/text';
+import { kcalFor, nutritionFor, parseGrams } from '../utils/nutrition';
 import { Button } from './Button';
+import { FatTrimSlider } from './FatTrimSlider';
+import { FoodChooser } from './FoodChooser';
 import { FormField } from './FormField';
+import { MacroLine } from './MacroLine';
 
 interface Props {
   mealType: MealType;
   foods: Food[] | null; // null while loading
-  onAdd: (foodId: number, grams: number) => Promise<void>;
+  onAdd: (foodId: number, grams: number, fatPercent: number | null) => Promise<void>;
   onClose: () => void;
 }
 
-const MAX_RESULTS = 12;
-
-const CHIP = 'cursor-pointer rounded-full border px-3 py-1.5 text-sm transition-colors';
-const chipClass = (selected: boolean) =>
-  `${CHIP} ${selected ? 'border-ink bg-ink text-white' : 'border-line bg-surface hover:bg-bg'}`;
-
 // Add one food to a meal: search by name -> "weighed raw or cooked?" -> grams (calories shown live)
 export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
-  const [query, setQuery] = useState('');
-  const [name, setName] = useState<string | null>(null);
-  const [foodId, setFoodId] = useState<number | null>(null);
+  const [food, setFood] = useState<Food | null>(null);
   const [grams, setGrams] = useState('');
+  const [fatPercent, setFatPercent] = useState(100); // 100 = as listed (mua về, chưa lọc mỡ)
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  // One entry per food name; its rows are the preparation states, RAW first
-  const byName = useMemo(() => {
-    const map = new Map<string, Food[]>();
-    for (const f of foods ?? []) map.set(f.name, [...(map.get(f.name) ?? []), f]);
-    for (const list of map.values()) {
-      list.sort((a, b) => PREPARATIONS.indexOf(a.preparation) - PREPARATIONS.indexOf(b.preparation));
-    }
-    return map;
-  }, [foods]);
-
-  const results = useMemo(() => {
-    const q = normalize(query);
-    return [...byName.keys()].filter((n) => normalize(n).includes(q)).slice(0, MAX_RESULTS);
-  }, [byName, query]);
-
-  const variants = name ? (byName.get(name) ?? []) : [];
-  const food = variants.find((f) => f.id === foodId);
   const parsed = parseGrams(grams);
-
-  function pickName(n: string) {
-    const list = byName.get(n) ?? [];
-    setName(n);
-    setFoodId(list.length === 1 ? list[0].id : null); // only one state: nothing to ask
-    setError(null);
-  }
+  const foodsById = useMemo(() => new Map((foods ?? []).map((f) => [f.id, f])), [foods]);
+  const leanFood = food?.leanVersionId != null ? foodsById.get(food.leanVersionId) : undefined;
+  const trim = food?.leanVersionId && leanFood ? { leanFood, fatPercent } : undefined;
 
   async function handleSubmit() {
     if (!food || parsed == null) return;
     setError(null);
     setBusy(true);
     try {
-      await onAdd(food.id, parsed); // the parent closes the picker on success
+      await onAdd(food.id, parsed, trim ? fatPercent : null); // the parent closes the picker on success
     } catch (err) {
       setError(getErrorMessage(err));
       setBusy(false);
@@ -83,36 +58,8 @@ export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
         <p className="text-sm text-muted">Đang tải danh sách món…</p>
       ) : (
         <>
-          <FormField label="Tìm món" name={`food-search-${mealType}`} type="search" autoFocus
-            placeholder="vd. gà, cơm, chuối" value={query} onChange={(e) => setQuery(e.target.value)} />
-
-          {results.length === 0 ? (
-            <p className="text-sm text-muted">Chưa có món này trong danh sách.</p>
-          ) : (
-            <div className="flex flex-wrap gap-2">
-              {results.map((n) => (
-                <button key={n} type="button" className={chipClass(n === name)} aria-pressed={n === name}
-                  onClick={() => pickName(n)}>
-                  {n}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* The same food has very different calories raw vs cooked (rice: 365 vs 130 kcal/100 g) */}
-          {variants.length > 1 && (
-            <fieldset className="grid gap-2">
-              <legend className="mb-2 text-sm font-medium">Bạn cân {name} lúc nào?</legend>
-              <div className="flex flex-wrap gap-2">
-                {variants.map((v) => (
-                  <button key={v.id} type="button" className={chipClass(v.id === foodId)}
-                    aria-pressed={v.id === foodId} onClick={() => setFoodId(v.id)}>
-                    {WEIGHED_WHEN_LABELS[v.preparation]}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-          )}
+          <FoodChooser foods={foods} idPrefix={`food-${mealType}`} autoFocus
+            onChange={(f) => { setFood(f); setFatPercent(100); setError(null); }} />
 
           {food && (
             <form className="flex flex-wrap items-end gap-3"
@@ -123,7 +70,7 @@ export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
                   error={grams !== '' && parsed == null ? 'Từ 0,1 đến 5000 g' : undefined} />
               </div>
               <p className="pb-2.5 text-lg font-light">
-                {parsed != null ? `≈ ${formatNumber(kcalFor(food, parsed))}` : '—'}{' '}
+                {parsed != null ? `≈ ${formatNumber(kcalFor(food, parsed, trim))}` : '—'}{' '}
                 <span className="text-sm text-muted">kcal</span>
               </p>
               <Button type="submit" disabled={busy || parsed == null} className="mb-0.5">
@@ -131,6 +78,13 @@ export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
               </Button>
             </form>
           )}
+          {food && parsed != null && <MacroLine nutrition={nutritionFor(food, parsed, trim)} />}
+          {trim && (
+            <FatTrimSlider id={`fat-trim-new-${mealType}`} food={food!} leanFood={leanFood!}
+              value={fatPercent} onChange={setFatPercent} />
+          )}
+          {food && edibleHint(food) && <p className="text-xs text-ink-soft">{edibleHint(food)}</p>}
+          {food && leanHint(food) && <p className="text-xs text-ink-soft">{leanHint(food)}</p>}
           {/* USDA measures fried foods AFTER frying, so the absorbed oil is already counted */}
           {food?.preparation === 'FRIED' && (
             <p className="text-sm text-ink-soft">Số liệu món chiên đã gồm dầu ngấm vào món, không cần thêm Dầu ăn.</p>

@@ -1,8 +1,9 @@
-import { ChevronDown, Plus } from 'lucide-react';
+import { Camera, ChevronDown, Plus } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { MEAL_TYPE_LABELS, PREPARATION_LABELS } from '../constants/meal';
 import type { Food, Meal, MealItem, MealType } from '../types/meal';
 import { formatNumber } from '../utils/number';
+import { MacroLine } from './MacroLine';
 import { MealItemEditor } from './MealItemEditor';
 
 interface Props {
@@ -11,10 +12,11 @@ interface Props {
   foodsById: Map<number, Food>;
   editingItemId: number | null;
   onEdit: (itemId: number | null) => void;
-  onSaveGrams: (meal: Meal, item: MealItem, grams: number) => Promise<void>;
+  onSaveGrams: (meal: Meal, item: MealItem, grams: number, fatPercent: number | null) => Promise<void>;
   onRemoveItem: (meal: Meal, item: MealItem) => Promise<void>;
   onAddClick: () => void;
-  picker: ReactNode; // the FoodPicker when it is open for this meal type
+  onPhotoClick: () => void;
+  picker: ReactNode; // the FoodPicker or the photo review when open for this meal type
 }
 
 // Long lists are cut to the first rows; "Xem thêm" shows the rest
@@ -23,7 +25,7 @@ const VISIBLE_ROWS = 6;
 // One meal of the day (MyFitnessPal style). Collapsed by default: the header shows the meal's calories
 // and item count; tap it to unfold the food rows, then tap a row to edit its grams.
 export function MealGroupCard(props: Props) {
-  const { mealType, meals, foodsById, editingItemId, onEdit, onSaveGrams, onRemoveItem, onAddClick, picker } = props;
+  const { mealType, meals, foodsById, editingItemId, onEdit, onSaveGrams, onRemoveItem, onAddClick, onPhotoClick, picker } = props;
   const rows = meals.flatMap((meal) => meal.items.map((item) => ({ meal, item })));
   const [open, setOpen] = useState(false); // food rows unfolded
   const [expanded, setExpanded] = useState(false); // all rows instead of the first VISIBLE_ROWS
@@ -51,6 +53,15 @@ export function MealGroupCard(props: Props) {
         )}
         <button type="button"
           onClick={() => {
+            setOpen(true);
+            onPhotoClick();
+          }}
+          className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-bg text-ink hover:bg-line"
+          aria-label={`Nhận diện ảnh cho ${MEAL_TYPE_LABELS[mealType].toLowerCase()}`} title="Thêm bằng ảnh">
+          <Camera aria-hidden="true" className="size-4" />
+        </button>
+        <button type="button"
+          onClick={() => {
             setOpen(true); // show the list so the new food appears where the user expects it
             onAddClick();
           }}
@@ -70,7 +81,11 @@ export function MealGroupCard(props: Props) {
                 <MealItemEditor
                   item={item}
                   food={foodsById.get(item.foodId)}
-                  onSave={(grams) => onSaveGrams(meal, item, grams)}
+                  leanFood={(() => {
+                    const leanId = foodsById.get(item.foodId)?.leanVersionId;
+                    return leanId != null ? foodsById.get(leanId) : undefined;
+                  })()}
+                  onSave={(grams, fatPercent) => onSaveGrams(meal, item, grams, fatPercent)}
                   onRemove={() => onRemoveItem(meal, item)}
                   onCancel={() => onEdit(null)}
                 />
@@ -87,7 +102,8 @@ export function MealGroupCard(props: Props) {
                         </span>
                       )}
                     </span>
-                    <span className="text-sm text-muted">{formatNumber(item.grams)} g</span>
+                    <span className="block text-sm text-muted">{formatNumber(item.grams)} g</span>
+                    <MacroLine nutrition={item.nutrition} />
                   </span>
                   <span className="shrink-0 text-lg font-light">
                     {formatNumber(item.nutrition.kcal)} <span className="text-sm text-muted">kcal</span>

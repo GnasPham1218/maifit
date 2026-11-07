@@ -13,6 +13,8 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -43,20 +45,32 @@ public class MealItem {
     @Column(precision = 6, scale = 1)
     private BigDecimal aiGrams;
 
+    // 0-100, only meaningful when food.leanVersion != null (V11). null = use food as listed.
+    // The column is SMALLINT; Hibernate maps Integer to INTEGER by default, and ddl-auto=validate
+    // rejects the mismatch at startup, so the JDBC type is pinned here.
+    @Column(name = "fat_percent")
+    @JdbcTypeCode(SqlTypes.SMALLINT)
+    private Integer fatPercent;
+
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
     // Package-private: only MealLog.addItem creates items
-    MealItem(MealLog mealLog, Food food, BigDecimal grams, BigDecimal aiGrams) {
+    MealItem(MealLog mealLog, Food food, BigDecimal grams, BigDecimal aiGrams, Integer fatPercent) {
         this.mealLog = mealLog;
         this.food = food;
         this.grams = grams;
         this.aiGrams = aiGrams;
+        this.fatPercent = fatPercent;
         this.createdAt = Instant.now();
     }
 
     // aiGrams is never changed: it keeps the AI's original guess to compare with
     public void changeGrams(BigDecimal grams) {
         this.grams = grams;
+    }
+
+    public void changeFatPercent(Integer fatPercent) {
+        this.fatPercent = fatPercent;
     }
 }
