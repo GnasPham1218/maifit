@@ -81,8 +81,17 @@ describe('analyzeFrame: posture (layer 2)', () => {
     expect(analyze(body(twoSides(PLANK), { 23: 0.1, 24: 0.1 })).posture).toEqual({ kind: 'unknown' });
   });
 
-  it('half-hidden hips (behind the shoulders, from the front) are enough for the slope', () => {
-    expect(analyze(body(twoSides(PLANK), { 23: 0.3, 24: 0.3 })).posture).toEqual({ kind: 'ok' });
+  it('filmed from the front (hips guessed), a plank is accepted and the legs are not judged', () => {
+    // the model guesses the hidden hips badly: here as for a knee push-up
+    const guessed = { ...PLANK, hip: [0.35, 0.3] as const };
+    const result = analyze(body(twoSides(guessed), { 23: 0.3, 24: 0.3 }));
+    expect(result.posture).toEqual({ kind: 'ok' });
+    expect(result.shoulder).toBeNull();
+  });
+
+  it('the bottom of a rep (shoulders level with the hands) is still a push-up posture', () => {
+    const bottom = { ...PLANK, shoulder: [0, 0.5] as const, elbow: [-0.25, 0.35] as const, hip: [0.5, 0.52] as const };
+    expect(analyze(body(twoSides(bottom))).posture).toEqual({ kind: 'ok' });
   });
 });
 
@@ -112,9 +121,9 @@ describe('analyzeFrame: height, anchors and body size', () => {
   });
 
   it('anchors are in pixels, null when hidden', () => {
-    const result = analyze(body(twoSides(PLANK), { 27: 0.1 }));
+    const result = analyze(body(twoSides(PLANK), { 16: 0.1 }));
     expect(result.anchors[0]).toEqual({ x: 0, y: 550 }); // left wrist
-    expect(result.anchors[2]).toBeNull(); // left ankle hidden
+    expect(result.anchors[1]).toBeNull(); // right wrist hidden
   });
 
   it('body size on screen is the diagonal of the seen points', () => {

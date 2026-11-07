@@ -255,7 +255,9 @@ export default function WorkoutPage() {
         angle: state.angle == null ? null : Math.round(state.angle),
         seen: analysis.angle != null,
         formMessage: state.formMessage,
-        formUnknown: current.formRules.length > 0 && analysis.form.kind === 'unknown',
+        // Push-up filmed straight on: the hips/legs are hidden, so kneeling cannot be checked
+        formUnknown: (current.formRules.length > 0 && analysis.form.kind === 'unknown') ||
+          (current.posture === 'PLANK' && analysis.angle != null && analysis.shoulder == null),
         event: state.event,
         debug: showDebug ? debugLine(analysis, session, fps) : null,
       };
@@ -288,7 +290,7 @@ export default function WorkoutPage() {
       : view.formMessage
         ? { tone: 'bg-danger', text: view.formMessage }
         : view.formUnknown
-          ? { tone: 'bg-black/70', text: 'Chưa thấy chân: đặt camera chéo hoặc nghiêng để kiểm tra tư thế.' }
+          ? { tone: 'bg-black/70', text: 'Camera không thấy chân: chưa kiểm tra quỳ gối (đặt chéo 45° để kiểm tra).' }
           : null;
 
   const stage = (

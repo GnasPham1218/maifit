@@ -71,13 +71,16 @@ export const EXERCISES: Record<ExerciseId, ExerciseConfig> = {
     // are checked through the posture instead (a back sloping like a knee push-up is refused)
     formRules: [],
     posture: 'PLANK',
-    anchors: [15, 16, 27, 28], // hands and feet
+    // Hands only: filmed from the front the feet are hidden and their guessed position jumps,
+    // which looked like leaving the spot
+    anchors: [15, 16],
     minDropRatio: 0.25,
     dropMessage: 'Hạ cả người xuống, không chỉ gập tay',
     setupHint: 'Vào tư thế plank, tay thẳng, giữ yên 1 giây',
     cameraHint:
       'Đặt điện thoại dưới sàn ngay trước mặt, cách khoảng 1–1,5 m, dựng hơi ngửa lên ' +
-      'để thấy đầu, vai, hai tay và lưng.',
+      'để thấy đầu, vai và hai tay. Đặt chính diện thì camera không thấy chân nên không kiểm tra quỳ gối; ' +
+      'muốn kiểm tra thì đặt chéo khoảng 45°.',
   },
 };
 
