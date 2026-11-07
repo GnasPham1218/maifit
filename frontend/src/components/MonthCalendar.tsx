@@ -4,8 +4,11 @@ import { formatNumber } from '../utils/number';
 
 interface Props {
   month: string; // yyyy-MM shown
-  kcalByDate: Map<string, number>; // only days with meals
-  targetKcal: number | null;
+  valueByDate: Map<string, number>; // only days with data (meals, sets…)
+  unit: string; // shown in the aria-label: "kcal", "rep"
+  emptyLabel: string; // aria-label of a day without data
+  target?: number | null; // when set, a small bar under each day shows value vs target
+  footnote?: string;
   selectedDate: string;
   today: string;
   onSelectDate: (date: string) => void;
@@ -16,8 +19,10 @@ const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 const ARROW =
   'flex size-9 cursor-pointer items-center justify-center rounded-full hover:bg-bg disabled:cursor-not-allowed disabled:opacity-40';
 
-// Month grid: each day shows the calories logged + a small bar vs the target. Tap a day to open it.
-export function MonthCalendar({ month, kcalByDate, targetKcal, selectedDate, today, onSelectDate, onChangeMonth }: Props) {
+// Month grid: each day shows its value (kcal, reps…) + optionally a small bar vs a target. Tap a day to open it.
+export function MonthCalendar({
+  month, valueByDate, unit, emptyLabel, target = null, footnote, selectedDate, today, onSelectDate, onChangeMonth,
+}: Props) {
   const count = daysInMonth(month);
   const leadingBlanks = mondayFirstWeekday(`${month}-01`);
   const dates = Array.from({ length: count }, (_, i) => `${month}-${String(i + 1).padStart(2, '0')}`);
@@ -42,10 +47,10 @@ export function MonthCalendar({ month, kcalByDate, targetKcal, selectedDate, tod
         {Array.from({ length: leadingBlanks }, (_, i) => <span key={`blank-${i}`} />)}
 
         {dates.map((date) => {
-          const kcal = kcalByDate.get(date);
+          const value = valueByDate.get(date);
           const selected = date === selectedDate;
           const future = date > today;
-          const percent = kcal != null && targetKcal ? Math.min(100, (kcal / targetKcal) * 100) : null;
+          const percent = value != null && target ? Math.min(100, (value / target) * 100) : null;
           return (
             <button
               key={date}
@@ -53,7 +58,7 @@ export function MonthCalendar({ month, kcalByDate, targetKcal, selectedDate, tod
               disabled={future}
               onClick={() => onSelectDate(date)}
               aria-pressed={selected}
-              aria-label={`Ngày ${Number(date.slice(8))}: ${kcal != null ? `${formatNumber(kcal)} kcal` : 'chưa ghi bữa ăn'}`}
+              aria-label={`Ngày ${Number(date.slice(8))}: ${value != null ? `${formatNumber(value)} ${unit}` : emptyLabel}`}
               className={
                 'flex min-h-14 min-w-0 cursor-pointer flex-col items-center justify-start gap-0.5 rounded-2xl px-0.5 pt-1.5 ' +
                 'transition-colors disabled:cursor-not-allowed disabled:opacity-30 ' +
@@ -61,10 +66,10 @@ export function MonthCalendar({ month, kcalByDate, targetKcal, selectedDate, tod
               }
             >
               <span className="text-sm font-medium">{Number(date.slice(8))}</span>
-              {kcal != null && (
+              {value != null && (
                 <>
                   <span className={`text-[10px] leading-tight ${selected ? 'text-white/80' : 'text-muted'}`}>
-                    {formatNumber(Math.round(kcal))}
+                    {formatNumber(Math.round(value))}
                   </span>
                   {percent != null && (
                     <span className={`h-1 w-3/4 overflow-hidden rounded-full ${selected ? 'bg-white/25' : 'bg-line'}`}>
@@ -78,7 +83,7 @@ export function MonthCalendar({ month, kcalByDate, targetKcal, selectedDate, tod
           );
         })}
       </div>
-      {targetKcal != null && <p className="mt-3 text-xs text-muted">Thanh dưới mỗi ngày: calo so với mục tiêu.</p>}
+      {footnote && <p className="mt-3 text-xs text-muted">{footnote}</p>}
     </div>
   );
 }

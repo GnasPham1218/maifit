@@ -5,6 +5,7 @@ import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomePage from './pages/HomePage';
+import LeaderboardPage from './pages/LeaderboardPage';
 import LoginPage from './pages/LoginPage';
 import MealsPage from './pages/MealsPage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
           { path: '/', element: <HomePage /> },
           { path: '/meals', element: <MealsPage /> },
           { path: '/workout', element: <WorkoutPage /> },
+          { path: '/leaderboard', element: <LeaderboardPage /> },
           { path: '/profile', element: <ProfilePage /> },
         ],
       },

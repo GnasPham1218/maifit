@@ -34,6 +34,12 @@ public enum ErrorCode {
     FOOD_REQUEST_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "Daily limit for reporting missing foods reached"),
     FAT_PERCENT_NOT_APPLICABLE(HttpStatus.BAD_REQUEST, "This food has no lean/fat trim option"),
 
+    // ---- Workouts ----
+    WORKOUT_TIME_INVALID(HttpStatus.BAD_REQUEST, "A set must be saved within 24 hours and cannot be in the future"),
+    WORKOUT_PACE_INVALID(HttpStatus.BAD_REQUEST, "Too many reps for the duration of the set"),
+    WORKOUT_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "At most 20 sets can be saved per day"),
+    WORKOUT_REPS_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "Daily rep limit for this exercise reached"),
+
     // ---- AI ----
     AI_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "Daily AI usage limit reached"),
     AI_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "The AI service is unavailable, please try again later"),
