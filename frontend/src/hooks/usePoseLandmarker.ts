@@ -21,32 +21,37 @@ async function createLandmarker(delegate: 'GPU' | 'CPU'): Promise<PoseLandmarker
   });
 }
 
-// Loads the model once per page visit and frees it (WASM + GPU memory) when the page closes.
+// One landmarker for the whole app session: compiling the WASM and loading the model onto the GPU
+// takes 1-3 s, so it is done the first time /workout opens and reused on every later visit.
+// Never closed: it holds a few tens of MB until the tab closes, only for users who opened /workout.
+// A failed attempt is not kept, so the next visit tries again.
+let shared: Promise<PoseLandmarker> | null = null;
+
+function getLandmarker(): Promise<PoseLandmarker> {
+  if (!shared) {
+    // GPU (WebGL) is several times faster; some browsers/devices refuse it -> fall back to CPU
+    shared = createLandmarker('GPU').catch(() => createLandmarker('CPU'));
+    shared.catch(() => {
+      shared = null;
+    });
+  }
+  return shared;
+}
+
 export function usePoseLandmarker(): PoseLandmarkerStatus {
   const [status, setStatus] = useState<PoseLandmarkerStatus>({ kind: 'loading' });
 
   useEffect(() => {
     let cancelled = false;
-    let instance: PoseLandmarker | null = null;
-
-    // GPU (WebGL) is several times faster; some browsers/devices refuse it -> fall back to CPU
-    createLandmarker('GPU')
-      .catch(() => createLandmarker('CPU'))
+    getLandmarker()
       .then((landmarker) => {
-        if (cancelled) {
-          landmarker.close(); // the page closed while loading
-          return;
-        }
-        instance = landmarker;
-        setStatus({ kind: 'ready', landmarker });
+        if (!cancelled) setStatus({ kind: 'ready', landmarker });
       })
       .catch(() => {
         if (!cancelled) setStatus({ kind: 'error' });
       });
-
     return () => {
-      cancelled = true;
-      instance?.close();
+      cancelled = true; // only stop updating this page; the landmarker stays for the next visit
     };
   }, []);
 
