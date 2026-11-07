@@ -76,7 +76,8 @@ export const EXERCISES: Record<ExerciseId, ExerciseConfig> = {
     // Hands only: filmed from the front the feet are hidden and their guessed position jumps,
     // which looked like leaving the spot
     anchors: [15, 16],
-    minDropRatio: 0.25,
+    // Measured on a phone: chest to the floor ~42% of the arm, a half rep ~20% -> 30% in between
+    minDropRatio: 0.3,
     dropMessage: 'Hạ cả người xuống, không chỉ gập tay',
     setupHint: 'Vào tư thế plank, tay thẳng, giữ yên 1 giây',
     cameraHint:
