@@ -155,7 +155,11 @@ export default function WorkoutPage() {
     };
 
     frameId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(frameId);
+    return () => {
+      cancelAnimationFrame(frameId);
+      // Camera off (or exercise changed): the last skeleton must not stay drawn over the screen
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
   }, [running, pose, exerciseId]);
 
   return (
