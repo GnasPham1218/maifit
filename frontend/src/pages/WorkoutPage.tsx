@@ -420,6 +420,37 @@ export default function WorkoutPage() {
           ? { tone: 'bg-black/70', text: 'Chưa thấy rõ chân: chưa kiểm tra được tư thế.' }
           : null;
 
+  // Camera off with a set not saved: save it, drop it, or keep training.
+  // Rendered INSIDE the stage: in real fullscreen (Fullscreen API) the browser only shows the
+  // fullscreen element and its children, so a dialog outside it stayed invisible on the phone.
+  const unsavedDialog = confirmStop && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4" role="dialog"
+          aria-modal="true" aria-labelledby="unsaved-title">
+          <div className="grid w-full max-w-sm gap-4 rounded-card bg-surface p-6">
+            <p id="unsaved-title" className="text-lg font-semibold">Set chưa được lưu</p>
+            <p className="text-sm text-ink-soft">
+              Bạn đã tập {view.reps} rep {exercise.label.toLowerCase()} nhưng chưa lưu. Lưu trước khi tắt camera?
+            </p>
+            <div className="grid gap-2">
+              <Button disabled={saving} onClick={() => void saveSet().then((ok) => {
+                setConfirmStop(false);
+                if (ok) stopCamera();
+              })}>
+                <Save aria-hidden="true" className="size-4" /> {saving ? 'Đang lưu…' : 'Lưu rồi tắt'}
+              </Button>
+              <Button variant="secondary" disabled={saving} onClick={() => {
+                setConfirmStop(false);
+                resetCounter();
+                stopCamera();
+              }}>
+                Tắt, không lưu
+              </Button>
+              <Button variant="secondary" disabled={saving} onClick={() => setConfirmStop(false)}>Tiếp tục tập</Button>
+            </div>
+          </div>
+        </div>
+  );
+
   const stage = (
     <div
       ref={stageRef}
@@ -501,6 +532,8 @@ export default function WorkoutPage() {
           </div>
         </div>
       )}
+
+      {unsavedDialog}
 
       {/* Controls on the camera: always the fullscreen toggle; in focus mode, the others too */}
       <div className="absolute inset-x-3 bottom-3 flex items-center justify-end gap-2">
@@ -607,34 +640,6 @@ export default function WorkoutPage() {
         </div>
       </div>
 
-      {/* Camera off with a set not saved: save it, drop it, or keep training */}
-      {confirmStop && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4" role="dialog"
-          aria-modal="true" aria-labelledby="unsaved-title">
-          <div className="grid w-full max-w-sm gap-4 rounded-card bg-surface p-6">
-            <p id="unsaved-title" className="text-lg font-semibold">Set chưa được lưu</p>
-            <p className="text-sm text-ink-soft">
-              Bạn đã tập {view.reps} rep {exercise.label.toLowerCase()} nhưng chưa lưu. Lưu trước khi tắt camera?
-            </p>
-            <div className="grid gap-2">
-              <Button disabled={saving} onClick={() => void saveSet().then((ok) => {
-                setConfirmStop(false);
-                if (ok) stopCamera();
-              })}>
-                <Save aria-hidden="true" className="size-4" /> {saving ? 'Đang lưu…' : 'Lưu rồi tắt'}
-              </Button>
-              <Button variant="secondary" disabled={saving} onClick={() => {
-                setConfirmStop(false);
-                resetCounter();
-                stopCamera();
-              }}>
-                Tắt, không lưu
-              </Button>
-              <Button variant="secondary" disabled={saving} onClick={() => setConfirmStop(false)}>Tiếp tục tập</Button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
