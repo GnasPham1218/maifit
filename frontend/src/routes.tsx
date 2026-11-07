@@ -12,6 +12,7 @@ import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
+import WorkoutPage from './pages/WorkoutPage';
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
         children: [
           { path: '/', element: <HomePage /> },
           { path: '/meals', element: <MealsPage /> },
+          { path: '/workout', element: <WorkoutPage /> },
           { path: '/profile', element: <ProfilePage /> },
         ],
       },
