@@ -13,7 +13,6 @@ const frame = (o: Partial<FrameAnalysis> = {}): FrameAnalysis => ({
   form: { kind: 'ok' },
   posture: { kind: 'ok' },
   tilt: 5,
-  shoulder: null,
   height: 0.9,
   limb: 0.45,
   anchors: [{ x: 400, y: 900 }, { x: 600, y: 900 }],
@@ -109,6 +108,14 @@ describe('stepSession: leaving the position (layers 2-3)', () => {
   it('leaving the exercise posture goes back to SETUP', () => {
     const lying = times(5, frame({ posture: { kind: 'bad', message: 'Đứng thẳng người lên' } }));
     expect(run([...ready, ...lying]).stage).toBe('SETUP');
+  });
+
+  it('after leaving mid-set, a short hold is enough to count again', () => {
+    const lying = times(5, frame({ posture: { kind: 'bad', message: 'Đứng thẳng người lên' } }));
+    const back = times(12, frame()); // ~0.4 s, less than the first 1 s hold
+    const state = run([...ready, ...squat, ...lying, ...back, ...squat]);
+    expect(state.stage).toBe('ACTIVE');
+    expect(state.counter.reps).toBe(2);
   });
 
   it('one noisy frame out of posture does not stop the set', () => {

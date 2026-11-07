@@ -18,16 +18,12 @@ export const MIN_SOFT_VISIBILITY = 0.5;
 const PLANK_MIN_TILT = 40; // back at least this far from vertical: down on the floor, not standing
 // Squat: the back may lean this far (a deep squat leans ~45, plus up to ~25 of camera tilt)
 const STANDING_MAX_TILT = 70;
-// Shoulder angle wrist - shoulder - hip with the arms straight: ~90 in a plank (hands under the
-// shoulders, body in a line). A knee push-up drops the hips: the angle closes (~60).
-// Hips raised (piked) open it (>110). First values tried: tune with "Hiện số đo".
-const PLANK_MIN_SHOULDER = 70;
-const PLANK_MAX_SHOULDER = 115;
-// From the front the hips are hidden behind the shoulders and the model GUESSES them (it drew
-// the legs hanging straight down in a real plank). A guess is fine for the coarse lying/standing
-// slope (visibility 0.2), but the fine shoulder angle needs hips really seen (diagonal or side
-// camera); filmed straight on, knees are simply not checked (and the screen says so).
-const HIP_SLOPE_VISIBILITY = 0.2;
+// Filmed straight on, the hips and legs are behind the shoulders: the model GUESSES them, even
+// with a high visibility score (it read a real plank as a knee push-up). So kneeling or raised hips
+// are NOT checked for push-ups; the reps are protected by the arm depth, the body drop and the
+// hands staying in place instead.
+const HIP_SLOPE_VISIBILITY = 0.2; // a guessed hip is still good enough to tell lying from standing
+
 // Plank: hands at least this far (meters) below the shoulders
 const HANDS_BELOW_SHOULDERS = 0.1;
 // Left and right counting angles further apart than this = one-sided movement
@@ -42,7 +38,6 @@ export interface FrameAnalysis {
   form: Check; // straight body lines + both sides moving together
   posture: Check; // in the exercise's body position (plank / standing)
   tilt: number | null; // degrees the back leans from the camera's vertical (shown with "Hiện số đo")
-  shoulder: number | null; // push-up: wrist - shoulder - hip angle; null when the hips are not really seen
   height: number | null; // meters: shoulders above the hands (push-up) / hips above the feet (squat)
   limb: number | null; // meters: arm (push-up) / thigh (squat), what the height drop is compared to
   anchors: (Point | null)[]; // exercise.anchors on screen, in pixels; null when not seen
@@ -55,7 +50,6 @@ export const EMPTY_ANALYSIS: FrameAnalysis = {
   form: { kind: 'unknown' },
   posture: { kind: 'unknown' },
   tilt: null,
-  shoulder: null,
   height: null,
   limb: null,
   anchors: [],
@@ -135,37 +129,29 @@ const HIPS = [23, 24];
 interface PostureResult {
   posture: Check;
   tilt: number | null;
-  shoulder: number | null;
 }
 
-// armsStraight: the counting angle is at the top. The fine plank shape is only judged there,
-// because the shoulder angle naturally changes when the elbows bend.
+// armsStraight: the counting angle is at the top. Hands under the shoulders is only judged there,
+// because at the bottom of a rep the shoulders come down level with the hands.
 function checkPosture(image: Pose, world: Pose, exercise: ExerciseConfig, armsStraight: boolean): PostureResult {
-  const unknown: PostureResult = { posture: { kind: 'unknown' }, tilt: null, shoulder: null };
+  const unknown: PostureResult = { posture: { kind: 'unknown' }, tilt: null };
   const shoulders = midpoint(image, world, SHOULDERS);
   const hips = midpoint(image, world, HIPS, exercise.posture === 'PLANK' ? HIP_SLOPE_VISIBILITY : MIN_SOFT_VISIBILITY);
   if (!shoulders || !hips) return unknown;
   const tilt = tiltFromVertical(hips, shoulders);
   if (Number.isNaN(tilt)) return unknown;
+  const result = (posture: Check): PostureResult => ({ posture, tilt });
 
   if (exercise.posture === 'STANDING') {
-    const posture: Check = tilt <= STANDING_MAX_TILT ? { kind: 'ok' } : { kind: 'bad', message: 'Đứng thẳng người lên' };
-    return { posture, tilt, shoulder: null };
+    return result(tilt <= STANDING_MAX_TILT ? { kind: 'ok' } : { kind: 'bad', message: 'Đứng thẳng người lên' });
   }
-
-  const wrists = midpoint(image, world, WRISTS);
-  const hipsSeen = midpoint(image, world, HIPS, MIN_SOFT_VISIBILITY) != null;
-  const shoulder = wrists && hipsSeen ? jointAngle(wrists, shoulders, hips) : null;
-  const result = (posture: Check): PostureResult => ({ posture, tilt, shoulder });
   if (tilt < PLANK_MIN_TILT) return result({ kind: 'bad', message: 'Vào tư thế nằm sấp chống tay (plank)' });
+  const wrists = midpoint(image, world, WRISTS);
   if (!wrists) return { ...unknown, tilt };
-  // Only judged with the arms straight: at the bottom of a rep the shoulders are level with the hands
+  // World y points down: hands on the floor are below (greater y than) the shoulders
   if (armsStraight && wrists.y - shoulders.y < HANDS_BELOW_SHOULDERS) {
     return result({ kind: 'bad', message: 'Chống hai tay xuống sàn' });
   }
-  if (shoulder == null || Number.isNaN(shoulder)) return result({ kind: 'ok' }); // hips hidden: legs not checked
-  if (armsStraight && shoulder < PLANK_MIN_SHOULDER) return result({ kind: 'bad', message: 'Duỗi thẳng chân, nhấc gối khỏi sàn' });
-  if (armsStraight && shoulder > PLANK_MAX_SHOULDER) return result({ kind: 'bad', message: 'Hạ hông xuống, giữ thẳng người' });
   return result({ kind: 'ok' });
 }
 

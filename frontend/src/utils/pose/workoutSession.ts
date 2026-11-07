@@ -17,6 +17,7 @@ export type SessionStage = 'SETUP' | 'ACTIVE';
 
 export interface SessionState {
   stage: SessionStage;
+  wasActive: boolean; // counted before in this set: getting back into position is quicker
   holdSince: number | null; // SETUP: when the person became still in position
   slipSince: number | null; // SETUP: when the position was last lost during a hold (grace period)
   holdAnchors: (Point | null)[]; // SETUP: anchors when the hold started; moving away restarts it
@@ -29,6 +30,7 @@ export interface SessionState {
 
 export interface SessionOptions {
   holdMs: number; // how long to hold still in position before counting starts
+  rejoinHoldMs: number; // the same after leaving the position mid-set (no long pause between reps)
   graceMs: number; // SETUP: losing the position for less than this does not restart the hold
   stillRatio: number; // SETUP: anchors staying within this share of the body size = holding still
   driftRatio: number; // ACTIVE: an anchor further than this share of the body size = left the spot
@@ -37,6 +39,7 @@ export interface SessionOptions {
 
 export const DEFAULT_SESSION_OPTIONS: SessionOptions = {
   holdMs: 1000,
+  rejoinHoldMs: 300,
   // A wobble or a few bad frames must not throw away the hold: only a real change does
   graceMs: 400,
   // Compared with the position at the start of the hold, not frame to frame: the landmarks shake
@@ -48,6 +51,7 @@ export const DEFAULT_SESSION_OPTIONS: SessionOptions = {
 
 export const INITIAL_SESSION: SessionState = {
   stage: 'SETUP',
+  wasActive: false,
   holdSince: null,
   slipSince: null,
   holdAnchors: [],
@@ -72,6 +76,7 @@ function maxMove(before: (Point | null)[], now: (Point | null)[]): number {
 function toSetup(state: SessionState, message: string): SessionState {
   return {
     ...INITIAL_SESSION,
+    wasActive: true,
     message,
     counter: { ...INITIAL_REP_STATE, reps: state.counter.reps, lastRepAt: state.counter.lastRepAt, event: state.counter.event },
   };
@@ -105,10 +110,11 @@ export function stepSession(
         ? { ...state, holdSince: null, slipSince: null, holdAnchors: [], message: why }
         : { ...state, holdSince: now, slipSince: null, holdAnchors: frame.anchors, message: 'Giữ yên…' };
     }
-    if (now - state.holdSince! < options.holdMs) return { ...state, slipSince: null, message: 'Giữ yên…' };
+    if (now - state.holdSince! < holdTime(state, options)) return { ...state, slipSince: null, message: 'Giữ yên…' };
     return {
       ...state,
       stage: 'ACTIVE',
+      wasActive: true,
       holdSince: null,
       slipSince: null,
       holdAnchors: [],
@@ -130,8 +136,10 @@ export function stepSession(
   return { ...state, offFrames, counter: stepRepCounter(state.counter, frame, now, exercise) };
 }
 
+const holdTime = (state: SessionState, options: SessionOptions) => (state.wasActive ? options.rejoinHoldMs : options.holdMs);
+
 // 0..1 for the "hold still" progress bar
 export function holdProgress(state: SessionState, now: number, options: SessionOptions = DEFAULT_SESSION_OPTIONS): number {
   if (state.stage !== 'SETUP' || state.holdSince == null) return 0;
-  return Math.min(1, (now - state.holdSince) / options.holdMs);
+  return Math.min(1, (now - state.holdSince) / holdTime(state, options));
 }

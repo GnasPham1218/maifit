@@ -67,8 +67,7 @@ export const EXERCISES: Record<ExerciseId, ExerciseConfig> = {
     ],
     downBelow: 90,
     upAbove: 150, // fast reps rarely lock the elbows fully
-    // Filmed straight from the front the legs are hidden behind the shoulders, so straight legs
-    // are checked through the posture instead (a back sloping like a knee push-up is refused)
+    // Filmed straight on the legs are hidden behind the shoulders: they cannot be checked
     formRules: [],
     posture: 'PLANK',
     // Hands only: filmed from the front the feet are hidden and their guessed position jumps,
@@ -79,8 +78,7 @@ export const EXERCISES: Record<ExerciseId, ExerciseConfig> = {
     setupHint: 'Vào tư thế plank, tay thẳng, giữ yên 1 giây',
     cameraHint:
       'Đặt điện thoại dưới sàn ngay trước mặt, cách khoảng 1–1,5 m, dựng hơi ngửa lên ' +
-      'để thấy đầu, vai và hai tay. Đặt chính diện thì camera không thấy chân nên không kiểm tra quỳ gối; ' +
-      'muốn kiểm tra thì đặt chéo khoảng 45°.',
+      'để thấy đầu, vai và hai tay.',
   },
 };
 

@@ -50,26 +50,18 @@ describe('analyzeFrame: posture (layer 2)', () => {
     expect(analyze(body(twoSides(handsForward))).posture).toEqual({ kind: 'bad', message: 'Chống hai tay xuống sàn' });
   });
 
-  it('a knee push-up (back sloping, filmed from the front) is refused', () => {
-    const onKnees = { ...PLANK, hip: [0.35, 0.3] as const, knee: [0.6, 0.55] as const, ankle: [1.0, 0.55] as const };
-    const result = analyze(body(twoSides(onKnees)));
-    expect(result.posture).toEqual({ kind: 'bad', message: 'Duỗi thẳng chân, nhấc gối khỏi sàn' });
-    expect(result.tilt).toBeCloseTo(49.4, 0);
-  });
-
-  it('raised (piked) hips are refused', () => {
-    const piked = { ...PLANK, hip: [0.4, -0.3] as const, knee: [0.8, 0] as const, ankle: [1.2, 0.3] as const };
-    expect(analyze(body(twoSides(piked))).posture).toEqual({ kind: 'bad', message: 'Hạ hông xuống, giữ thẳng người' });
-  });
-
-  it('a phone tilted 25 degrees does not change the plank verdict (body angles, not camera angles)', () => {
+  it('a phone tilted 25 degrees still sees a plank', () => {
     const r = (25 * Math.PI) / 180;
     const rotate = ([x, y]: readonly [number, number, number?]) =>
       [x * Math.cos(r) - y * Math.sin(r), x * Math.sin(r) + y * Math.cos(r)] as const;
     const tilted = Object.fromEntries(Object.entries(PLANK).map(([k, v]) => [k, rotate(v)])) as unknown as typeof PLANK;
-    const result = analyze(body(twoSides(tilted)));
-    expect(result.posture).toEqual({ kind: 'ok' });
-    expect(result.shoulder).toBeCloseTo(84.3, 0);
+    expect(analyze(body(twoSides(tilted))).posture).toEqual({ kind: 'ok' });
+  });
+
+  it('a real plank whose hidden hips the model guesses wrongly is still a plank', () => {
+    // filmed straight on, the model drew the hips as for a knee push-up (seen on a real phone)
+    const guessed = { ...PLANK, hip: [0.35, 0.3] as const };
+    expect(analyze(body(twoSides(guessed))).posture).toEqual({ kind: 'ok' });
   });
 
   it('standing is a squat posture; lying down is not', () => {
@@ -79,14 +71,6 @@ describe('analyzeFrame: posture (layer 2)', () => {
 
   it('posture is unknown when the hips are not seen at all', () => {
     expect(analyze(body(twoSides(PLANK), { 23: 0.1, 24: 0.1 })).posture).toEqual({ kind: 'unknown' });
-  });
-
-  it('filmed from the front (hips guessed), a plank is accepted and the legs are not judged', () => {
-    // the model guesses the hidden hips badly: here as for a knee push-up
-    const guessed = { ...PLANK, hip: [0.35, 0.3] as const };
-    const result = analyze(body(twoSides(guessed), { 23: 0.3, 24: 0.3 }));
-    expect(result.posture).toEqual({ kind: 'ok' });
-    expect(result.shoulder).toBeNull();
   });
 
   it('the bottom of a rep (shoulders level with the hands) is still a push-up posture', () => {
