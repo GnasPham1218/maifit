@@ -1,9 +1,12 @@
 import { DrawingUtils, PoseLandmarker } from '@mediapipe/tasks-vision';
-import { Camera, CameraOff, Check, Gauge, Maximize2, Minimize2, RotateCcw } from 'lucide-react';
+import { Camera, CameraOff, Check, Gauge, Maximize2, Minimize2, RotateCcw, Save } from 'lucide-react';
+import { Link } from 'react-router';
+import { workoutApi } from '../apis/workoutApi';
 import { useEffect, useRef, useState } from 'react';
 import { Alert } from '../components/Alert';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
+import { getErrorMessage } from '../constants/errorMessages';
 import { EXERCISE_IDS, EXERCISES, type ExerciseId } from '../exercises';
 import { savedPoseModel, savePoseModel, usePoseLandmarker, type PoseModel } from '../hooks/usePoseLandmarker';
 import { analyzeFrame, type FrameAnalysis } from '../utils/pose/analyzeFrame';
@@ -104,6 +107,22 @@ function attemptText(a: Attempt): string {
   return a.ok ? `${head}${low} · đạt` : `${head}${low} · chưa đạt: ${a.reason}`;
 }
 
+interface SetTiming {
+  clientId: string;
+  startedAt: number | null; // ms, when counting started (wall clock)
+  lastRepAt: number | null; // ms, when the last rep was counted
+}
+
+const newSet = (): SetTiming => ({ clientId: crypto.randomUUID(), startedAt: null, lastRepAt: null });
+
+// From "in position" to the last rep, 5 s .. 1 h like the server
+function setWindow(set: SetTiming): { start: number; durationSec: number } {
+  const now = Date.now();
+  const start = set.startedAt ?? now;
+  const end = set.lastRepAt ?? now;
+  return { start, durationSec: Math.min(3600, Math.max(5, Math.ceil((end - start) / 1000))) };
+}
+
 function cameraErrorMessage(err: unknown): string {
   const name = err instanceof DOMException ? err.name : '';
   if (name === 'NotAllowedError') return 'Bạn đã chặn quyền dùng camera. Mở cài đặt trang trên trình duyệt để cho phép rồi thử lại.';
@@ -130,13 +149,58 @@ export default function WorkoutPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const sessionRef = useRef<SessionState>(INITIAL_SESSION);
+  // The set being recorded: its id (a retried save is stored once) and its timing for the server
+  const setRef = useRef<SetTiming>(newSet());
+  const [saving, setSaving] = useState(false);
+  const [saveNote, setSaveNote] = useState<{ ok: boolean; text: string } | null>(null);
+  const [confirmStop, setConfirmStop] = useState(false); // "set not saved" dialog
 
   const exercise = EXERCISES[exerciseId];
 
   function resetCounter() {
     sessionRef.current = INITIAL_SESSION;
+    setRef.current = newSet();
     setView(INITIAL_VIEW);
     setAttempts([]);
+  }
+
+  const unsaved = view.reps > 0;
+
+  // Sends the set to the server, which checks it again (pace, time, daily limits), then starts a new set
+  async function saveSet(): Promise<boolean> {
+    const reps = sessionRef.current.counter.reps;
+    if (reps === 0) return true;
+    const { start, durationSec } = setWindow(setRef.current);
+    setSaving(true);
+    setSaveNote(null);
+    try {
+      await workoutApi.create({
+        exercise: exerciseId,
+        reps,
+        startedAt: new Date(start).toISOString(),
+        durationSec,
+        clientId: setRef.current.clientId,
+      });
+      setSaveNote({ ok: true, text: `Đã lưu ${reps} rep ${exercise.label.toLowerCase()}.` });
+      resetCounter();
+      return true;
+    } catch (err) {
+      setSaveNote({ ok: false, text: getErrorMessage(err) });
+      return false;
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  // Turning the camera off with reps not saved: ask first instead of losing the set
+  function requestStop() {
+    if (unsaved) setConfirmStop(true);
+    else stopCamera();
+  }
+
+  function confirmReset() {
+    if (unsaved && !window.confirm(`Bỏ set ${view.reps} rep chưa lưu và đếm lại từ đầu?`)) return;
+    resetCounter();
   }
 
   async function startCamera() {
@@ -185,9 +249,19 @@ export default function WorkoutPage() {
   }
 
   function chooseExercise(id: ExerciseId) {
+    if (id === exerciseId) return;
+    if (unsaved && !window.confirm(`Đổi bài sẽ bỏ set ${view.reps} rep chưa lưu. Đổi bài?`)) return;
     setExerciseId(id);
     resetCounter(); // reps of another exercise must not carry over
   }
+
+  // Closing or reloading the tab with a set not saved: the browser asks first
+  useEffect(() => {
+    if (!unsaved) return;
+    const warn = (e: BeforeUnloadEvent) => e.preventDefault();
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [unsaved]);
 
   // Leaving the page while the camera is on: release it
   useEffect(() => {
@@ -233,6 +307,7 @@ export default function WorkoutPage() {
     let loopStartedAt = 0; // set on the first frame
     let switchedModel = false;
     let loggedSeq = sessionRef.current.counter.event?.seq ?? 0;
+    let lastReps = sessionRef.current.counter.reps;
 
     const loop = () => {
       frameId = requestAnimationFrame(loop);
@@ -258,6 +333,12 @@ export default function WorkoutPage() {
       const session = stepSession(sessionRef.current, analysis, now, current);
       sessionRef.current = session;
       const state = session.counter;
+
+      // Set timing (wall clock, sent to the server): starts when counting starts, ends at the last rep
+      const set = setRef.current;
+      if (session.stage === 'ACTIVE' && set.startedAt == null) set.startedAt = Date.now();
+      if (state.reps > lastReps) set.lastRepAt = Date.now();
+      lastReps = state.reps;
 
       // Draw: skeleton (red while the form is wrong) + the angle next to the counting joint
       if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
@@ -425,11 +506,17 @@ export default function WorkoutPage() {
       <div className="absolute inset-x-3 bottom-3 flex items-center justify-end gap-2">
         {focus && running && (
           <>
-            <button type="button" onClick={resetCounter}
+            {unsaved && (
+              <button type="button" onClick={() => void saveSet()} disabled={saving}
+                className="flex h-10 cursor-pointer items-center gap-2 rounded-full bg-lime-strong px-4 text-sm text-white hover:bg-lime-strong/80">
+                <Save aria-hidden="true" className="size-4" /> Lưu
+              </button>
+            )}
+            <button type="button" onClick={confirmReset}
               className="flex h-10 cursor-pointer items-center gap-2 rounded-full bg-black/55 px-4 text-sm text-white hover:bg-black/70">
               <RotateCcw aria-hidden="true" className="size-4" /> Đếm lại
             </button>
-            <button type="button" onClick={stopCamera}
+            <button type="button" onClick={requestStop}
               className="flex h-10 cursor-pointer items-center gap-2 rounded-full bg-black/55 px-4 text-sm text-white hover:bg-black/70">
               <CameraOff aria-hidden="true" className="size-4" /> Tắt
             </button>
@@ -483,6 +570,15 @@ export default function WorkoutPage() {
         <Card tone="lime">
           <p className="text-sm text-ink-soft">{exercise.label}: số rep</p>
           <p className="text-6xl font-bold tabular-nums">{view.reps}</p>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <Button onClick={() => void saveSet()} disabled={!unsaved || saving}>
+              <Save aria-hidden="true" className="size-4" /> {saving ? 'Đang lưu…' : 'Lưu set'}
+            </Button>
+            <Link to="/leaderboard" className="text-sm">Bảng xếp hạng</Link>
+          </div>
+          {saveNote && (
+            <p className={`mt-2 text-sm ${saveNote.ok ? 'text-success' : 'text-danger'}`} role="status">{saveNote.text}</p>
+          )}
         </Card>
 
         {attempts.length > 0 && (
@@ -499,17 +595,46 @@ export default function WorkoutPage() {
 
         <div className="flex flex-wrap gap-2">
           {running ? (
-            <Button variant="secondary" onClick={stopCamera}>
+            <Button variant="secondary" onClick={requestStop}>
               <CameraOff aria-hidden="true" className="size-4" /> Tắt camera
             </Button>
           ) : (
             startButton
           )}
-          <Button variant="secondary" onClick={resetCounter} disabled={view.reps === 0}>
+          <Button variant="secondary" onClick={confirmReset} disabled={view.reps === 0}>
             <RotateCcw aria-hidden="true" className="size-4" /> Đếm lại
           </Button>
         </div>
       </div>
+
+      {/* Camera off with a set not saved: save it, drop it, or keep training */}
+      {confirmStop && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4" role="dialog"
+          aria-modal="true" aria-labelledby="unsaved-title">
+          <div className="grid w-full max-w-sm gap-4 rounded-card bg-surface p-6">
+            <p id="unsaved-title" className="text-lg font-semibold">Set chưa được lưu</p>
+            <p className="text-sm text-ink-soft">
+              Bạn đã tập {view.reps} rep {exercise.label.toLowerCase()} nhưng chưa lưu. Lưu trước khi tắt camera?
+            </p>
+            <div className="grid gap-2">
+              <Button disabled={saving} onClick={() => void saveSet().then((ok) => {
+                setConfirmStop(false);
+                if (ok) stopCamera();
+              })}>
+                <Save aria-hidden="true" className="size-4" /> {saving ? 'Đang lưu…' : 'Lưu rồi tắt'}
+              </Button>
+              <Button variant="secondary" disabled={saving} onClick={() => {
+                setConfirmStop(false);
+                resetCounter();
+                stopCamera();
+              }}>
+                Tắt, không lưu
+              </Button>
+              <Button variant="secondary" disabled={saving} onClick={() => setConfirmStop(false)}>Tiếp tục tập</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
