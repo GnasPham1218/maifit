@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { EXERCISES } from '../../constants/exercises';
+import { EXERCISES } from '../../exercises';
 import type { FrameAnalysis } from './analyzeFrame';
 import { holdProgress, INITIAL_SESSION, stepSession, type SessionState } from './workoutSession';
 

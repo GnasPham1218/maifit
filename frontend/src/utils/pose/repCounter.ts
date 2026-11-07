@@ -1,4 +1,4 @@
-import type { ExerciseConfig } from '../../constants/exercises';
+import type { Exercise } from '../../exercises/types';
 import type { Check } from './analyzeFrame';
 
 // WAITING: not sure where the person is yet (start, or came back into the frame).
@@ -73,8 +73,8 @@ export interface FrameInput {
   limb?: number | null;
 }
 
-type Thresholds = Pick<ExerciseConfig, 'downBelow' | 'upAbove'> &
-  Partial<Pick<ExerciseConfig, 'minDropRatio' | 'dropMessage'>>;
+type Thresholds = Pick<Exercise, 'downBelow' | 'upAbove'> &
+  Partial<Pick<Exercise, 'minDropRatio' | 'dropMessage'>>;
 
 const nextEvent = (state: RepCounterState, kind: RepEventKind, low: number | null, message?: string): RepEvent => ({
   kind,

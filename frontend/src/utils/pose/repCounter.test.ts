@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { FormResult } from './analyzeFrame';
+import type { Check as FormResult } from './poseMath';
 import {
   DEFAULT_REP_OPTIONS,
   INITIAL_REP_STATE,

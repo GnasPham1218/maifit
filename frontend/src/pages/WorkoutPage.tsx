@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Alert } from '../components/Alert';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
-import { EXERCISE_IDS, EXERCISES, type ExerciseId } from '../constants/exercises';
+import { EXERCISE_IDS, EXERCISES, type ExerciseId } from '../exercises';
 import { usePoseLandmarker } from '../hooks/usePoseLandmarker';
 import { analyzeFrame, type FrameAnalysis } from '../utils/pose/analyzeFrame';
 import { createLandmarkFilter } from '../utils/pose/landmarkFilter';

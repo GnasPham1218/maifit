@@ -1,4 +1,4 @@
-import type { ExerciseConfig } from '../../constants/exercises';
+import type { Exercise } from '../../exercises/types';
 import type { Point } from './angle';
 import type { FrameAnalysis } from './analyzeFrame';
 import { INITIAL_REP_STATE, stepRepCounter, type RepCounterState } from './repCounter';
@@ -86,7 +86,7 @@ export function stepSession(
   state: SessionState,
   frame: FrameAnalysis,
   now: number,
-  exercise: ExerciseConfig,
+  exercise: Exercise,
   options: SessionOptions = DEFAULT_SESSION_OPTIONS,
 ): SessionState {
   if (state.stage === 'SETUP') {
