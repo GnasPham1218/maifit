@@ -37,9 +37,6 @@ export interface ExerciseConfig {
   cameraHint: string;
 }
 
-// Straight enough for a body line or a leg; first value tried, tune after real tests
-const STRAIGHT = 150;
-
 // MediaPipe indices: 11/12 shoulders, 13/14 elbows, 15/16 wrists, 23/24 hips, 25/26 knees, 27/28 ankles
 export const EXERCISES: Record<ExerciseId, ExerciseConfig> = {
   SQUAT: {
@@ -68,32 +65,17 @@ export const EXERCISES: Record<ExerciseId, ExerciseConfig> = {
     ],
     downBelow: 90,
     upAbove: 150, // fast reps rarely lock the elbows fully
-    formRules: [
-      {
-        sides: [
-          [11, 23, 27], // shoulder - hip - ankle: no sagging or piked hips
-          [12, 24, 28],
-        ],
-        minAngle: STRAIGHT,
-        message: 'Giữ thẳng người, không võng hay đẩy hông',
-      },
-      {
-        sides: [
-          [23, 25, 27], // hip - knee - ankle: knees must not touch the floor
-          [24, 26, 28],
-        ],
-        minAngle: STRAIGHT,
-        message: 'Giữ thẳng chân, không quỳ gối',
-      },
-    ],
+    // Filmed straight from the front the legs are hidden behind the shoulders, so straight legs
+    // are checked through the posture instead (a back sloping like a knee push-up is refused)
+    formRules: [],
     posture: 'PLANK',
     anchors: [15, 16, 27, 28], // hands and feet
     minDropRatio: 0.25,
     dropMessage: 'Hạ cả người xuống, không chỉ gập tay',
     setupHint: 'Vào tư thế plank, tay thẳng, giữ yên 1 giây',
     cameraHint:
-      'Đặt điện thoại dưới sàn, chéo khoảng 45° phía trước hoặc ngang bên cạnh, thấy cả người từ đầu tới chân. ' +
-      'Đặt thẳng chính diện thì vai che chân nên app không kiểm tra được chân thẳng.',
+      'Đặt điện thoại dưới sàn ngay trước mặt, cách khoảng 1–1,5 m, dựng hơi ngửa lên ' +
+      'để thấy đầu, vai, hai tay và lưng.',
   },
 };
 

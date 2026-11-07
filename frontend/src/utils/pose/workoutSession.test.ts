@@ -12,6 +12,7 @@ const frame = (o: Partial<FrameAnalysis> = {}): FrameAnalysis => ({
   joint: null,
   form: { kind: 'ok' },
   posture: { kind: 'ok' },
+  tilt: 5,
   height: 0.9,
   limb: 0.45,
   anchors: [{ x: 400, y: 900 }, { x: 600, y: 900 }],
@@ -19,8 +20,8 @@ const frame = (o: Partial<FrameAnalysis> = {}): FrameAnalysis => ({
   ...o,
 });
 
-function run(frames: FrameAnalysis[], from: SessionState = INITIAL_SESSION, people = 1) {
-  return frames.reduce((state, f, i) => stepSession(state, f, people, i * FRAME_MS, SQUAT), from);
+function run(frames: FrameAnalysis[], from: SessionState = INITIAL_SESSION) {
+  return frames.reduce((state, f, i) => stepSession(state, f, i * FRAME_MS, SQUAT), from);
 }
 
 const times = (n: number, f: FrameAnalysis) => Array.from({ length: n }, () => f);
@@ -49,6 +50,12 @@ describe('stepSession: getting into position (layer 1)', () => {
   it('moving while getting into position restarts the hold', () => {
     const walking = Array.from({ length: 35 }, (_, i) => frame({ anchors: [{ x: 400 + i * 40, y: 900 }] }));
     expect(run(walking).stage).toBe('SETUP');
+  });
+
+  it('the usual landmark shake (a few pixels each frame) still counts as holding still', () => {
+    const shaking = Array.from({ length: 35 }, (_, i) =>
+      frame({ anchors: [{ x: 400 + (i % 2 ? 15 : -15), y: 900 + (i % 3) * 10 }, { x: 600, y: 900 }] }));
+    expect(run(shaking).stage).toBe('ACTIVE');
   });
 
   it('shows the hold progress', () => {
@@ -101,12 +108,5 @@ describe('stepSession: leaving the position (layers 2-3)', () => {
   it('one noisy frame out of posture does not stop the set', () => {
     const blip = [frame({ posture: { kind: 'bad', message: 'x' } })];
     expect(run([...ready, ...blip, frame()]).stage).toBe('ACTIVE');
-  });
-
-  it('a second person in the frame pauses counting', () => {
-    const active = run(ready);
-    const state = stepSession(active, frame(), 2, 2000, SQUAT);
-    expect(state.stage).toBe('SETUP');
-    expect(state.message).toBe('Chỉ để một người trong khung hình');
   });
 });

@@ -1,12 +1,12 @@
 import { DrawingUtils, PoseLandmarker } from '@mediapipe/tasks-vision';
-import { Camera, CameraOff, Check, Maximize2, Minimize2, RotateCcw } from 'lucide-react';
+import { Camera, CameraOff, Check, Gauge, Maximize2, Minimize2, RotateCcw } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Alert } from '../components/Alert';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { EXERCISE_IDS, EXERCISES, type ExerciseId } from '../constants/exercises';
 import { usePoseLandmarker } from '../hooks/usePoseLandmarker';
-import { analyzeFrame } from '../utils/pose/analyzeFrame';
+import { analyzeFrame, type FrameAnalysis } from '../utils/pose/analyzeFrame';
 import type { RepEvent, RepPhase } from '../utils/pose/repCounter';
 import {
   holdProgress,
@@ -37,6 +37,7 @@ interface View {
   formMessage: string | null; // a form rule broken right now
   formUnknown: boolean; // the form lines are hidden (e.g. legs behind the shoulders)
   event: RepEvent | null;
+  debug: string | null; // raw measurements, shown with "Hiện số đo" to tune the thresholds
 }
 
 const INITIAL_VIEW: View = {
@@ -50,11 +51,27 @@ const INITIAL_VIEW: View = {
   formMessage: null,
   formUnknown: false,
   event: null,
+  debug: null,
 };
 
 const sameView = (a: View, b: View) =>
   a.stage === b.stage && a.setupMessage === b.setupMessage && a.hold === b.hold && a.reps === b.reps && a.phase === b.phase && a.angle === b.angle && a.seen === b.seen &&
-  a.formMessage === b.formMessage && a.formUnknown === b.formUnknown && a.event?.seq === b.event?.seq;
+  a.formMessage === b.formMessage && a.formUnknown === b.formUnknown && a.event?.seq === b.event?.seq && a.debug === b.debug;
+
+const round = (n: number | null | undefined) => (n == null ? '—' : String(Math.round(n)));
+
+// One line of raw numbers to tune the thresholds on a real phone
+function debugLine(analysis: FrameAnalysis, session: SessionState): string {
+  const { topHeight, lowHeight, limb } = session.counter;
+  const drop = topHeight != null && lowHeight != null && limb ? ((topHeight - lowHeight) / limb) * 100 : null;
+  return [
+    `góc ${round(analysis.angle)}°`,
+    `lưng ${round(analysis.tilt)}°`,
+    `hạ ${round(drop)}%`,
+    `tư thế ${analysis.posture.kind}`,
+    `form ${analysis.form.kind}`,
+  ].join(' · ');
+}
 
 function cameraErrorMessage(err: unknown): string {
   const name = err instanceof DOMException ? err.name : '';
@@ -73,6 +90,7 @@ export default function WorkoutPage() {
   const [focus, setFocus] = useState(false); // camera fills the screen
   const [view, setView] = useState<View>(INITIAL_VIEW);
   const [error, setError] = useState<string | null>(null);
+  const [showDebug, setShowDebug] = useState(false);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -185,7 +203,7 @@ export default function WorkoutPage() {
       const image = result.landmarks[0];
       const frameSize = { width: video.videoWidth, height: video.videoHeight };
       const analysis = analyzeFrame(image, result.worldLandmarks[0], current, frameSize);
-      const session = stepSession(sessionRef.current, analysis, result.landmarks.length, now, current);
+      const session = stepSession(sessionRef.current, analysis, now, current);
       sessionRef.current = session;
       const state = session.counter;
 
@@ -228,6 +246,7 @@ export default function WorkoutPage() {
         formMessage: state.formMessage,
         formUnknown: current.formRules.length > 0 && analysis.form.kind === 'unknown',
         event: state.event,
+        debug: showDebug ? debugLine(analysis, session) : null,
       };
       if (!sameView(next, shown)) {
         shown = next;
@@ -241,7 +260,7 @@ export default function WorkoutPage() {
       // Camera off (or exercise changed): the last skeleton must not stay drawn over the screen
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
-  }, [running, pose, exerciseId]);
+  }, [running, pose, exerciseId, showDebug]);
 
   const startButton = (
     <Button onClick={() => void startCamera()} disabled={pose.kind !== 'ready'}>
@@ -290,6 +309,12 @@ export default function WorkoutPage() {
               {view.angle != null && <span className="text-white/70"> · {view.angle}°</span>}
             </p>
           </div>
+
+          {view.debug && (
+            <p className="absolute top-3 right-3 max-w-[60%] rounded-xl bg-black/70 px-3 py-2 text-right font-mono text-xs">
+              {view.debug}
+            </p>
+          )}
 
           {/* Not counting yet (or paused): get into position and hold still */}
           {view.stage === 'SETUP' && (
@@ -341,6 +366,12 @@ export default function WorkoutPage() {
             </button>
           </>
         )}
+        <button type="button" onClick={() => setShowDebug(!showDebug)} aria-pressed={showDebug}
+          className={`flex size-10 cursor-pointer items-center justify-center rounded-full text-white hover:bg-black/70 ${
+            showDebug ? 'bg-sky-strong' : 'bg-black/55'}`}
+          aria-label="Hiện số đo" title="Hiện số đo">
+          <Gauge aria-hidden="true" className="size-5" />
+        </button>
         <button type="button" onClick={focus ? exitFocus : enterFocus}
           className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-black/55 text-white hover:bg-black/70"
           aria-label={focus ? 'Thu nhỏ' : 'Toàn màn hình'} title={focus ? 'Thu nhỏ' : 'Toàn màn hình'}>

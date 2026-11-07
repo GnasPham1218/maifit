@@ -6,8 +6,8 @@ import { INITIAL_REP_STATE, stepRepCounter, type RepCounterState } from './repCo
 // Anti-cheat layer around the rep counter. Reps are only counted while the person:
 //  1. got into the start position and held it still for a moment (SETUP -> ACTIVE),
 //  2. stays in the exercise's body position (plank / standing),
-//  3. keeps hands / feet where they were at the start (no walking around, no other exercise),
-//  and only one person is in the frame. Layers 4-5 (real body drop, both sides) live in
+//  3. keeps hands / feet where they were at the start (no walking around, no other exercise).
+// Layers 4-5 (real body drop, both sides) live in
 //  repCounter and analyzeFrame. Leaving the position goes back to SETUP; reps already done stay.
 //
 // This only makes cheating harder for honest-ish users: anything running in the browser can be
@@ -18,7 +18,7 @@ export type SessionStage = 'SETUP' | 'ACTIVE';
 export interface SessionState {
   stage: SessionStage;
   holdSince: number | null; // SETUP: when the person became still in position
-  lastAnchors: (Point | null)[]; // SETUP: anchors of the previous frame, to see if they are still
+  holdAnchors: (Point | null)[]; // SETUP: anchors when the hold started; moving away restarts it
   anchors: (Point | null)[]; // ACTIVE: hands / feet positions locked at the start
   scale: number | null; // ACTIVE: body size on screen at the start (pixels)
   offFrames: number; // ACTIVE: frames in a row out of position
@@ -28,14 +28,16 @@ export interface SessionState {
 
 export interface SessionOptions {
   holdMs: number; // how long to hold still in position before counting starts
-  stillRatio: number; // SETUP: anchors moving less than this share of the body size per frame = still
+  stillRatio: number; // SETUP: anchors staying within this share of the body size = holding still
   driftRatio: number; // ACTIVE: an anchor further than this share of the body size = left the spot
   offFrames: number; // ACTIVE: out of position this many frames in a row -> back to SETUP
 }
 
 export const DEFAULT_SESSION_OPTIONS: SessionOptions = {
   holdMs: 1000,
-  stillRatio: 0.02,
+  // Compared with the position at the start of the hold, not frame to frame: the landmarks shake
+  // a few pixels every frame on a phone, which a per-frame check mistook for moving
+  stillRatio: 0.05,
   driftRatio: 0.15,
   offFrames: 5,
 };
@@ -43,7 +45,7 @@ export const DEFAULT_SESSION_OPTIONS: SessionOptions = {
 export const INITIAL_SESSION: SessionState = {
   stage: 'SETUP',
   holdSince: null,
-  lastAnchors: [],
+  holdAnchors: [],
   anchors: [],
   scale: null,
   offFrames: 0,
@@ -73,13 +75,10 @@ function toSetup(state: SessionState, message: string): SessionState {
 export function stepSession(
   state: SessionState,
   frame: FrameAnalysis,
-  people: number,
   now: number,
   exercise: ExerciseConfig,
   options: SessionOptions = DEFAULT_SESSION_OPTIONS,
 ): SessionState {
-  if (people > 1) return toSetup(state, 'Chỉ để một người trong khung hình');
-
   if (state.stage === 'SETUP') {
     const seenAnchors = frame.anchors.some((p) => p != null);
     const why =
@@ -88,18 +87,17 @@ export function stepSession(
           : frame.form.kind === 'bad' ? frame.form.message
             : frame.angle <= exercise.upAbove ? exercise.setupHint
               : null;
-    if (why) return { ...state, holdSince: null, lastAnchors: frame.anchors, message: why };
+    if (why) return { ...state, holdSince: null, holdAnchors: [], message: why };
 
-    // In position: the anchors must also be still (not walking into place)
-    const still = maxMove(state.lastAnchors, frame.anchors) < options.stillRatio * frame.scale!;
-    const holdSince = still ? (state.holdSince ?? now) : now;
-    if (now - holdSince < options.holdMs) {
-      return { ...state, holdSince, lastAnchors: frame.anchors, message: 'Giữ yên…' };
-    }
+    // In position: the hands / feet must also stay put (not walking into place)
+    const still = state.holdSince != null && maxMove(state.holdAnchors, frame.anchors) < options.stillRatio * frame.scale!;
+    if (!still) return { ...state, holdSince: now, holdAnchors: frame.anchors, message: 'Giữ yên…' };
+    if (now - state.holdSince! < options.holdMs) return { ...state, message: 'Giữ yên…' };
     return {
       ...state,
       stage: 'ACTIVE',
       holdSince: null,
+      holdAnchors: [],
       anchors: frame.anchors,
       scale: frame.scale,
       offFrames: 0,

@@ -50,29 +50,30 @@ describe('analyzeFrame: posture (layer 2)', () => {
     expect(analyze(body(twoSides(handsForward))).posture).toEqual({ kind: 'bad', message: 'Chống hai tay xuống sàn' });
   });
 
+  it('a knee push-up (back sloping, filmed from the front) is refused', () => {
+    const onKnees = { ...PLANK, hip: [0.35, 0.3] as const, knee: [0.6, 0.55] as const, ankle: [1.0, 0.55] as const };
+    const result = analyze(body(twoSides(onKnees)));
+    expect(result.posture).toEqual({ kind: 'bad', message: 'Duỗi thẳng chân, nhấc gối khỏi sàn' });
+    expect(result.tilt).toBeCloseTo(49.4, 0);
+  });
+
   it('standing is a squat posture; lying down is not', () => {
     expect(analyze(body(twoSides(STANDING)), SQUAT).posture).toEqual({ kind: 'ok' });
     expect(analyze(body(twoSides(PLANK)), SQUAT).posture.kind).toBe('bad');
   });
 
-  it('posture is unknown when the hips are hidden', () => {
+  it('posture is unknown when the hips are not seen at all', () => {
     expect(analyze(body(twoSides(PLANK), { 23: 0.1, 24: 0.1 })).posture).toEqual({ kind: 'unknown' });
+  });
+
+  it('half-hidden hips (behind the shoulders, from the front) are enough for the slope', () => {
+    expect(analyze(body(twoSides(PLANK), { 23: 0.3, 24: 0.3 })).posture).toEqual({ kind: 'ok' });
   });
 });
 
 describe('analyzeFrame: form (straight lines + both sides)', () => {
   it('a straight plank is good form', () => {
     expect(analyze(body(twoSides(PLANK))).form).toEqual({ kind: 'ok' });
-  });
-
-  it('knees on the floor break the straight-leg rule', () => {
-    const kneeling = { ...PLANK, knee: [0.95, 0.5] as const, ankle: [1.4, 0.5] as const };
-    expect(analyze(body(twoSides(kneeling))).form.kind).toBe('bad');
-  });
-
-  it('form is unknown when the legs are hidden (never guessed)', () => {
-    const legsHidden = { 23: 0.2, 24: 0.2, 25: 0.2, 26: 0.2, 27: 0.2, 28: 0.2 };
-    expect(analyze(body(twoSides(PLANK), legsHidden)).form).toEqual({ kind: 'unknown' });
   });
 
   it('one arm bent and the other straight is one-sided (layer 5)', () => {

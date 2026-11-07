@@ -12,8 +12,14 @@ export const MIN_VISIBILITY = 0.6;
 // but not hidden ones: facing the camera in a push-up, the shoulders cover the legs
 export const MIN_SOFT_VISIBILITY = 0.5;
 
-// Plank: the shoulder-to-hip line must lean at least this far from vertical (90 = flat)
-const PLANK_MIN_TILT = 55;
+// Plank, filmed from the front: the back (shoulders -> hips) leans this far from vertical at least.
+// A full plank is close to flat (~70-85); a knee push-up slopes much more (~45-60), standing is ~0.
+// First values tried: tune with the on-screen numbers ("Hiện số đo").
+const PLANK_MIN_TILT = 62;
+const UPRIGHT_MAX_TILT = 35; // under this the person is not down on the floor at all
+// From the front the hips are partly behind the shoulders: their 3D position is the model's
+// estimate, good enough for a slope, so a lower visibility is accepted for them
+const HIP_SLOPE_VISIBILITY = 0.2;
 // Standing: the hip-to-shoulder line may lean at most this far (a deep squat leans ~45)
 const STANDING_MAX_TILT = 60;
 // Plank: hands at least this far (meters) below the shoulders
@@ -29,6 +35,7 @@ export interface FrameAnalysis {
   joint: Point | null; // that joint on screen (normalized 0..1), to draw the angle next to it
   form: Check; // straight body lines + both sides moving together
   posture: Check; // in the exercise's body position (plank / standing)
+  tilt: number | null; // degrees the back leans from vertical (shown with "Hiện số đo")
   height: number | null; // meters: shoulders above the hands (push-up) / hips above the feet (squat)
   limb: number | null; // meters: arm (push-up) / thigh (squat), what the height drop is compared to
   anchors: (Point | null)[]; // exercise.anchors on screen, in pixels; null when not seen
@@ -40,6 +47,7 @@ export const EMPTY_ANALYSIS: FrameAnalysis = {
   joint: null,
   form: { kind: 'unknown' },
   posture: { kind: 'unknown' },
+  tilt: null,
   height: null,
   limb: null,
   anchors: [],
@@ -116,22 +124,25 @@ const SHOULDERS = [11, 12];
 const WRISTS = [15, 16];
 const HIPS = [23, 24];
 
-function checkPosture(image: Pose, world: Pose, exercise: ExerciseConfig): Check {
+function checkPosture(image: Pose, world: Pose, exercise: ExerciseConfig): { posture: Check; tilt: number | null } {
+  const unknown = { posture: { kind: 'unknown' } as Check, tilt: null };
   const shoulders = midpoint(image, world, SHOULDERS);
-  const hips = midpoint(image, world, HIPS);
-  if (!shoulders || !hips) return { kind: 'unknown' };
+  const hips = midpoint(image, world, HIPS, exercise.posture === 'PLANK' ? HIP_SLOPE_VISIBILITY : MIN_SOFT_VISIBILITY);
+  if (!shoulders || !hips) return unknown;
   const tilt = tiltFromVertical(hips, shoulders);
-  if (Number.isNaN(tilt)) return { kind: 'unknown' };
+  if (Number.isNaN(tilt)) return unknown;
+  const result = (posture: Check) => ({ posture, tilt });
 
   if (exercise.posture === 'STANDING') {
-    return tilt <= STANDING_MAX_TILT ? { kind: 'ok' } : { kind: 'bad', message: 'Đứng thẳng người lên' };
+    return result(tilt <= STANDING_MAX_TILT ? { kind: 'ok' } : { kind: 'bad', message: 'Đứng thẳng người lên' });
   }
-  if (tilt < PLANK_MIN_TILT) return { kind: 'bad', message: 'Vào tư thế nằm sấp chống tay (plank)' };
+  if (tilt < UPRIGHT_MAX_TILT) return result({ kind: 'bad', message: 'Vào tư thế nằm sấp chống tay (plank)' });
+  if (tilt < PLANK_MIN_TILT) return result({ kind: 'bad', message: 'Duỗi thẳng chân, nhấc gối khỏi sàn' });
   const wrists = midpoint(image, world, WRISTS);
-  if (!wrists) return { kind: 'unknown' };
+  if (!wrists) return unknown;
   // World y points down: hands on the floor are below (greater y than) the shoulders
-  if (wrists.y - shoulders.y < HANDS_BELOW_SHOULDERS) return { kind: 'bad', message: 'Chống hai tay xuống sàn' };
-  return { kind: 'ok' };
+  if (wrists.y - shoulders.y < HANDS_BELOW_SHOULDERS) return result({ kind: 'bad', message: 'Chống hai tay xuống sàn' });
+  return result({ kind: 'ok' });
 }
 
 // Average length (meters) of a chain of segments over the sides listed, e.g. shoulder-elbow-wrist
@@ -192,7 +203,7 @@ export function analyzeFrame(
     angle: main?.angle ?? null,
     joint: main?.joint ?? null,
     form: checkForm(image, world, exercise, counting),
-    posture: checkPosture(image, world, exercise),
+    ...checkPosture(image, world, exercise),
     ...measureHeight(image, world, exercise),
     anchors,
     scale,
