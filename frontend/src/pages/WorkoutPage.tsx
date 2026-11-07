@@ -1,13 +1,19 @@
 import { DrawingUtils, PoseLandmarker } from '@mediapipe/tasks-vision';
-import { Camera, CameraOff, RotateCcw } from 'lucide-react';
+import { Camera, CameraOff, Check, Maximize2, Minimize2, RotateCcw } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Alert } from '../components/Alert';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { EXERCISE_IDS, EXERCISES, type ExerciseId } from '../constants/exercises';
 import { usePoseLandmarker } from '../hooks/usePoseLandmarker';
-import { exerciseAngle } from '../utils/pose/exerciseAngle';
-import { INITIAL_REP_STATE, stepRepCounter, type RepCounterState, type RepPhase } from '../utils/pose/repCounter';
+import { analyzeFrame } from '../utils/pose/analyzeFrame';
+import {
+  INITIAL_REP_STATE,
+  stepRepCounter,
+  type RepCounterState,
+  type RepEvent,
+  type RepPhase,
+} from '../utils/pose/repCounter';
 
 const PHASE_LABELS: Record<RepPhase, string> = {
   WAITING: 'Vào tư thế bắt đầu',
@@ -15,26 +21,33 @@ const PHASE_LABELS: Record<RepPhase, string> = {
   DOWN: 'Xuống',
 };
 
+const SKELETON_OK = '#ffffff';
+const SKELETON_BAD = '#f87171';
+
 // What the screen shows; the full counter state lives in a ref and changes every frame
 interface View {
   reps: number;
   phase: RepPhase;
   angle: number | null; // rounded
-  seen: boolean; // the body was usable in the last frame
+  seen: boolean; // the counting joint was usable in the last frame
+  formMessage: string | null; // a form rule broken right now
+  formUnknown: boolean; // the form lines are hidden (e.g. legs behind the shoulders)
+  event: RepEvent | null;
 }
 
-const INITIAL_VIEW: View = { reps: 0, phase: 'WAITING', angle: null, seen: false };
+const INITIAL_VIEW: View = {
+  reps: 0,
+  phase: 'WAITING',
+  angle: null,
+  seen: false,
+  formMessage: null,
+  formUnknown: false,
+  event: null,
+};
 
-function toView(state: RepCounterState, seen: boolean): View {
-  return {
-    reps: state.reps,
-    phase: state.phase,
-    angle: state.angle == null ? null : Math.round(state.angle),
-    seen,
-  };
-}
-
-const sameView = (a: View, b: View) => a.reps === b.reps && a.phase === b.phase && a.angle === b.angle && a.seen === b.seen;
+const sameView = (a: View, b: View) =>
+  a.reps === b.reps && a.phase === b.phase && a.angle === b.angle && a.seen === b.seen &&
+  a.formMessage === b.formMessage && a.formUnknown === b.formUnknown && a.event?.seq === b.event?.seq;
 
 function cameraErrorMessage(err: unknown): string {
   const name = err instanceof DOMException ? err.name : '';
@@ -50,9 +63,11 @@ export default function WorkoutPage() {
   const pose = usePoseLandmarker();
   const [exerciseId, setExerciseId] = useState<ExerciseId>('SQUAT');
   const [running, setRunning] = useState(false);
+  const [focus, setFocus] = useState(false); // camera fills the screen
   const [view, setView] = useState<View>(INITIAL_VIEW);
   const [error, setError] = useState<string | null>(null);
 
+  const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -95,6 +110,19 @@ export default function WorkoutPage() {
     streamRef.current = null;
     if (videoRef.current) videoRef.current.srcObject = null;
     setRunning(false);
+    exitFocus();
+  }
+
+  // Real fullscreen where the browser allows it on an element (Android, desktop);
+  // iPhone Safari does not, so the stage also covers the page with position: fixed
+  function enterFocus() {
+    setFocus(true);
+    stageRef.current?.requestFullscreen?.().catch(() => {});
+  }
+
+  function exitFocus() {
+    setFocus(false);
+    if (document.fullscreenElement) void document.exitFullscreen().catch(() => {});
   }
 
   function chooseExercise(id: ExerciseId) {
@@ -108,7 +136,23 @@ export default function WorkoutPage() {
     return () => streams.current?.getTracks().forEach((track) => track.stop());
   }, []);
 
-  // Frame loop: detect -> draw the skeleton -> angle -> counter
+  // Fullscreen closed by the browser (Esc, back gesture): leave focus mode too.
+  // While focused, the page behind must not scroll.
+  useEffect(() => {
+    if (!focus) return;
+    const onChange = () => {
+      if (!document.fullscreenElement) setFocus(false);
+    };
+    document.addEventListener('fullscreenchange', onChange);
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('fullscreenchange', onChange);
+      document.body.style.overflow = overflow;
+    };
+  }, [focus]);
+
+  // Frame loop: detect -> analyze -> count -> draw
   useEffect(() => {
     if (!running || pose.kind !== 'ready') return;
     const video = videoRef.current;
@@ -131,23 +175,48 @@ export default function WorkoutPage() {
 
       const now = performance.now();
       const result = landmarker.detectForVideo(video, now);
-      const landmarks = result.landmarks[0];
+      const image = result.landmarks[0];
+      const analysis = analyzeFrame(image, result.worldLandmarks[0], current);
+      const state = stepRepCounter(counterRef.current, analysis, now, current);
+      counterRef.current = state;
 
+      // Draw: skeleton (red while the form is wrong) + the angle next to the counting joint
       if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
       }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (landmarks) {
-        drawer.drawConnectors(landmarks, PoseLandmarker.POSE_CONNECTIONS, { color: '#ffffff', lineWidth: 3 });
-        drawer.drawLandmarks(landmarks, { color: '#dcf0b9', radius: 3 });
+      if (image) {
+        const color = state.formMessage ? SKELETON_BAD : SKELETON_OK;
+        drawer.drawConnectors(image, PoseLandmarker.POSE_CONNECTIONS, { color, lineWidth: 3 });
+        drawer.drawLandmarks(image, { color: '#dcf0b9', radius: 3 });
+      }
+      if (analysis.joint && state.angle != null) {
+        const size = Math.round(canvas.height / 16);
+        ctx.save();
+        // The canvas is mirrored with CSS like the video; mirror the text back so it reads normally
+        ctx.translate(analysis.joint.x * canvas.width, analysis.joint.y * canvas.height);
+        ctx.scale(-1, 1);
+        ctx.font = `600 ${size}px system-ui, sans-serif`;
+        ctx.lineWidth = Math.max(3, size / 6);
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillStyle = '#ffffff';
+        const label = `${Math.round(state.angle)}°`;
+        ctx.strokeText(label, size * 0.4, -size * 0.4);
+        ctx.fillText(label, size * 0.4, -size * 0.4);
+        ctx.restore();
       }
 
-      const angle = exerciseAngle(landmarks, current, video.videoWidth, video.videoHeight);
-      counterRef.current = stepRepCounter(counterRef.current, angle, now, current);
-
       // Re-render only when something on screen changes, not 30 times a second
-      const next = toView(counterRef.current, angle != null);
+      const next: View = {
+        reps: state.reps,
+        phase: state.phase,
+        angle: state.angle == null ? null : Math.round(state.angle),
+        seen: analysis.angle != null,
+        formMessage: state.formMessage,
+        formUnknown: current.formRules.length > 0 && analysis.form.kind === 'unknown',
+        event: state.event,
+      };
       if (!sameView(next, shown)) {
         shown = next;
         setView(next);
@@ -162,25 +231,106 @@ export default function WorkoutPage() {
     };
   }, [running, pose, exerciseId]);
 
-  return (
-    <div className="grid items-start gap-5 lg:grid-cols-3">
-      <Card className="min-w-0 lg:col-span-2">
-        {/* Mirrored like a mirror (front camera); angles are not affected by mirroring */}
-        <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-ink">
-          <video ref={videoRef} playsInline muted className="absolute inset-0 size-full -scale-x-100 object-contain" />
-          <canvas ref={canvasRef} className="absolute inset-0 size-full -scale-x-100 object-contain" />
-          {!running && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-6 text-center text-white">
-              <Camera aria-hidden="true" className="size-8" />
-              <p className="text-sm">Camera đang tắt</p>
+  const startButton = (
+    <Button onClick={() => void startCamera()} disabled={pose.kind !== 'ready'}>
+      <Camera aria-hidden="true" className="size-4" />
+      {pose.kind === 'loading' ? 'Đang tải bộ nhận diện…' : 'Bắt đầu'}
+    </Button>
+  );
+
+  // Bottom line on the camera: the most useful message right now
+  const liveMessage = !running
+    ? null
+    : !view.seen
+      ? { tone: 'bg-black/70', text: 'Chưa thấy rõ người: lùi ra xa để camera thấy cả người.' }
+      : view.formMessage
+        ? { tone: 'bg-danger', text: view.formMessage }
+        : view.formUnknown
+          ? { tone: 'bg-black/70', text: 'Chưa thấy chân: đặt camera chéo hoặc nghiêng để kiểm tra tư thế.' }
+          : null;
+
+  const stage = (
+    <div
+      ref={stageRef}
+      className={focus
+        ? 'fixed inset-0 z-50 bg-black'
+        : 'relative aspect-[3/4] overflow-hidden rounded-2xl bg-ink sm:aspect-[4/3]'}
+    >
+      {/* Mirrored like a mirror (front camera); angles are not affected by mirroring */}
+      <video ref={videoRef} playsInline muted className="absolute inset-0 size-full -scale-x-100 object-contain" />
+      <canvas ref={canvasRef} className="absolute inset-0 size-full -scale-x-100 object-contain" />
+
+      {!running && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center text-white">
+          <Camera aria-hidden="true" className="size-8" />
+          <p className="text-sm">Camera đang tắt</p>
+          {focus && startButton}
+        </div>
+      )}
+
+      {running && (
+        <div className="pointer-events-none absolute inset-0 text-white">
+          {/* Rep count + phase, top left */}
+          <div className="absolute top-3 left-3 rounded-2xl bg-black/55 px-4 py-2">
+            <p className="text-5xl leading-none font-bold tabular-nums sm:text-6xl" aria-live="polite">{view.reps}</p>
+            <p className="mt-1 text-sm">
+              {exercise.label} · {PHASE_LABELS[view.phase]}
+              {view.angle != null && <span className="text-white/70"> · {view.angle}°</span>}
+            </p>
+          </div>
+
+          {/* A counted rep: a check mark that pops in the middle */}
+          {view.event?.kind === 'COUNTED' && (
+            <div key={view.event.seq} className="absolute inset-0 flex items-center justify-center">
+              <div className="flex size-24 animate-rep-pop items-center justify-center rounded-full bg-lime-strong opacity-0 shadow-lg">
+                <Check aria-hidden="true" className="size-14" strokeWidth={3} />
+              </div>
             </div>
           )}
-          {running && !view.seen && (
-            <p className="absolute inset-x-4 bottom-4 rounded-xl bg-black/60 px-3 py-2 text-center text-sm text-white" role="status">
-              Chưa thấy rõ người: lùi ra xa để camera thấy cả người.
-            </p>
-          )}
+
+          <div className="absolute inset-x-3 bottom-16 flex flex-col items-center gap-2 sm:bottom-20">
+            {/* A rep that did not count: says why, then fades out */}
+            {view.event && view.event.kind !== 'COUNTED' && (
+              <p key={view.event.seq} role="status"
+                className={`animate-toast rounded-xl px-3 py-2 text-center text-sm font-medium opacity-0 ${
+                  view.event.kind === 'BAD_FORM' ? 'bg-danger' : 'bg-peach-strong'}`}>
+                {view.event.kind === 'BAD_FORM' ? `Không tính rep: ${view.event.message}` : 'Chưa đủ sâu: xuống thấp hơn'}
+              </p>
+            )}
+            {liveMessage && (
+              <p className={`rounded-xl px-3 py-2 text-center text-sm ${liveMessage.tone}`}>{liveMessage.text}</p>
+            )}
+          </div>
         </div>
+      )}
+
+      {/* Controls on the camera: always the fullscreen toggle; in focus mode, the others too */}
+      <div className="absolute inset-x-3 bottom-3 flex items-center justify-end gap-2">
+        {focus && running && (
+          <>
+            <button type="button" onClick={resetCounter}
+              className="flex h-10 cursor-pointer items-center gap-2 rounded-full bg-black/55 px-4 text-sm text-white hover:bg-black/70">
+              <RotateCcw aria-hidden="true" className="size-4" /> Đếm lại
+            </button>
+            <button type="button" onClick={stopCamera}
+              className="flex h-10 cursor-pointer items-center gap-2 rounded-full bg-black/55 px-4 text-sm text-white hover:bg-black/70">
+              <CameraOff aria-hidden="true" className="size-4" /> Tắt
+            </button>
+          </>
+        )}
+        <button type="button" onClick={focus ? exitFocus : enterFocus}
+          className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-black/55 text-white hover:bg-black/70"
+          aria-label={focus ? 'Thu nhỏ' : 'Toàn màn hình'} title={focus ? 'Thu nhỏ' : 'Toàn màn hình'}>
+          {focus ? <Minimize2 aria-hidden="true" className="size-5" /> : <Maximize2 aria-hidden="true" className="size-5" />}
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="grid items-start gap-5 lg:grid-cols-3">
+      <Card className="min-w-0 p-3 sm:p-6 lg:col-span-2">
+        {stage}
         <p className="mt-3 text-xs text-muted">
           Video chỉ được xử lý trên thiết bị của bạn, không gửi lên máy chủ.
         </p>
@@ -206,13 +356,10 @@ export default function WorkoutPage() {
           <p className="mt-3 text-sm text-ink-soft">{exercise.cameraHint}</p>
         </Card>
 
+        {/* Stays after the camera is off, so the result of the set is still visible */}
         <Card tone="lime">
-          <p className="text-sm text-ink-soft">Số rep</p>
-          <p className="text-6xl font-bold tabular-nums" aria-live="polite">{view.reps}</p>
-          <p className="mt-2 text-sm text-ink-soft">
-            {running ? PHASE_LABELS[view.phase] : 'Bật camera để bắt đầu'}
-            {running && view.angle != null && <span className="text-muted"> · góc {view.angle}°</span>}
-          </p>
+          <p className="text-sm text-ink-soft">{exercise.label}: số rep</p>
+          <p className="text-6xl font-bold tabular-nums">{view.reps}</p>
         </Card>
 
         <div className="flex flex-wrap gap-2">
@@ -221,10 +368,7 @@ export default function WorkoutPage() {
               <CameraOff aria-hidden="true" className="size-4" /> Tắt camera
             </Button>
           ) : (
-            <Button onClick={() => void startCamera()} disabled={pose.kind !== 'ready'}>
-              <Camera aria-hidden="true" className="size-4" />
-              {pose.kind === 'loading' ? 'Đang tải bộ nhận diện…' : 'Bắt đầu'}
-            </Button>
+            startButton
           )}
           <Button variant="secondary" onClick={resetCounter} disabled={view.reps === 0}>
             <RotateCcw aria-hidden="true" className="size-4" /> Đếm lại

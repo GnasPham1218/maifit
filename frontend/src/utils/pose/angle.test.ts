@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { jointAngle } from './angle';
 
+const deg = (d: number) => (d * Math.PI) / 180;
+
 describe('jointAngle', () => {
   const b = { x: 0, y: 0 };
 
@@ -22,15 +24,24 @@ describe('jointAngle', () => {
     expect(jointAngle(a, b, c)).toBeCloseTo(jointAngle(c, b, a));
   });
 
-  it('never goes over 180 (an angle measured the "long way round" is folded back)', () => {
+  it('never goes over 180', () => {
     // 60 degrees between the segments; subtracting two atan2 results would give 300 here
-    const a = { x: Math.cos((170 * Math.PI) / 180), y: Math.sin((170 * Math.PI) / 180) };
-    const c = { x: Math.cos((-130 * Math.PI) / 180), y: Math.sin((-130 * Math.PI) / 180) };
+    const a = { x: Math.cos(deg(170)), y: Math.sin(deg(170)) };
+    const c = { x: Math.cos(deg(-130)), y: Math.sin(deg(-130)) };
     expect(jointAngle(a, b, c)).toBeCloseTo(60);
   });
 
   it('does not depend on the segment lengths (thigh vs shin)', () => {
     expect(jointAngle({ x: 10, y: 0 }, b, { x: 0, y: 0.5 })).toBeCloseTo(90);
+  });
+
+  it('measures in 3D: a knee bending towards the camera', () => {
+    // Facing the camera (z = depth): hip above the knee, ankle straight towards the camera.
+    // In 2D (x, y only) the shin collapses to a point; in 3D it is a right angle.
+    const hip = { x: 0, y: -0.4, z: 0 };
+    const knee = { x: 0, y: 0, z: 0 };
+    const ankle = { x: 0, y: 0, z: -0.4 };
+    expect(jointAngle(hip, knee, ankle)).toBeCloseTo(90);
   });
 
   it('is NaN when two points are on top of each other', () => {
