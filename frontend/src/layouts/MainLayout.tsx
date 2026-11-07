@@ -1,4 +1,4 @@
-import { Dumbbell, House, LogOut, UserRound, Utensils, type LucideIcon } from 'lucide-react';
+import { Activity, Dumbbell, House, LogOut, UserRound, Utensils, type LucideIcon } from 'lucide-react';
 import { NavLink, Outlet, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 
@@ -12,6 +12,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Trang chủ', icon: House },
   { to: '/meals', label: 'Ăn uống', icon: Utensils },
+  { to: '/workout', label: 'Tập luyện', icon: Activity },
   { to: '/profile', label: 'Hồ sơ', icon: UserRound },
 ];
 

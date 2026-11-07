@@ -28,6 +28,23 @@
   --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   --radius-card: 1.75rem; /* 28px -> rounded-card */
+
+  /* Rep counter feedback on the camera: animate-rep-pop (the check mark), animate-toast (a message) */
+  --animate-rep-pop: rep-pop 0.9s ease-out forwards;
+  --animate-toast: toast 2.2s ease-out forwards;
+
+  @keyframes rep-pop {
+    0% { opacity: 0; transform: scale(0.6); }
+    20% { opacity: 1; transform: scale(1.1); }
+    70% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1); }
+  }
+  @keyframes toast {
+    0% { opacity: 0; transform: translateY(8px); }
+    10% { opacity: 1; transform: translateY(0); }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
 }
 
 /* Preflight (Tailwind's reset) removes default styles; put back the few we rely on */
