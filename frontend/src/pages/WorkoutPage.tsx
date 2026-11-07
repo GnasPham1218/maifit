@@ -7,6 +7,7 @@ import { Card } from '../components/Card';
 import { EXERCISE_IDS, EXERCISES, type ExerciseId } from '../constants/exercises';
 import { usePoseLandmarker } from '../hooks/usePoseLandmarker';
 import { analyzeFrame, type FrameAnalysis } from '../utils/pose/analyzeFrame';
+import { createLandmarkFilter } from '../utils/pose/landmarkFilter';
 import type { RepEvent, RepPhase } from '../utils/pose/repCounter';
 import {
   holdProgress,
@@ -61,15 +62,17 @@ const sameView = (a: View, b: View) =>
 const round = (n: number | null | undefined) => (n == null ? '—' : String(Math.round(n)));
 
 // One line of raw numbers to tune the thresholds on a real phone
-function debugLine(analysis: FrameAnalysis, session: SessionState): string {
+function debugLine(analysis: FrameAnalysis, session: SessionState, fps: number): string {
   const { topHeight, lowHeight, limb } = session.counter;
   const drop = topHeight != null && lowHeight != null && limb ? ((topHeight - lowHeight) / limb) * 100 : null;
   return [
     `góc ${round(analysis.angle)}°`,
     `lưng ${round(analysis.tilt)}°`,
+    `vai ${round(analysis.shoulder)}°`,
     `hạ ${round(drop)}%`,
     `tư thế ${analysis.posture.kind}`,
     `form ${analysis.form.kind}`,
+    `${round(fps)} fps`,
   ].join(' · ');
 }
 
@@ -191,6 +194,11 @@ export default function WorkoutPage() {
     let frameId = 0;
     let lastVideoTime = -1;
     let shown = INITIAL_VIEW;
+    // Steady the landmarks before drawing and measuring (a new filter per run: no old pose blended in)
+    const filterImage = createLandmarkFilter();
+    const filterWorld = createLandmarkFilter();
+    let fps = 0;
+    let lastFrameAt = 0;
 
     const loop = () => {
       frameId = requestAnimationFrame(loop);
@@ -200,9 +208,12 @@ export default function WorkoutPage() {
 
       const now = performance.now();
       const result = landmarker.detectForVideo(video, now);
-      const image = result.landmarks[0];
+      const image = filterImage(result.landmarks[0], now);
+      const world = filterWorld(result.worldLandmarks[0], now);
+      if (lastFrameAt) fps = fps * 0.9 + (1000 / (now - lastFrameAt)) * 0.1;
+      lastFrameAt = now;
       const frameSize = { width: video.videoWidth, height: video.videoHeight };
-      const analysis = analyzeFrame(image, result.worldLandmarks[0], current, frameSize);
+      const analysis = analyzeFrame(image, world, current, frameSize);
       const session = stepSession(sessionRef.current, analysis, now, current);
       sessionRef.current = session;
       const state = session.counter;
@@ -246,7 +257,7 @@ export default function WorkoutPage() {
         formMessage: state.formMessage,
         formUnknown: current.formRules.length > 0 && analysis.form.kind === 'unknown',
         event: state.event,
-        debug: showDebug ? debugLine(analysis, session) : null,
+        debug: showDebug ? debugLine(analysis, session, fps) : null,
       };
       if (!sameView(next, shown)) {
         shown = next;

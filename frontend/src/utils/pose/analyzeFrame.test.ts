@@ -57,6 +57,21 @@ describe('analyzeFrame: posture (layer 2)', () => {
     expect(result.tilt).toBeCloseTo(49.4, 0);
   });
 
+  it('raised (piked) hips are refused', () => {
+    const piked = { ...PLANK, hip: [0.4, -0.3] as const, knee: [0.8, 0] as const, ankle: [1.2, 0.3] as const };
+    expect(analyze(body(twoSides(piked))).posture).toEqual({ kind: 'bad', message: 'Hạ hông xuống, giữ thẳng người' });
+  });
+
+  it('a phone tilted 25 degrees does not change the plank verdict (body angles, not camera angles)', () => {
+    const r = (25 * Math.PI) / 180;
+    const rotate = ([x, y]: readonly [number, number, number?]) =>
+      [x * Math.cos(r) - y * Math.sin(r), x * Math.sin(r) + y * Math.cos(r)] as const;
+    const tilted = Object.fromEntries(Object.entries(PLANK).map(([k, v]) => [k, rotate(v)])) as unknown as typeof PLANK;
+    const result = analyze(body(twoSides(tilted)));
+    expect(result.posture).toEqual({ kind: 'ok' });
+    expect(result.shoulder).toBeCloseTo(84.3, 0);
+  });
+
   it('standing is a squat posture; lying down is not', () => {
     expect(analyze(body(twoSides(STANDING)), SQUAT).posture).toEqual({ kind: 'ok' });
     expect(analyze(body(twoSides(PLANK)), SQUAT).posture.kind).toBe('bad');

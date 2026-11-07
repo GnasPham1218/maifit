@@ -18,6 +18,7 @@ export type SessionStage = 'SETUP' | 'ACTIVE';
 export interface SessionState {
   stage: SessionStage;
   holdSince: number | null; // SETUP: when the person became still in position
+  slipSince: number | null; // SETUP: when the position was last lost during a hold (grace period)
   holdAnchors: (Point | null)[]; // SETUP: anchors when the hold started; moving away restarts it
   anchors: (Point | null)[]; // ACTIVE: hands / feet positions locked at the start
   scale: number | null; // ACTIVE: body size on screen at the start (pixels)
@@ -28,6 +29,7 @@ export interface SessionState {
 
 export interface SessionOptions {
   holdMs: number; // how long to hold still in position before counting starts
+  graceMs: number; // SETUP: losing the position for less than this does not restart the hold
   stillRatio: number; // SETUP: anchors staying within this share of the body size = holding still
   driftRatio: number; // ACTIVE: an anchor further than this share of the body size = left the spot
   offFrames: number; // ACTIVE: out of position this many frames in a row -> back to SETUP
@@ -35,6 +37,8 @@ export interface SessionOptions {
 
 export const DEFAULT_SESSION_OPTIONS: SessionOptions = {
   holdMs: 1000,
+  // A wobble or a few bad frames must not throw away the hold: only a real change does
+  graceMs: 400,
   // Compared with the position at the start of the hold, not frame to frame: the landmarks shake
   // a few pixels every frame on a phone, which a per-frame check mistook for moving
   stillRatio: 0.05,
@@ -45,6 +49,7 @@ export const DEFAULT_SESSION_OPTIONS: SessionOptions = {
 export const INITIAL_SESSION: SessionState = {
   stage: 'SETUP',
   holdSince: null,
+  slipSince: null,
   holdAnchors: [],
   anchors: [],
   scale: null,
@@ -85,18 +90,27 @@ export function stepSession(
       frame.angle == null || !seenAnchors || frame.scale == null ? 'Lùi ra xa để camera thấy cả người'
         : frame.posture.kind === 'bad' ? frame.posture.message
           : frame.form.kind === 'bad' ? frame.form.message
-            : frame.angle <= exercise.upAbove ? exercise.setupHint
+            : frame.angle <= exercise.upAbove ? `${exercise.setupHint} (góc đang ${Math.round(frame.angle)}°)`
               : null;
-    if (why) return { ...state, holdSince: null, holdAnchors: [], message: why };
+    const still = state.holdSince != null && frame.scale != null &&
+      maxMove(state.holdAnchors, frame.anchors) < options.stillRatio * frame.scale;
 
-    // In position: the hands / feet must also stay put (not walking into place)
-    const still = state.holdSince != null && maxMove(state.holdAnchors, frame.anchors) < options.stillRatio * frame.scale!;
-    if (!still) return { ...state, holdSince: now, holdAnchors: frame.anchors, message: 'Giữ yên…' };
-    if (now - state.holdSince! < options.holdMs) return { ...state, message: 'Giữ yên…' };
+    if (why || !still) {
+      // Holding, and only just slipped: keep the hold for a moment instead of starting over
+      const slipSince = state.slipSince ?? now;
+      if (state.holdSince != null && now - slipSince < options.graceMs) {
+        return { ...state, slipSince, message: why ?? 'Giữ yên…' };
+      }
+      return why
+        ? { ...state, holdSince: null, slipSince: null, holdAnchors: [], message: why }
+        : { ...state, holdSince: now, slipSince: null, holdAnchors: frame.anchors, message: 'Giữ yên…' };
+    }
+    if (now - state.holdSince! < options.holdMs) return { ...state, slipSince: null, message: 'Giữ yên…' };
     return {
       ...state,
       stage: 'ACTIVE',
       holdSince: null,
+      slipSince: null,
       holdAnchors: [],
       anchors: frame.anchors,
       scale: frame.scale,

@@ -47,7 +47,9 @@ export const EXERCISES: Record<ExerciseId, ExerciseConfig> = {
       [24, 26, 28],
     ],
     downBelow: 100,
-    upAbove: 160,
+    // Measured standing straight on a phone: ~159 in 3D (the model never reads a fully locked
+    // knee), so the top is 150, still 50 degrees above the bottom
+    upAbove: 150,
     formRules: [],
     posture: 'STANDING',
     anchors: [27, 28], // feet

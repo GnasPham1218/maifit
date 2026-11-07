@@ -3,22 +3,37 @@ import { useEffect, useState } from 'react';
 
 // Both served by the app itself (see scripts/copy-mediapipe.mjs and public/models), no CDN
 const WASM_PATH = '/mediapipe/wasm';
-// lite (~5 MB): fastest, enough to tell 90 from 160 degrees. If counting is off in tests,
-// download pose_landmarker_full.task and change this one line.
-const MODEL_PATH = '/models/pose_landmarker_lite.task';
+// full (~9 MB) is noticeably steadier and more accurate than lite (~5 MB) and still real-time
+// on a recent phone. If the full file is not in public/models, the lite one is used.
+const MODELS = ['/models/pose_landmarker_full.task', '/models/pose_landmarker_lite.task'] as const;
 
 export type PoseLandmarkerStatus =
   | { kind: 'loading' }
   | { kind: 'ready'; landmarker: PoseLandmarker }
   | { kind: 'error' };
 
-async function createLandmarker(delegate: 'GPU' | 'CPU'): Promise<PoseLandmarker> {
+async function createLandmarker(modelAssetPath: string, delegate: 'GPU' | 'CPU'): Promise<PoseLandmarker> {
   const fileset = await FilesetResolver.forVisionTasks(WASM_PATH);
   return PoseLandmarker.createFromOptions(fileset, {
-    baseOptions: { modelAssetPath: MODEL_PATH, delegate },
+    baseOptions: { modelAssetPath, delegate },
     runningMode: 'VIDEO',
     numPoses: 1, // one person per session; also cheaper
   });
+}
+
+// Best model first, GPU (WebGL, several times faster) before CPU: first combination that loads wins
+async function createBest(): Promise<PoseLandmarker> {
+  let lastError: unknown;
+  for (const model of MODELS) {
+    for (const delegate of ['GPU', 'CPU'] as const) {
+      try {
+        return await createLandmarker(model, delegate);
+      } catch (err) {
+        lastError = err;
+      }
+    }
+  }
+  throw lastError;
 }
 
 // One landmarker for the whole app session: compiling the WASM and loading the model onto the GPU
@@ -29,8 +44,7 @@ let shared: Promise<PoseLandmarker> | null = null;
 
 function getLandmarker(): Promise<PoseLandmarker> {
   if (!shared) {
-    // GPU (WebGL) is several times faster; some browsers/devices refuse it -> fall back to CPU
-    shared = createLandmarker('GPU').catch(() => createLandmarker('CPU'));
+    shared = createBest();
     shared.catch(() => {
       shared = null;
     });

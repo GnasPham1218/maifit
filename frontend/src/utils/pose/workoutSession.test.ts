@@ -13,6 +13,7 @@ const frame = (o: Partial<FrameAnalysis> = {}): FrameAnalysis => ({
   form: { kind: 'ok' },
   posture: { kind: 'ok' },
   tilt: 5,
+  shoulder: null,
   height: 0.9,
   limb: 0.45,
   anchors: [{ x: 400, y: 900 }, { x: 600, y: 900 }],
@@ -35,7 +36,7 @@ describe('stepSession: getting into position (layer 1)', () => {
   it('starts in SETUP and asks to get into position when not at the top', () => {
     const state = run([frame({ angle: 140 })]);
     expect(state.stage).toBe('SETUP');
-    expect(state.message).toBe(SQUAT.setupHint);
+    expect(state.message).toBe(`${SQUAT.setupHint} (góc đang 140°)`);
   });
 
   it('asks to step back when the body is not seen', () => {
@@ -56,6 +57,11 @@ describe('stepSession: getting into position (layer 1)', () => {
     const shaking = Array.from({ length: 35 }, (_, i) =>
       frame({ anchors: [{ x: 400 + (i % 2 ? 15 : -15), y: 900 + (i % 3) * 10 }, { x: 600, y: 900 }] }));
     expect(run(shaking).stage).toBe('ACTIVE');
+  });
+
+  it('a few bad frames while holding do not restart the hold', () => {
+    const wobble = [...times(15, frame()), ...times(4, frame({ angle: 145 })), ...times(16, frame())];
+    expect(run(wobble).stage).toBe('ACTIVE');
   });
 
   it('shows the hold progress', () => {
