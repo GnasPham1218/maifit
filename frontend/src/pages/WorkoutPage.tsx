@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Alert } from '../components/Alert';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
+import { WorkoutHistory } from '../components/WorkoutHistory';
 import { getErrorMessage } from '../constants/errorMessages';
 import { EXERCISE_IDS, EXERCISES, type ExerciseId } from '../exercises';
 import { savedPoseModel, savePoseModel, usePoseLandmarker, type PoseModel } from '../hooks/usePoseLandmarker';
@@ -154,6 +155,7 @@ export default function WorkoutPage() {
   const [saving, setSaving] = useState(false);
   const [saveNote, setSaveNote] = useState<{ ok: boolean; text: string } | null>(null);
   const [confirmStop, setConfirmStop] = useState(false); // "set not saved" dialog
+  const [historyKey, setHistoryKey] = useState(0); // bumped after a save: the history below reloads
 
   const exercise = EXERCISES[exerciseId];
 
@@ -183,6 +185,7 @@ export default function WorkoutPage() {
       });
       setSaveNote({ ok: true, text: `Đã lưu ${reps} rep ${exercise.label.toLowerCase()}.` });
       resetCounter();
+      setHistoryKey((k) => k + 1);
       return true;
     } catch (err) {
       setSaveNote({ ok: false, text: getErrorMessage(err) });
@@ -572,12 +575,18 @@ export default function WorkoutPage() {
 
   return (
     <div className="grid items-start gap-5 lg:grid-cols-3">
-      <Card className="min-w-0 p-3 sm:p-6 lg:col-span-2">
-        {stage}
-        <p className="mt-3 text-xs text-muted">
-          Video chỉ được xử lý trên thiết bị của bạn, không gửi lên máy chủ.
-        </p>
-      </Card>
+      <div className="grid min-w-0 gap-5 lg:col-span-2">
+        <Card className="min-w-0 p-3 sm:p-6">
+          {stage}
+          <p className="mt-3 text-xs text-muted">
+            Video chỉ được xử lý trên thiết bị của bạn, không gửi lên máy chủ.
+          </p>
+        </Card>
+
+        <Card title="Lịch sử tập luyện" className="min-w-0">
+          <WorkoutHistory refreshKey={historyKey} />
+        </Card>
+      </div>
 
       <div className="grid min-w-0 gap-5">
         {error && <Alert type="error">{error}</Alert>}

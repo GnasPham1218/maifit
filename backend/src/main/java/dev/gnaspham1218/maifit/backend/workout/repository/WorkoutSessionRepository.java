@@ -13,6 +13,23 @@ import java.util.UUID;
 
 public interface WorkoutSessionRepository extends JpaRepository<WorkoutSession, Long> {
 
+    // Ownership check built into the query: another user's set simply is "not found" (IDOR)
+    Optional<WorkoutSession> findByIdAndUserId(Long id, Long userId);
+
+    // Reps per calendar day (Vietnam time) and exercise, for the history calendar, in ONE query.
+    // Columns: [0] day (date), [1] exercise, [2] reps (bigint)
+    @Query(value = """
+            select cast(w.started_at at time zone :zone as date) as day, w.exercise, sum(w.reps) as reps
+            from workout_sessions w
+            where w.user_id = :userId and w.started_at >= :from and w.started_at < :to
+            group by day, w.exercise
+            order by day, w.exercise
+            """, nativeQuery = true)
+    List<Object[]> sumRepsPerDay(@Param("userId") Long userId,
+                                 @Param("from") Instant from,
+                                 @Param("to") Instant to,
+                                 @Param("zone") String zone);
+
     // A retry of a set already saved (same client_id) returns that set instead of a duplicate
     Optional<WorkoutSession> findByUserIdAndClientId(Long userId, UUID clientId);
 

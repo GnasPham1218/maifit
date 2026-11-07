@@ -154,8 +154,9 @@ export default function MealsPage() {
       {/* Grid rows stretch by default: both cards get the height of the taller one (the calendar) */}
       <div className="grid gap-5 lg:grid-cols-3">
         <Card className="min-w-0">
-          <MonthCalendar month={viewMonth} kcalByDate={kcalByDate} targetKcal={targetKcal} selectedDate={date}
-            today={today} onSelectDate={selectDate} onChangeMonth={setViewMonth} />
+          <MonthCalendar month={viewMonth} valueByDate={kcalByDate} unit="kcal" emptyLabel="chưa ghi bữa ăn"
+            target={targetKcal} footnote={targetKcal != null ? 'Thanh dưới mỗi ngày: calo so với mục tiêu.' : undefined}
+            selectedDate={date} today={today} onSelectDate={selectDate} onChangeMonth={setViewMonth} />
         </Card>
         <Card title="Calo theo ngày" className="flex min-w-0 flex-col lg:col-span-2">
           <div className="min-h-0 flex-1">

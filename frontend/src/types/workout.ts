@@ -25,6 +25,17 @@ export interface DailyWorkouts {
   streakDays: number;
 }
 
+export interface DayExerciseReps {
+  date: string; // yyyy-MM-dd, Vietnam time
+  exercise: ExerciseId;
+  reps: number;
+}
+
+export interface MonthlyWorkoutSummary {
+  month: string; // yyyy-MM
+  days: DayExerciseReps[]; // only days with sets
+}
+
 export interface LeaderboardEntry {
   rank: number; // equal totals share a rank
   displayName: string;

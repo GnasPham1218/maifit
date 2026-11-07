@@ -5,7 +5,10 @@ import dev.gnaspham1218.maifit.backend.common.exception.ErrorCode;
 import dev.gnaspham1218.maifit.backend.common.time.AppTime;
 import dev.gnaspham1218.maifit.backend.workout.dto.CreateWorkoutRequest;
 import dev.gnaspham1218.maifit.backend.workout.dto.DailyWorkoutsResponse;
+import dev.gnaspham1218.maifit.backend.workout.dto.DayExerciseReps;
+import dev.gnaspham1218.maifit.backend.workout.dto.MonthlyWorkoutSummary;
 import dev.gnaspham1218.maifit.backend.workout.dto.WorkoutResponse;
+import dev.gnaspham1218.maifit.backend.workout.entity.WorkoutExercise;
 import dev.gnaspham1218.maifit.backend.workout.entity.WorkoutSession;
 import dev.gnaspham1218.maifit.backend.workout.repository.WorkoutSessionRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import java.sql.Date;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 // Reps are counted in the browser, which the user controls (DevTools, a video in front of the
@@ -87,6 +91,30 @@ public class WorkoutService {
                 .findByUserIdAndStartedAtGreaterThanEqualAndStartedAtLessThanOrderByStartedAt(userId, from, to)
                 .stream().map(WorkoutService::toResponse).toList();
         return new DailyWorkoutsResponse(day, sessions, streak(userId));
+    }
+
+    // month = calendar month in Vietnam time, default this month
+    @Transactional(readOnly = true)
+    public MonthlyWorkoutSummary monthlySummary(Long userId, YearMonth month) {
+        YearMonth m = month != null ? month : YearMonth.now(AppTime.ZONE);
+        Instant from = m.atDay(1).atStartOfDay(AppTime.ZONE).toInstant();
+        Instant to = m.plusMonths(1).atDay(1).atStartOfDay(AppTime.ZONE).toInstant(); // exclusive
+        List<DayExerciseReps> days = repository.sumRepsPerDay(userId, from, to, AppTime.ZONE.getId()).stream()
+                .map(row -> new DayExerciseReps(
+                        toLocalDate(row[0]),
+                        WorkoutExercise.valueOf((String) row[1]),
+                        ((Number) row[2]).longValue()))
+                .toList();
+        return new MonthlyWorkoutSummary(m.toString(), days);
+    }
+
+    // Only the owner can delete: someone else's id answers 404 (not 403), so ids cannot be probed.
+    // Deleting only lowers totals, so it opens no way to climb the leaderboard.
+    @Transactional
+    public void delete(Long userId, Long id) {
+        WorkoutSession session = repository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        repository.delete(session);
     }
 
     @Transactional(readOnly = true)
