@@ -4,3 +4,4 @@ backend/target/
 frontend/dist/
 .idea/
 .vscode/
+.codegraph/

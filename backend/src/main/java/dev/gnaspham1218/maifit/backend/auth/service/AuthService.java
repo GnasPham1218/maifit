@@ -21,6 +21,8 @@ import dev.gnaspham1218.maifit.backend.user.mapper.UserMapper;
 import dev.gnaspham1218.maifit.backend.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,6 +37,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
+
     private final UserRepository userRepository;
     private final EmailTokenRepository emailTokenRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -44,6 +48,7 @@ public class AuthService {
     private final AuthProperties authProperties;
     private final UserMapper userMapper;
     private final JwtService jwtService;
+    private final AuthRateLimiter authRateLimiter;
 
     // A real BCrypt hash used when the email does not exist, so that login takes the same time either way
     private String dummyPasswordHash;
@@ -85,7 +90,15 @@ public class AuthService {
 
     @Transactional
     public AuthResult login(LoginRequest req) {
-        User user = userRepository.findByEmail(normalize(req.email())).orElse(null);
+        String email = normalize(req.email());
+
+        // Checked BEFORE the password: while locked, even the correct password is refused.
+        // Otherwise an attacker could keep guessing and spot the one answer that is not an error.
+        if (authRateLimiter.isLoginLocked(email)) {
+            throw new AppException(ErrorCode.LOGIN_TEMPORARILY_LOCKED);
+        }
+
+        User user = userRepository.findByEmail(email).orElse(null);
 
         // Always run BCrypt once, even when the user does not exist: otherwise "unknown email"
         // answers faster than "wrong password" and an attacker can tell which emails are registered.
@@ -93,8 +106,14 @@ public class AuthService {
         boolean passwordMatches = passwordEncoder.matches(req.password(), hash);
 
         if (user == null || user.getPasswordHash() == null || !passwordMatches) {
+            // Counted for unknown emails too, so the lock does not reveal which emails exist
+            authRateLimiter.recordLoginFailure(email);
+            if (authRateLimiter.isLoginLocked(email)) {
+                log.warn("Sign-in temporarily locked after repeated failures");
+            }
             throw new AppException(ErrorCode.INVALID_CREDENTIALS); // same error for wrong email and wrong password
         }
+        authRateLimiter.resetLoginFailures(email); // correct password: start counting from zero again
         // Checked only after the password is correct, so it does not reveal which emails exist
         if (!user.isEmailVerified()) {
             throw new AppException(ErrorCode.EMAIL_NOT_VERIFIED);
@@ -143,7 +162,14 @@ public class AuthService {
     // exists or not, so this endpoint cannot be used to find out who has an account.
     @Transactional
     public void forgotPassword(ForgotPasswordRequest req) {
-        userRepository.findByEmail(normalize(req.email()))
+        String email = normalize(req.email());
+        // Email bombing protection: over the limit, silently send nothing.
+        // The response stays the same, so the caller cannot tell it was limited.
+        if (!authRateLimiter.tryAcquirePasswordResetEmail(email)) {
+            log.warn("Password reset email limit reached for an address; email not sent");
+            return;
+        }
+        userRepository.findByEmail(email)
                 .ifPresent(user -> sendPasswordResetEmail(user, Instant.now()));
     }
 

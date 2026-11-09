@@ -13,6 +13,7 @@ const MESSAGES: Record<string, string> = {
   EMAIL_ALREADY_EXISTS: 'Email này đã được sử dụng.',
   USERNAME_ALREADY_EXISTS: 'Username này đã có người dùng.',
   INVALID_CREDENTIALS: 'Email hoặc mật khẩu không đúng.',
+  LOGIN_TEMPORARILY_LOCKED: 'Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút hoặc dùng "Quên mật khẩu".',
   EMAIL_NOT_VERIFIED: 'Bạn cần xác thực email trước khi đăng nhập. Hãy kiểm tra hộp thư.',
   INVALID_TOKEN: 'Liên kết không hợp lệ hoặc đã hết hạn.',
   PROFILE_NOT_FOUND: 'Bạn chưa thiết lập hồ sơ.',
