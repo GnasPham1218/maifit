@@ -20,6 +20,7 @@ export interface RegisterRequest {
   username: string;
   password: string;
   displayName: string;
+  captchaToken: string; // Cloudflare Turnstile token, single use
 }
 
 export type AuthStatus = 'loading' | 'authenticated' | 'anonymous';

@@ -7,6 +7,14 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY . .
+
+# Public Turnstile site key: Vite inlines VITE_* variables into the JS at build time,
+# so it must be given here (CI passes it with --build-arg), not when the container runs.
+# Fail the build if it is missing, rather than shipping a sign-up page with a broken CAPTCHA.
+ARG VITE_TURNSTILE_SITE_KEY
+RUN test -n "$VITE_TURNSTILE_SITE_KEY" || (echo "VITE_TURNSTILE_SITE_KEY build arg is required" && exit 1)
+ENV VITE_TURNSTILE_SITE_KEY=$VITE_TURNSTILE_SITE_KEY
+
 RUN npm run build
 
 # ---- Stage 2: serve ----

@@ -6,6 +6,10 @@ import jakarta.validation.constraints.Size;
 
 public record ForgotPasswordRequest(
         @NotBlank @Email @Size(max = 254)
-        String email
+        String email,
+
+        // Cloudflare Turnstile token from the widget; checked by TurnstileVerifier (blank -> CAPTCHA_INVALID)
+        @Size(max = 2048)
+        String captchaToken
 ) {
 }

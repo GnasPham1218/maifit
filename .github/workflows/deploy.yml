@@ -43,6 +43,10 @@ jobs:
           tags: |
             ghcr.io/gnaspham1218/maifit-${{ matrix.service }}:${{ github.sha }}
             ghcr.io/gnaspham1218/maifit-${{ matrix.service }}:latest
+          # Public Turnstile site key (a repository VARIABLE, not a secret: it ends up in the JS anyway).
+          # Only the frontend Dockerfile declares this ARG; the backend build ignores it.
+          build-args: |
+            VITE_TURNSTILE_SITE_KEY=${{ vars.VITE_TURNSTILE_SITE_KEY }}
           cache-from: type=gha,scope=${{ matrix.service }}
           cache-to: type=gha,mode=max,scope=${{ matrix.service }}
 

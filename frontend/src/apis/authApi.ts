@@ -29,8 +29,8 @@ export const authApi = {
     }
   },
 
-  forgotPassword: (email: string) =>
-    api<null>('/auth/forgot-password', { method: 'POST', body: { email }, auth: false }),
+  forgotPassword: (email: string, captchaToken: string) =>
+    api<null>('/auth/forgot-password', { method: 'POST', body: { email, captchaToken }, auth: false }),
 
   resetPassword: (token: string, newPassword: string) =>
     api<null>('/auth/reset-password', { method: 'POST', body: { token, newPassword }, auth: false }),
