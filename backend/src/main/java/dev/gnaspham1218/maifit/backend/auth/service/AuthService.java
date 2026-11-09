@@ -49,6 +49,7 @@ public class AuthService {
     private final UserMapper userMapper;
     private final JwtService jwtService;
     private final AuthRateLimiter authRateLimiter;
+    private final TurnstileVerifier turnstileVerifier;
 
     // A real BCrypt hash used when the email does not exist, so that login takes the same time either way
     private String dummyPasswordHash;
@@ -64,6 +65,9 @@ public class AuthService {
 
     @Transactional
     public UserResponse register(RegisterRequest req) {
+        // First, before touching the DB or sending mail: stop bots creating accounts in bulk
+        turnstileVerifier.verify(req.captchaToken());
+
         String email = normalize(req.email());
         String username = normalize(req.username());
 
@@ -162,6 +166,10 @@ public class AuthService {
     // exists or not, so this endpoint cannot be used to find out who has an account.
     @Transactional
     public void forgotPassword(ForgotPasswordRequest req) {
+        // First: stop bots using this endpoint to flood inboxes. A CAPTCHA error reveals
+        // nothing about the email, so it is safe to return it (unlike the silent limit below).
+        turnstileVerifier.verify(req.captchaToken());
+
         String email = normalize(req.email());
         // Email bombing protection: over the limit, silently send nothing.
         // The response stays the same, so the caller cannot tell it was limited.

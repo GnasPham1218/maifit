@@ -16,6 +16,8 @@ const MESSAGES: Record<string, string> = {
   LOGIN_TEMPORARILY_LOCKED: 'Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút hoặc dùng "Quên mật khẩu".',
   EMAIL_NOT_VERIFIED: 'Bạn cần xác thực email trước khi đăng nhập. Hãy kiểm tra hộp thư.',
   INVALID_TOKEN: 'Liên kết không hợp lệ hoặc đã hết hạn.',
+  CAPTCHA_INVALID: 'Xác minh chống bot không thành công. Vui lòng thử lại.',
+  CAPTCHA_UNAVAILABLE: 'Chưa xác minh được chống bot vì dịch vụ đang bận. Vui lòng thử lại sau ít phút.',
   PROFILE_NOT_FOUND: 'Bạn chưa thiết lập hồ sơ.',
   AGE_OUT_OF_RANGE: 'Tuổi phải từ 13 đến 100.',
   CHECKIN_IN_FUTURE: 'Thời gian ghi không được ở tương lai.',

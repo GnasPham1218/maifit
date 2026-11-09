@@ -19,6 +19,10 @@ public record RegisterRequest(
         String password,
 
         @NotBlank @Size(max = 50)
-        String displayName
+        String displayName,
+
+        // Cloudflare Turnstile token from the widget; checked by TurnstileVerifier (blank -> CAPTCHA_INVALID)
+        @Size(max = 2048)
+        String captchaToken
 ) {
 }

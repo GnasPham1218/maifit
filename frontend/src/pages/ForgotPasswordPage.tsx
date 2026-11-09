@@ -5,21 +5,28 @@ import { Alert } from '../components/Alert';
 import { FormField } from '../components/FormField';
 import { getErrorMessage } from '../constants/errorMessages';
 import { Button } from '../components/Button';
+import { TurnstileWidget } from '../components/TurnstileWidget';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  // Changing this remounts the widget, which gives a brand-new CAPTCHA (a token works only once)
+  const [captchaKey, setCaptchaKey] = useState(0);
 
   async function handleSubmit() {
+    if (!captchaToken) return; // the button is disabled until the widget passes
     setError(null);
     setSubmitting(true);
     try {
-      await authApi.forgotPassword(email);
+      await authApi.forgotPassword(email, captchaToken);
       setSent(true);
     } catch (err) {
       setError(getErrorMessage(err));
+      setCaptchaToken(null);
+      setCaptchaKey((k) => k + 1);
     } finally {
       setSubmitting(false);
     }
@@ -45,7 +52,8 @@ export default function ForgotPasswordPage() {
           >
             <FormField label="Email" name="email" type="email" autoComplete="email" required
               value={email} onChange={(e) => setEmail(e.target.value)} />
-            <Button type="submit" disabled={submitting}>
+            <TurnstileWidget key={captchaKey} onToken={setCaptchaToken} />
+            <Button type="submit" disabled={submitting || !captchaToken}>
               {submitting ? 'Đang gửi…' : 'Gửi liên kết đặt lại'}
             </Button>
           </form>

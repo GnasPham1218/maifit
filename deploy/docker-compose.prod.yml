@@ -51,6 +51,8 @@ services:
       # ":-" (not an empty value) because Spring treats an empty GEMINI_MODEL as set and skips its default
       GEMINI_API_KEY: ${GEMINI_API_KEY:?set GEMINI_API_KEY in deploy/.env}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash-lite}
+      # CAPTCHA (Cloudflare Turnstile) secret key, checked server-side on register and forgot-password
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY:?set TURNSTILE_SECRET_KEY in deploy/.env}
     ports:
       # 127.0.0.1 : 8080         : 8080
       # chỉ VPS   : cổng trên VPS : cổng trong container

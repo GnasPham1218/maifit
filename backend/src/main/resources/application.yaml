@@ -77,6 +77,13 @@ app:
     # Whole app, per day (Vietnam time). Gmail blocks accounts sending ~500/day (rolling 24 h),
     # so stay well below it; normal traffic is a few dozen emails a day.
     daily-limit: 300
+  turnstile:
+    # Cloudflare Turnstile (CAPTCHA) on register and forgot-password.
+    # Local .env uses Cloudflare's test key 1x0000000000000000000000000000000AA (always passes);
+    # production uses the real key from the Cloudflare dashboard, only in deploy/.env.
+    secret-key: ${TURNSTILE_SECRET_KEY}
+    verify-url: https://challenges.cloudflare.com/turnstile/v0/siteverify
+    timeout: 5s
   ai:
     daily-limit:
       food-vision: 10   # food recognition calls per user per day

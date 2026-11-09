@@ -6,6 +6,7 @@ import { FormField } from '../components/FormField';
 import { getErrorMessage, getFieldErrors } from '../constants/errorMessages';
 import { validatePassword, validateUsername } from '../utils/validation';
 import { Button } from '../components/Button';
+import { TurnstileWidget } from '../components/TurnstileWidget';
 
 const EMPTY = { email: '', username: '', displayName: '', password: '', confirmPassword: '' };
 
@@ -15,6 +16,9 @@ export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  // Changing this remounts the widget, which gives a brand-new CAPTCHA (a token works only once)
+  const [captchaKey, setCaptchaKey] = useState(0);
 
   function update(field: keyof typeof EMPTY, value: string) {
     setForm({ ...form, [field]: value });
@@ -35,6 +39,7 @@ export default function RegisterPage() {
     const errors = validate();
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) return;
+    if (!captchaToken) return; // the button is disabled until the widget passes
 
     setSubmitting(true);
     try {
@@ -43,11 +48,15 @@ export default function RegisterPage() {
         username: form.username,
         displayName: form.displayName,
         password: form.password,
+        captchaToken,
       });
       setRegisteredEmail(user.email);
     } catch (err) {
       setError(getErrorMessage(err));
       setFieldErrors(getFieldErrors(err));
+      // The backend already used this token (even if the error was e.g. "email taken"), so get a new one
+      setCaptchaToken(null);
+      setCaptchaKey((k) => k + 1);
     } finally {
       setSubmitting(false);
     }
@@ -90,7 +99,8 @@ export default function RegisterPage() {
         <FormField label="Nhập lại mật khẩu" name="confirmPassword" type="password" autoComplete="new-password" required
           value={form.confirmPassword} error={fieldErrors.confirmPassword}
           onChange={(e) => update('confirmPassword', e.target.value)} />
-        <Button type="submit" disabled={submitting}>
+        <TurnstileWidget key={captchaKey} onToken={setCaptchaToken} />
+        <Button type="submit" disabled={submitting || !captchaToken}>
           {submitting ? 'Đang tạo tài khoản…' : 'Đăng ký'}
         </Button>
       </form>
