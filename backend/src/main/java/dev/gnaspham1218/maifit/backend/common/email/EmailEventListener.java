@@ -17,10 +17,16 @@ public class EmailEventListener {
     private static final Logger log = LoggerFactory.getLogger(EmailEventListener.class);
 
     private final EmailSender emailSender;
+    private final EmailDailyQuota dailyQuota;
 
     @Async
     @TransactionalEventListener
     public void on(VerificationEmailEvent event) {
+        if (!dailyQuota.tryAcquire()) {
+            // ERROR, not WARN: reaching the cap almost certainly means an attack. Never log the link (it contains a token)
+            log.error("Daily email limit reached; verification email to {} not sent", event.to());
+            return;
+        }
         try {
             emailSender.sendVerificationEmail(event.to(), event.displayName(), event.link());
         } catch (Exception e) {
@@ -32,6 +38,10 @@ public class EmailEventListener {
     @Async
     @TransactionalEventListener
     public void on(PasswordResetEmailEvent event) {
+        if (!dailyQuota.tryAcquire()) {
+            log.error("Daily email limit reached; password reset email to {} not sent", event.to());
+            return;
+        }
         try {
             emailSender.sendPasswordResetEmail(event.to(), event.displayName(), event.link());
         } catch (Exception e) {

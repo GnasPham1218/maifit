@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "app.mail")
 public record AppMailProperties(
         String from,      // must be the Gmail account itself (Gmail rewrites any other sender)
-        String fromName   // shown as the sender name in the inbox
+        String fromName,  // shown as the sender name in the inbox
+        int dailyLimit    // max emails sent by the whole app per day (Vietnam time), see EmailDailyQuota
 ) {
 }
