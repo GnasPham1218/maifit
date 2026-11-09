@@ -19,6 +19,7 @@ public enum ErrorCode {
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "Invalid email or password"),
     EMAIL_NOT_VERIFIED(HttpStatus.FORBIDDEN, "Please verify your email before signing in"),
     INVALID_TOKEN(HttpStatus.BAD_REQUEST, "The link is invalid or has expired"),
+    LOGIN_TEMPORARILY_LOCKED(HttpStatus.TOO_MANY_REQUESTS, "Too many failed sign-in attempts, please try again later"),
 
     // ---- Profile & body ----
     PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "Profile has not been set up yet"),

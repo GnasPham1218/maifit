@@ -49,6 +49,15 @@ management:
     mail:
       enabled: false   # otherwise /health connects to Gmail on every check and turns DOWN if Gmail is slow
 app:
+  rate-limit:
+    # Per-email limits, in memory (one backend instance). Per-IP limits are in Nginx.
+    max-tracked-keys: 50000   # memory bound per limiter; old keys are evicted beyond this
+    login:
+      max-attempts: 5         # failed sign-ins per email...
+      window: 15m             # ...counted from the first failure, then a lock until the window ends
+    password-reset:
+      max-attempts: 3         # reset emails per address...
+      window: 1h
   food-request:
     daily-limit: 5   # "Báo thiếu món": distinct names per user per day (Vietnam time)
   jwt:
