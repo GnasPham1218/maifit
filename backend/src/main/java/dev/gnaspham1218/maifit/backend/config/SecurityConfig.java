@@ -28,7 +28,10 @@ public class SecurityConfig {
             "/auth/refresh",
             "/auth/logout",
             "/auth/forgot-password",
-            "/auth/reset-password"
+            "/auth/reset-password",
+            // Called by the payment gateway's servers (no JWT); authenticated by the provider's
+            // own check inside PaymentProvider.parseWebhook (payOS: HMAC signature)
+            "/payments/webhook/*"
     };
 
     private final RestAuthenticationEntryPoint authenticationEntryPoint;

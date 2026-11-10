@@ -46,7 +46,13 @@ public enum ErrorCode {
     // ---- AI ----
     AI_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "Daily AI usage limit reached"),
     AI_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "The AI service is unavailable, please try again later"),
-    IMAGE_INVALID(HttpStatus.BAD_REQUEST, "Only JPEG, PNG or WebP images up to 2 MB are accepted");
+    IMAGE_INVALID(HttpStatus.BAD_REQUEST, "Only JPEG, PNG or WebP images up to 2 MB are accepted"),
+
+    // ---- Payments ----
+    PAYMENT_ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "Payment order not found"),
+    PAYMENT_ORDER_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "Too many payment orders created today"),
+    PAYMENT_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "The payment service is unavailable, please try again later"),
+    PAYMENT_WEBHOOK_INVALID(HttpStatus.BAD_REQUEST, "Invalid payment notification");
 
     private final HttpStatus status;
     private final String defaultMessage;

@@ -1,5 +1,6 @@
 import { Camera, ImageUp, Pencil, Plus, Trash2, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router';
 import { mealApi } from '../apis/mealApi';
 import { getErrorMessage } from '../constants/errorMessages';
 import { MEAL_TYPE_LABELS, PREPARATION_LABELS } from '../constants/meal';
@@ -396,7 +397,9 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
       )}
 
       {remaining != null && (
-        <p className="text-xs text-muted">Còn {remaining} lượt nhận diện ảnh hôm nay.</p>
+        <p className="text-xs text-muted">
+          Còn {remaining} lượt nhận diện ảnh hôm nay. <Link to="/premium">Thêm lượt với Premium</Link>
+        </p>
       )}
       {error && <p className="text-sm text-danger" role="alert">{error}</p>}
     </div>

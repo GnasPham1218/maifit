@@ -53,6 +53,12 @@ services:
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash-lite}
       # CAPTCHA (Cloudflare Turnstile) secret key, checked server-side on register and forgot-password
       TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY:?set TURNSTILE_SECRET_KEY in deploy/.env}
+      # Payments (payOS): keys of the payment channel. The checksum key is what proves a webhook is real.
+      PAYOS_CLIENT_ID: ${PAYOS_CLIENT_ID:?set PAYOS_CLIENT_ID in deploy/.env}
+      PAYOS_API_KEY: ${PAYOS_API_KEY:?set PAYOS_API_KEY in deploy/.env}
+      PAYOS_CHECKSUM_KEY: ${PAYOS_CHECKSUM_KEY:?set PAYOS_CHECKSUM_KEY in deploy/.env}
+      # Price of Premium in VND; ":-" for the same reason as GEMINI_MODEL
+      PREMIUM_PRICE: ${PREMIUM_PRICE:-39000}
     ports:
       # 127.0.0.1 : 8080         : 8080
       # chỉ VPS   : cổng trên VPS : cổng trong container

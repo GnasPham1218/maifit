@@ -63,6 +63,20 @@
 			<artifactId>bucket4j_jdk17-core</artifactId>
 			<version>8.22.0</version>
 		</dependency>
+		<!-- payOS payment gateway: official SDK (signs requests, verifies webhook signatures).
+		     Not managed by Spring Boot: version checked on Maven Central -->
+		<dependency>
+			<groupId>vn.payos</groupId>
+			<artifactId>payos-java</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<!-- Renders the bank-transfer QR code on our own server (no third-party script or image host).
+		     Not managed by Spring Boot: version checked on Maven Central -->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.5.4</version>
+		</dependency>
 		<!-- In-memory cache with expiry + size bound, stores one bucket per email. Version managed by Spring Boot -->
 		<dependency>
 			<groupId>com.github.ben-manes.caffeine</groupId>

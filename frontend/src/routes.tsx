@@ -9,6 +9,7 @@ import LeaderboardPage from './pages/LeaderboardPage';
 import LoginPage from './pages/LoginPage';
 import MealsPage from './pages/MealsPage';
 import NotFoundPage from './pages/NotFoundPage';
+import PremiumPage from './pages/PremiumPage';
 import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
@@ -27,6 +28,7 @@ export const router = createBrowserRouter([
           { path: '/meals', element: <MealsPage /> },
           { path: '/workout', element: <WorkoutPage /> },
           { path: '/leaderboard', element: <LeaderboardPage /> },
+          { path: '/premium', element: <PremiumPage /> },
           { path: '/profile', element: <ProfilePage /> },
         ],
       },
