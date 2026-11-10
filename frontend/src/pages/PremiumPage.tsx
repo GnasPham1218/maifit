@@ -92,14 +92,7 @@ export default function PremiumPage() {
       paymentApi
         .get(orderCode)
         .then((latest) => {
-          if (ignore) return;
-          setOrder(latest);
-          if (latest.state === 'PAID') {
-            // Premium time changed on the server: read it again
-            paymentApi.plan().then((data) => {
-              if (!ignore) setPlan(data);
-            }).catch(() => {});
-          }
+          if (!ignore) setOrder(latest);
         })
         .catch(() => {}); // a failed poll is retried by the next one
     }, POLL_MS);
@@ -109,6 +102,25 @@ export default function PremiumPage() {
       window.clearInterval(poll);
     };
   }, [waiting, orderCode]);
+
+  // The order just became PAID (seen by the poll or by "Tôi đã chuyển khoản"): Premium time changed
+  // on the server, so read the plan again. This is its own effect on purpose: the polling effect
+  // above is cleaned up the moment the order stops being PENDING, which would cancel a request
+  // started from inside it.
+  const paidOrderCode = order?.state === 'PAID' ? order.orderCode : undefined;
+  useEffect(() => {
+    if (paidOrderCode === undefined) return;
+    let ignore = false;
+    paymentApi
+      .plan()
+      .then((data) => {
+        if (!ignore) setPlan(data);
+      })
+      .catch(() => {}); // the tiles stay as they were; a reload shows the new plan
+    return () => {
+      ignore = true;
+    };
+  }, [paidOrderCode]);
 
   async function handleCheckout() {
     setBusy(true);
@@ -132,10 +144,8 @@ export default function PremiumPage() {
     setNotice(null);
     try {
       const latest = await paymentApi.refresh(order.orderCode);
-      setOrder(latest);
-      if (latest.state === 'PAID') {
-        setPlan(await paymentApi.plan());
-      } else {
+      setOrder(latest); // PAID -> the effect above reloads the plan
+      if (latest.state !== 'PAID') {
         setNotice('Chưa thấy tiền về. Ngân hàng có thể mất khoảng một phút, trang này sẽ tự cập nhật.');
       }
     } catch (err) {
