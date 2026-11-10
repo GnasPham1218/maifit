@@ -1,0 +1,59 @@
+# .github/dependabot.yml
+# Once a week, Dependabot opens PRs that update dependencies. Each PR runs the
+# "Build, scan and deploy" workflow as a check (build + Trivy scan, no deploy) before you merge.
+# Minor/patch updates are grouped into one PR per ecosystem; major updates get their own PR,
+# because they can break code and need a closer look.
+version: 2
+updates:
+  - package-ecosystem: maven
+    directory: /backend
+    schedule:
+      interval: weekly
+      day: monday
+      time: "08:00"
+      timezone: Asia/Ho_Chi_Minh
+    open-pull-requests-limit: 5
+    groups:
+      maven-minor-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+      day: monday
+      time: "08:00"
+      timezone: Asia/Ho_Chi_Minh
+    open-pull-requests-limit: 5
+    groups:
+      npm-minor-patch:
+        update-types: [minor, patch]
+
+  # Base images in the Dockerfiles (JDK/JRE, Node, Nginx): patched OS packages arrive this way
+  - package-ecosystem: docker
+    directory: /backend
+    schedule:
+      interval: weekly
+      day: monday
+      time: "08:00"
+      timezone: Asia/Ho_Chi_Minh
+
+  - package-ecosystem: docker
+    directory: /frontend
+    schedule:
+      interval: weekly
+      day: monday
+      time: "08:00"
+      timezone: Asia/Ho_Chi_Minh
+
+  # Actions used in .github/workflows, including the SHA-pinned Trivy action
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "08:00"
+      timezone: Asia/Ho_Chi_Minh
+    groups:
+      github-actions:
+        patterns: ["*"]

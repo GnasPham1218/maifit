@@ -1,18 +1,22 @@
 # .github/workflows/deploy.yml
-# Push lên main → build 2 image → push ghcr.io (tag = commit SHA + latest) → SSH vào VPS để deploy.
-name: Build and deploy
+# Pull request -> build both images -> Trivy scan (a check on the PR, nothing is pushed)
+# Push to main  -> build -> Trivy scan -> push to ghcr.io (tag = commit SHA + latest) -> SSH deploy to the VPS
+name: Build, scan and deploy
 
 on:
   push:
     branches: [main]
-  workflow_dispatch:   # cho phép bấm chạy tay trong tab Actions
+  pull_request:
+    branches: [main]
+  workflow_dispatch:   # allows a manual run from the Actions tab
 
-# Hai lần push liên tiếp → deploy lần lượt, không chạy chồng lên nhau trên VPS
+# main: two pushes in a row deploy one after the other, never on top of each other on the VPS.
+# PR: a new commit cancels the still-running check of the previous commit.
 concurrency:
-  group: deploy-production
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-# GITHUB_TOKEN chỉ có đúng các quyền cần dùng
+# GITHUB_TOKEN gets only the permissions it needs (PRs from Dependabot get read-only anyway)
 permissions:
   contents: read
   packages: write
@@ -28,14 +32,47 @@ jobs:
 
       - uses: docker/setup-buildx-action@v4
 
+      # 1) Build into the runner's local Docker only, so Trivy can scan it BEFORE anything is published
+      - name: Build ${{ matrix.service }} image
+        uses: docker/build-push-action@v7
+        with:
+          context: ${{ matrix.service }}
+          load: true
+          provenance: false   # attestations cannot be loaded into the local Docker image store
+          tags: maifit-${{ matrix.service }}:scan
+          # Public Turnstile site key (a repository VARIABLE, not a secret: it ends up in the JS anyway).
+          # PRs (e.g. from Dependabot, which cannot read repo settings) build with Cloudflare's test key;
+          # main always uses the real key, and the frontend Dockerfile fails if it is missing.
+          # Only the frontend Dockerfile declares this ARG; the backend build ignores it.
+          build-args: |
+            VITE_TURNSTILE_SITE_KEY=${{ github.event_name == 'pull_request' && '1x00000000000000000000AA' || vars.VITE_TURNSTILE_SITE_KEY }}
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
+
+      # 2) Security gate: a CRITICAL vulnerability that already has a fix stops the pipeline here
+      - name: Scan ${{ matrix.service }} image with Trivy
+        # Pinned to a commit SHA, not a tag: in March 2026 attackers force-pushed most tags of this
+        # action to malicious code. A SHA cannot be moved. This is the immutable v0.36.0 release;
+        # Dependabot proposes SHA updates.
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: maifit-${{ matrix.service }}:scan
+          severity: CRITICAL
+          ignore-unfixed: true   # nothing to upgrade to yet -> blocking would not help
+          exit-code: '1'
+          format: table
+
+      # 3) Publish only from main, and only after the scan passed
       - name: Log in to ghcr.io
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push ${{ matrix.service }}
+      - name: Push ${{ matrix.service }} image
+        if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v7
         with:
           context: ${{ matrix.service }}
@@ -43,15 +80,15 @@ jobs:
           tags: |
             ghcr.io/gnaspham1218/maifit-${{ matrix.service }}:${{ github.sha }}
             ghcr.io/gnaspham1218/maifit-${{ matrix.service }}:latest
-          # Public Turnstile site key (a repository VARIABLE, not a secret: it ends up in the JS anyway).
-          # Only the frontend Dockerfile declares this ARG; the backend build ignores it.
+          # Same inputs as the scanned build -> every layer comes from the cache: the pushed image
+          # is the one Trivy just scanned, not a new build
           build-args: |
             VITE_TURNSTILE_SITE_KEY=${{ vars.VITE_TURNSTILE_SITE_KEY }}
           cache-from: type=gha,scope=${{ matrix.service }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
 
   deploy:
     needs: build
+    if: github.event_name != 'pull_request'   # PRs are only checked, never deployed
     runs-on: ubuntu-latest
     steps:
       - name: Configure SSH
