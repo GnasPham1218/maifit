@@ -43,6 +43,11 @@ public class User {
     @Column(nullable = false, length = 20)
     private Role role;
 
+    // Premium ends at this time; null = never bought. Only changed by UserRepository.extendPremium
+    // (one atomic UPDATE), so two payments confirmed at the same moment both count.
+    @Column(insertable = false, updatable = false)
+    private Instant premiumUntil;
+
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 

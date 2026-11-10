@@ -7,6 +7,7 @@ import dev.gnaspham1218.maifit.backend.ai.repository.AiUsageRepository;
 import dev.gnaspham1218.maifit.backend.common.exception.AppException;
 import dev.gnaspham1218.maifit.backend.common.exception.ErrorCode;
 import dev.gnaspham1218.maifit.backend.common.time.AppTime;
+import dev.gnaspham1218.maifit.backend.user.service.PremiumService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,16 +19,30 @@ import java.time.ZonedDateTime;
 public class AiUsageService {
 
     private final AiUsageRepository repo;
+    private final PremiumService premiumService;
     private final int foodVisionLimit;
+    private final int foodVisionPremiumLimit;
     private final int chatLimit;
 
     public AiUsageService(
             AiUsageRepository repo,
-            @Value("${app.ai.daily-limit.food-vision:10}") int foodVisionLimit,
+            PremiumService premiumService,
+            @Value("${app.ai.daily-limit.food-vision:3}") int foodVisionLimit,
+            @Value("${app.ai.daily-limit.food-vision-premium:30}") int foodVisionPremiumLimit,
             @Value("${app.ai.daily-limit.chat:20}") int chatLimit) {
         this.repo = repo;
+        this.premiumService = premiumService;
         this.foodVisionLimit = foodVisionLimit;
+        this.foodVisionPremiumLimit = foodVisionPremiumLimit;
         this.chatLimit = chatLimit;
+    }
+
+    public int freeFoodVisionLimit() {
+        return foodVisionLimit;
+    }
+
+    public int premiumFoodVisionLimit() {
+        return foodVisionPremiumLimit;
     }
 
     /**
@@ -37,7 +52,7 @@ public class AiUsageService {
     @Transactional
     public int acquire(Long userId, AiFeature feature) {
         LocalDate today = ZonedDateTime.now(AppTime.ZONE).toLocalDate();
-        int limit = limitFor(feature);
+        int limit = limitFor(userId, feature);
         int affected = repo.tryIncrement(userId, today, feature.name(), limit);
         if (affected == 0) {
             throw new AppException(ErrorCode.AI_DAILY_LIMIT,
@@ -56,9 +71,11 @@ public class AiUsageService {
         repo.refund(userId, today, feature.name());
     }
 
-    private int limitFor(AiFeature feature) {
+    // The limit is looked up on every call, so Premium applies (and ends) without any extra step:
+    // a paid order raises the limit right away, an ended Premium falls back to the free limit.
+    private int limitFor(Long userId, AiFeature feature) {
         return switch (feature) {
-            case FOOD_VISION -> foodVisionLimit;
+            case FOOD_VISION -> premiumService.isPremium(userId) ? foodVisionPremiumLimit : foodVisionLimit;
             case CHAT        -> chatLimit;
         };
     }

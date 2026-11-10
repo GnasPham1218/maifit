@@ -31,9 +31,12 @@ const MESSAGES: Record<string, string> = {
   WORKOUT_PACE_INVALID: 'Số rep quá nhiều so với thời gian tập, set này không được lưu.',
   WORKOUT_DAILY_LIMIT: 'Mỗi ngày chỉ lưu được tối đa 20 set.',
   WORKOUT_REPS_DAILY_LIMIT: 'Hôm nay bạn đã đạt giới hạn 2.000 rep cho bài này.',
-  AI_DAILY_LIMIT: 'Bạn đã dùng hết lượt nhận diện ảnh hôm nay. Hãy thêm món thủ công hoặc thử lại vào ngày mai.',
+  AI_DAILY_LIMIT: 'Bạn đã dùng hết lượt nhận diện ảnh hôm nay. Hãy thêm món thủ công, thử lại vào ngày mai, hoặc nâng cấp Premium để có thêm lượt.',
   AI_UNAVAILABLE: 'Dịch vụ AI đang bận, chưa nhận diện được. Lượt này không bị trừ, bạn thử lại sau nhé.',
   IMAGE_INVALID: 'Chỉ nhận ảnh JPEG, PNG hoặc WebP, tối đa 2 MB.',
+  PAYMENT_ORDER_NOT_FOUND: 'Không tìm thấy đơn thanh toán.',
+  PAYMENT_ORDER_LIMIT: 'Hôm nay bạn đã tạo quá nhiều mã thanh toán. Vui lòng thử lại vào ngày mai.',
+  PAYMENT_UNAVAILABLE: 'Cổng thanh toán đang bận. Bạn chưa bị trừ tiền, vui lòng thử lại sau ít phút.',
 };
 
 export function getErrorMessage(error: unknown): string {

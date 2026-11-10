@@ -86,5 +86,23 @@ app:
     timeout: 5s
   ai:
     daily-limit:
-      food-vision: 10   # food recognition calls per user per day
-      chat: 20           # chatbot calls per user per day
+      food-vision: 3            # food recognition calls per user per day, free plan
+      food-vision-premium: 30   # the same for Premium users
+      chat: 20                  # chatbot calls per user per day
+  payment:
+    provider: PAYOS             # gateway used for new orders (a PaymentProvider implementation)
+    premium:
+      # VND for one purchase. Local .env sets PREMIUM_PRICE=2000 for testing: payOS has no sandbox,
+      # every test is a real bank transfer.
+      price: ${PREMIUM_PRICE:39000}
+      days: 30                  # Premium days one purchase adds (stacks on top of the remaining time)
+    order-ttl: 15m              # how long a QR stays payable
+    max-orders-per-day: 10      # new orders per user per day (Vietnam time)
+    description: MAIFit         # bank-transfer content; kept short, gateways limit its length
+    return-url: ${FRONTEND_URL:http://localhost:5173}/premium
+  payos:
+    # Keys of the payOS payment channel (my.payos.vn > Kênh thanh toán). Only in .env / deploy/.env.
+    client-id: ${PAYOS_CLIENT_ID}
+    api-key: ${PAYOS_API_KEY}
+    checksum-key: ${PAYOS_CHECKSUM_KEY}
+    timeout: 10s
