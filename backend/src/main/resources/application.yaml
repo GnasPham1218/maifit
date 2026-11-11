@@ -30,6 +30,20 @@ spring:
       mail.smtp.timeout: 5000
       mail.smtp.writetimeout: 5000
   ai:
+    model:
+      # Two providers are on the classpath, so each role is assigned explicitly:
+      # Gemini answers, Ollama embeds. Without "chat", Spring finds two ChatModel beans and fails to start.
+      chat: google-genai
+      embedding: ollama
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      embedding:
+        model: bge-m3           # documents and questions must be embedded by the SAME model
+    vectorstore:
+      pgvector:
+        # Must match vector(1024) in V14__vector_store.sql. Set explicitly so the app does not
+        # have to call Ollama at startup to discover it (the app still starts when Ollama is down).
+        dimensions: 1024
     google:
       genai:
         api-key: ${GEMINI_API_KEY}
