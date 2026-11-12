@@ -72,6 +72,10 @@ app:
     password-reset:
       max-attempts: 3         # reset emails per address...
       window: 1h
+  rag:
+    # Sources are cut at every heading first; a section longer than one chunk is cut again by tokens
+    chunk-size: 350        # target tokens per chunk
+    min-chunk-chars: 200   # never cut a chunk shorter than this
   food-request:
     daily-limit: 5   # "Báo thiếu món": distinct names per user per day (Vietnam time)
   jwt:
