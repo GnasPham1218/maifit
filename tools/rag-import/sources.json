@@ -1,0 +1,103 @@
+{
+  "sources": [
+    {
+      "id": "issn-protein",
+      "input": "raw/issn-protein.html",
+      "site": "bmc",
+      "url": "https://jissn.biomedcentral.com/articles/10.1186/s12970-017-0177-8",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "accessed": "2026-11-12",
+      "keep": [
+        "Abstract",
+        "Background",
+        "Benefits on exercise performance",
+        "Body composition",
+        "Protein timing",
+        "Recommended intake",
+        "Protein quality",
+        "Protein sources",
+        "Protein safety",
+        "Conclusion"
+      ]
+    },
+    {
+      "id": "issn-nutrient-timing",
+      "input": "raw/issn-nutrient-timing.html",
+      "site": "bmc",
+      "url": "https://jissn.biomedcentral.com/articles/10.1186/s12970-017-0189-4",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "accessed": "2026-11-12",
+      "keep": [
+        "Abstract",
+        "Background",
+        "Conclusions"
+      ]
+    },
+    {
+      "id": "issn-diets-body-composition",
+      "input": "raw/issn-diets-body-composition.html",
+      "site": "bmc",
+      "url": "https://jissn.biomedcentral.com/articles/10.1186/s12970-017-0174-y",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "accessed": "2026-11-12",
+      "keep": [
+        "Abstract",
+        "Background",
+        "Major diet archetypes",
+        "Mechanisms governing changes in body composition vis a vis diet alterations",
+        "Summary and conclusions"
+      ],
+      "tables": {
+        "2": "raw/issn-diets-body-composition-table-2.html",
+        "3": "raw/issn-diets-body-composition-table-3.html"
+      }
+    },
+    {
+      "id": "issn-creatine",
+      "input": "raw/issn-creatine.html",
+      "site": "bmc",
+      "url": "https://jissn.biomedcentral.com/articles/10.1186/s12970-017-0173-z",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "accessed": "2026-11-12",
+      "keep": [
+        "Abstract",
+        "Background",
+        "Metabolic role",
+        "Supplementation protocols",
+        "Bioavailability",
+        "Ergogenic value",
+        "Other applications in sport and training",
+        "Safety",
+        "Position of the international society of sports nutrition (ISSN)",
+        "Conclusion"
+      ],
+      "drop_headings": [
+        "Brain and spinal cord neuroprotection"
+      ],
+      "tables": {
+        "1": "raw/issn-creatine-table-1.html"
+      }
+    },
+    {
+      "id": "issn-sports-nutrition-review",
+      "input": "raw/issn-sports-nutrition-review.html",
+      "site": "bmc",
+      "url": "https://jissn.biomedcentral.com/articles/10.1186/s12970-018-0242-y",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "accessed": "2026-11-12",
+      "keep": [
+        "Background"
+      ],
+      "keep_headings": {
+        "Background": [
+          "General dietary guidelines for active individuals"
+        ]
+      }
+    }
+  ]
+}
