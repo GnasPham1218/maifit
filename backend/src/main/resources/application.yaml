@@ -76,6 +76,13 @@ app:
     # Sources are cut at every heading first; a section longer than one chunk is cut again by tokens
     chunk-size: 350        # target tokens per chunk
     min-chunk-chars: 200   # never cut a chunk shorter than this
+  chat:
+    max-question-chars: 500     # longer questions are rejected (a long question also retrieves worse)
+    top-k: 5                    # chunks retrieved and sent to the model
+    # Retrieval gate. Measured 2026-11-12 on the 5 sources: in-scope questions 0.56-0.74,
+    # out-of-scope 0.28-0.37. Below this score a chunk does not count; no chunk left = refusal, no AI call
+    similarity-threshold: 0.45
+    history-messages: 6         # previous messages sent back so follow-up questions make sense
   food-request:
     daily-limit: 5   # "Báo thiếu món": distinct names per user per day (Vietnam time)
   jwt:
