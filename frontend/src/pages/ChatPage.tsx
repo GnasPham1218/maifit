@@ -10,7 +10,7 @@ import { ChatMessageBubble, PendingBubble } from '../components/chat/ChatMessage
 import { ConversationList } from '../components/chat/ConversationList';
 import { CHAT_DISCLAIMER, SUGGESTED_QUESTIONS, chatLimitText } from '../constants/chat';
 import { getErrorMessage } from '../constants/errorMessages';
-import type { ChatConversation, ChatMessage, ChatQuota, ChatReply } from '../types/chat';
+import type { ChatCalcItemRequest, ChatConversation, ChatMessage, ChatQuota, ChatReply } from '../types/chat';
 
 type View = number | 'new'; // an existing conversation, or a new one
 
@@ -35,10 +35,12 @@ const SLOW_AFTER_MS = 8000;
 // The question and the reply as history items, so they show without reloading
 function exchangeOf(question: string, reply: ChatReply): ChatMessage[] {
   const now = new Date().toISOString();
-  const tempId = -Date.now(); // replaced by real ids on the next load
   return [
-    { id: tempId, role: 'USER', content: question, outcome: null, sources: [], createdAt: now },
-    { id: tempId - 1, role: 'ASSISTANT', content: reply.answer, outcome: reply.outcome, sources: reply.sources, createdAt: now },
+    // The question's id is not returned: a temporary negative one, replaced on the next load
+    { id: -Date.now(), role: 'USER', content: question, outcome: null, sources: [], calculation: null, createdAt: now },
+    // The reply's real id: needed to pick a preparation in its calculation right away
+    { id: reply.messageId, role: 'ASSISTANT', content: reply.answer, outcome: reply.outcome, sources: reply.sources,
+      calculation: reply.calculation, createdAt: now },
   ];
 }
 
@@ -173,6 +175,14 @@ export default function ChatPage() {
     }
   }
 
+  // The backend recalculates and saves the corrected list; errors are shown by the card
+  async function handleUpdateCalculation(messageId: number, items: ChatCalcItemRequest[]) {
+    const calculation = await chatApi.updateCalculation(messageId, items);
+    setLoaded((prev) => prev && prev.messages
+      ? { ...prev, messages: prev.messages.map((m) => (m.id === messageId ? { ...m, calculation } : m)) }
+      : prev);
+  }
+
   async function handleDelete(id: number) {
     try {
       await chatApi.remove(id);
@@ -227,11 +237,13 @@ export default function ChatPage() {
             </div>
           ) : (
             <ol className="grid gap-3" aria-live="polite">
-              {messages.map((m) => <ChatMessageBubble key={m.id} message={m} />)}
+              {messages.map((m) => (
+                <ChatMessageBubble key={m.id} message={m} onUpdateCalculation={handleUpdateCalculation} />
+              ))}
               {pendingHere && (
                 <>
                   <ChatMessageBubble message={{ id: 0, role: 'USER', content: sending.question, outcome: null,
-                    sources: [], createdAt: '' }} />
+                    sources: [], calculation: null, createdAt: '' }} />
                   <PendingBubble slow={slow} />
                 </>
               )}

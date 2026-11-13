@@ -1,10 +1,16 @@
 import { OUTCOME_TEXT } from '../../constants/chat';
-import type { ChatMessage } from '../../types/chat';
+import type { ChatCalcItemRequest, ChatMessage } from '../../types/chat';
+import { CalculationCard } from './CalculationCard';
 import { SourceChips } from './SourceChips';
 
 // Text only: React escapes it, so even a manipulated model answer cannot inject HTML.
 // whitespace-pre-line keeps the line breaks and "- " lists of the answer.
-export function ChatMessageBubble({ message }: { message: ChatMessage }) {
+interface ChatMessageBubbleProps {
+  message: ChatMessage;
+  onUpdateCalculation?: (messageId: number, items: ChatCalcItemRequest[]) => Promise<void>;
+}
+
+export function ChatMessageBubble({ message, onUpdateCalculation }: ChatMessageBubbleProps) {
   if (message.role === 'USER') {
     return (
       <li className="flex justify-end">
@@ -23,6 +29,10 @@ export function ChatMessageBubble({ message }: { message: ChatMessage }) {
         <p className={`whitespace-pre-line break-words rounded-3xl rounded-bl-lg bg-bg px-4 py-2.5 ${declined ? 'text-ink-soft' : ''}`}>
           {text}
         </p>
+        {message.calculation && onUpdateCalculation && (
+          <CalculationCard calculation={message.calculation}
+            onSave={(items) => onUpdateCalculation(message.id, items)} />
+        )}
         <SourceChips sources={message.sources} />
       </div>
     </li>
