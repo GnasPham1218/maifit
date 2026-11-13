@@ -31,11 +31,12 @@ export const router = createBrowserRouter([
       {
         element: <MainLayout />,
         children: [
-          { path: '/', element: <HomePage /> },
-          { path: '/meals', element: <MealsPage /> },
+          { path: '/', element: <HomePage />, handle: { title: 'Trang chủ', greeting: true } },
+          { path: '/meals', element: <MealsPage />, handle: { title: 'Ăn uống' } },
           {
             path: '/workout',
             element: <WorkoutLayout />,
+            handle: { title: 'Tập luyện' },
             children: [
               { index: true, element: <WorkoutPage /> },
               { path: 'leaderboard', element: <LeaderboardPage /> },
@@ -43,10 +44,11 @@ export const router = createBrowserRouter([
           },
           // Old address (bookmarks, shared links) -> the leaderboard tab
           { path: '/leaderboard', element: <Navigate to="/workout/leaderboard" replace /> },
-          { path: '/chat', element: <ChatPage /> },
-          { path: '/chat/:conversationId', element: <ChatPage /> },
-          { path: '/premium', element: <PremiumPage /> },
-          { path: '/profile', element: <ProfilePage /> },
+          { path: '/chat', element: <ChatPage />, handle: { title: 'MBotFit' } },
+          { path: '/chat/:conversationId', element: <ChatPage />, handle: { title: 'MBotFit' } },
+          // Not in the nav any more; reachable until step 9 moves the payment flow into the profile
+          { path: '/premium', element: <PremiumPage />, handle: { title: 'Premium' } },
+          { path: '/profile', element: <ProfilePage />, handle: { title: 'Hồ sơ' } },
         ],
       },
     ],

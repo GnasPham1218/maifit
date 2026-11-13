@@ -1,6 +1,10 @@
-import { Activity, Crown, Dumbbell, House, LogOut, MessageCircle, UserRound, Utensils, type LucideIcon } from 'lucide-react';
-import { NavLink, Outlet, useNavigate } from 'react-router';
+import { Activity, Bot, House, LogOut, UserRound, Utensils, type LucideIcon } from 'lucide-react';
+import { motion } from 'motion/react';
+import { Link, NavLink, Outlet, useLocation, useMatches, useNavigate } from 'react-router';
+import { Avatar } from '../components/Avatar';
 import { useAuth } from '../hooks/useAuth';
+import { usePremium } from '../hooks/usePremium';
+import { isRouteHandle } from '../types/route';
 
 interface NavItem {
   to: string;
@@ -8,88 +12,142 @@ interface NavItem {
   icon: LucideIcon;
 }
 
-// One item per page; the leaderboard is a tab of /workout
+// Five sections. The leaderboard is a tab of /workout; Premium lives in the profile (step 9).
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Trang chủ', icon: House },
   { to: '/meals', label: 'Ăn uống', icon: Utensils },
   { to: '/workout', label: 'Tập luyện', icon: Activity },
-  { to: '/chat', label: 'Trợ lý AI', icon: MessageCircle },
-  { to: '/premium', label: 'Premium', icon: Crown },
+  { to: '/chat', label: 'MBotFit', icon: Bot },
   { to: '/profile', label: 'Hồ sơ', icon: UserRound },
 ];
 
-const ICON_BUTTON = 'flex size-12 items-center justify-center rounded-full transition-colors';
+// Desktop: icons only on md, icon + label from lg
+function sideClass({ isActive }: { isActive: boolean }) {
+  return `flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-colors md:justify-center lg:justify-start ${
+    isActive ? 'bg-accent text-on-accent' : 'text-hero-muted hover:bg-white/8 hover:text-hero-ink'}`;
+}
 
-function navClass({ isActive }: { isActive: boolean }) {
-  return `${ICON_BUTTON} ${isActive ? 'bg-ink text-peach' : 'bg-bg text-ink hover:bg-line'}`;
+// Phone: label under the icon, the active icon sits in a pill
+function bottomClass({ isActive }: { isActive: boolean }) {
+  return `group flex flex-1 flex-col items-center gap-1 py-1 text-[0.7rem] font-medium ${
+    isActive ? 'text-ink' : 'text-muted'}`;
 }
 
 function todayLabel(): string {
-  // e.g. "Thứ Hai, 2 tháng 11, 2026" in Vietnam time
+  // e.g. "Thứ Sáu, 13 tháng 11" in Vietnam time
   return new Date().toLocaleDateString('vi-VN', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
-    year: 'numeric',
     timeZone: 'Asia/Ho_Chi_Minh',
   });
+}
+
+// "/workout/leaderboard" -> "/workout": tabs and conversations inside one section do not replay the page entrance
+function sectionOf(pathname: string): string {
+  return '/' + (pathname.split('/')[1] ?? '');
 }
 
 export default function MainLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const premium = usePremium();
+
+  // The deepest route with a title wins (e.g. a tab inside /workout)
+  const handle = useMatches().map((m) => m.handle).filter(isRouteHandle).at(-1);
+  const name = user?.displayName ?? '';
 
   async function handleLogout() {
     await logout();
     navigate('/login', { replace: true });
   }
 
-  const initial = user?.displayName.trim().charAt(0).toUpperCase() ?? '?';
-
   return (
-    <div className="min-h-screen md:pl-24">
-      {/* Icon sidebar on desktop, bottom bar on mobile */}
-      <aside className="fixed inset-x-0 bottom-0 z-10 flex items-center justify-between border-t border-line bg-surface px-4 py-2 md:inset-y-0 md:left-0 md:right-auto md:w-24 md:flex-col md:border-t-0 md:px-0 md:py-6">
-        <Dumbbell aria-hidden="true" className="hidden size-8 text-sky-strong md:block" />
+    <div className="min-h-screen md:pl-20 lg:pl-60">
+      {/* Desktop sidebar */}
+      <aside className="fixed inset-y-0 left-0 z-20 hidden w-20 flex-col bg-side px-3 py-6 md:flex lg:w-60 lg:px-4">
+        <Link to="/" className="mb-8 flex items-center justify-center gap-2 lg:justify-start lg:px-3">
+          <span aria-hidden="true" className="flex size-9 items-center justify-center rounded-xl bg-accent font-display text-lg font-bold text-on-accent">
+            M
+          </span>
+          <span className="hidden font-display text-2xl font-bold tracking-wide text-hero-ink lg:inline">MAIFit</span>
+          <span className="sr-only lg:hidden">MAIFit, trang chủ</span>
+        </Link>
 
-        <nav aria-label="Điều hướng chính" className="flex gap-3 md:flex-col">
+        <nav aria-label="Điều hướng chính" className="grid gap-1">
           {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
-            <NavLink key={to} to={to} end={to === '/'} className={navClass} aria-label={label} title={label}>
-              <Icon aria-hidden="true" className="size-5" />
+            <NavLink key={to} to={to} end={to === '/'} className={sideClass} title={label}>
+              <Icon aria-hidden="true" className="size-5 shrink-0" />
+              <span className="sr-only lg:not-sr-only">{label}</span>
             </NavLink>
           ))}
         </nav>
 
-        {/* Desktop only: the bottom bar on phones has room for the pages alone (logout is on the profile page) */}
-        <div className="hidden items-center gap-3 md:flex md:flex-col">
+        <div className="mt-auto grid gap-2">
+          <Link to="/profile" className="flex items-center justify-center gap-3 rounded-2xl p-2 hover:bg-white/8 lg:justify-start">
+            <Avatar name={name} size={40} premium={premium} />
+            <span className="hidden min-w-0 lg:block">
+              <span className="block truncate text-sm font-medium text-hero-ink">{name}</span>
+              <span className="block text-xs text-hero-muted">{premium ? 'Premium' : 'Gói miễn phí'}</span>
+            </span>
+          </Link>
           <button
             type="button"
             onClick={() => void handleLogout()}
-            className={`${ICON_BUTTON} cursor-pointer bg-bg text-ink hover:bg-line`}
-            aria-label="Đăng xuất"
+            className="flex cursor-pointer items-center justify-center gap-3 rounded-2xl px-3 py-2.5 text-sm text-hero-muted hover:bg-white/8 hover:text-hero-ink lg:justify-start"
             title="Đăng xuất"
           >
-            <LogOut aria-hidden="true" className="size-5" />
+            <LogOut aria-hidden="true" className="size-5 shrink-0" />
+            <span className="sr-only lg:not-sr-only">Đăng xuất</span>
           </button>
-          <div
-            className="flex size-12 items-center justify-center rounded-full bg-peach font-semibold"
-            title={user?.displayName}
-          >
-            {initial}
-          </div>
         </div>
       </aside>
 
-      <div className="mx-auto max-w-6xl px-5 pt-8 pb-28 md:px-8 md:pb-10">
-        <header className="mb-8">
-          <h1 className="text-3xl tracking-tight">
-            <span className="font-bold">Xin chào,</span> {user?.displayName}
-          </h1>
-          <p className="mt-1 text-muted first-letter:uppercase">{todayLabel()}</p>
+      {/* Phone bottom bar; logout is on the profile page */}
+      <nav aria-label="Điều hướng chính" className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-surface px-2 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:hidden">
+        {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
+          <NavLink key={to} to={to} end={to === '/'} className={bottomClass}>
+            {({ isActive }) => (
+              <>
+                <span className={`flex h-8 w-14 items-center justify-center rounded-full transition-colors ${
+                  isActive ? 'bg-accent text-on-accent' : 'group-hover:bg-line'}`}>
+                  <Icon aria-hidden="true" className="size-5" />
+                </span>
+                {label}
+              </>
+            )}
+          </NavLink>
+        ))}
+      </nav>
+
+      <div className="mx-auto max-w-6xl px-5 pt-6 pb-28 md:px-8 md:pt-8 md:pb-10">
+        <header className="mb-6 flex items-center justify-between gap-4 md:mb-8">
+          <div className="min-w-0">
+            {handle?.greeting ? (
+              <>
+                <p className="text-sm text-muted first-letter:uppercase">{todayLabel()}</p>
+                <h1 className="truncate font-display text-3xl font-bold tracking-wide md:text-4xl">Chào {name}</h1>
+              </>
+            ) : (
+              <h1 className="truncate font-display text-3xl font-bold tracking-wide md:text-4xl">{handle?.title}</h1>
+            )}
+          </div>
+          {/* Phone: the avatar opens the profile (the sidebar has it on desktop) */}
+          <Link to="/profile" className="shrink-0 rounded-full md:hidden" aria-label="Hồ sơ">
+            <Avatar name={name} size={40} premium={premium} />
+          </Link>
         </header>
-        <main>
+
+        {/* Entrance only (no exit), keyed by section. Motion follows the OS reduced-motion setting via MotionConfig. */}
+        <motion.main
+          key={sectionOf(pathname)}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        >
           <Outlet />
-        </main>
+        </motion.main>
       </div>
     </div>
   );
