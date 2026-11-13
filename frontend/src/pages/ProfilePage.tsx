@@ -14,6 +14,7 @@ import { optionalNumber } from '../utils/number';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { useAuth } from '../hooks/useAuth';
+import { ThemeSwitcher } from '../components/ThemeSwitcher';
 
 interface FormState {
   sex: Sex;
@@ -195,6 +196,10 @@ export default function ProfilePage() {
 
       {/* Check-ins need a profile first, so TDEE can be recomputed right away */}
       {profile && <BodyCheckinSection onChanged={() => void reloadProfile()} />}
+
+      <Card title="Giao diện">
+        <ThemeSwitcher />
+      </Card>
 
       <LogoutCard />
     </section>
