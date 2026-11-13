@@ -3,6 +3,7 @@ import { GuestRoute } from './components/GuestRoute';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
+import ChatPage from './pages/ChatPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomePage from './pages/HomePage';
 import LeaderboardPage from './pages/LeaderboardPage';
@@ -28,6 +29,8 @@ export const router = createBrowserRouter([
           { path: '/meals', element: <MealsPage /> },
           { path: '/workout', element: <WorkoutPage /> },
           { path: '/leaderboard', element: <LeaderboardPage /> },
+          { path: '/chat', element: <ChatPage /> },
+          { path: '/chat/:conversationId', element: <ChatPage /> },
           { path: '/premium', element: <PremiumPage /> },
           { path: '/profile', element: <ProfilePage /> },
         ],

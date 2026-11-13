@@ -23,5 +23,7 @@ export interface PremiumPlan {
   days: number; // Premium days one purchase adds
   freeDailyScans: number;
   premiumDailyScans: number;
+  freeDailyChats: number; // chatbot questions per day
+  premiumDailyChats: number;
   pendingOrder: PaymentOrder | null; // an order still waiting for payment
 }
