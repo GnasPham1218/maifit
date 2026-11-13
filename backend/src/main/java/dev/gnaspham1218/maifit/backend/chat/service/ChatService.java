@@ -52,14 +52,16 @@ public class ChatService {
         // 4. Save the exchange, after every AI call (no transaction is held during them)
         List<ChatSource> sources = decision.sources();
         String sourcesJson = sources.isEmpty() ? null : jsonMapper.writeValueAsString(sources);
+        String calculationJson = decision.calculation() == null ? null : jsonMapper.writeValueAsString(decision.calculation());
         ValidatedAnswer answer = decision.answer();
-        Long savedId = history.saveExchange(userId, conversationId, question,
-                answer.outcome(), answer.answer(), sourcesJson);
+        SavedExchange saved = history.saveExchange(userId, conversationId, question,
+                answer.outcome(), answer.answer(), sourcesJson, calculationJson);
 
-        log.info("Chat user={} conversation={} outcome={} chunks={} topScore={} retrievalMs={} modelMs={}",
-                userId, savedId, answer.outcome(), decision.chunks().size(), decision.topScore(),
-                decision.retrievalMs(), decision.modelMs());
-        return new ChatReplyResponse(savedId, answer.outcome(), answer.answer(), sources, decision.remainingToday());
+        log.info("Chat user={} conversation={} outcome={} chunks={} portions={} topScore={} retrievalMs={} modelMs={}",
+                userId, saved.conversationId(), answer.outcome(), decision.chunks().size(), answer.portions().size(),
+                decision.topScore(), decision.retrievalMs(), decision.modelMs());
+        return new ChatReplyResponse(saved.conversationId(), saved.answerMessageId(), answer.outcome(), answer.answer(),
+                sources, decision.calculation(), decision.remainingToday());
     }
 
     private ChatEngine.Quota quotaOf(Long userId) {

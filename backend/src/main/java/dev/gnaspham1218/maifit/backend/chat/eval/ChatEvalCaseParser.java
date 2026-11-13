@@ -12,6 +12,7 @@ import java.util.Set;
 /**
  * Reads chat-eval/cases.txt: one case per line, fields separated by "|", "#" starts a comment.
  *   expected | question | source section must contain (optional) | previous question (optional)
+ *   | portions, e.g. "Gạo tẻ=BOILED; Trứng gà=?" (optional)
  * "|" instead of commas because the questions are full Vietnamese sentences with commas.
  */
 public final class ChatEvalCaseParser {
@@ -28,11 +29,11 @@ public final class ChatEvalCaseParser {
                 continue;
             }
             String[] fields = line.split("\\|", -1);
-            if (fields.length < 2 || fields.length > 4 || fields[1].isBlank()) {
-                throw new IllegalArgumentException("cases.txt line " + (i + 1) + ": expected 2 to 4 fields: " + line);
+            if (fields.length < 2 || fields.length > 5 || fields[1].isBlank()) {
+                throw new IllegalArgumentException("cases.txt line " + (i + 1) + ": expected 2 to 5 fields: " + line);
             }
             cases.add(new ChatEvalCase(i + 1, outcomes(fields[0], i + 1), fields[1].strip(),
-                    field(fields, 2), field(fields, 3)));
+                    field(fields, 2), field(fields, 3), field(fields, 4)));
         }
         return cases;
     }

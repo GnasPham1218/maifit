@@ -4,9 +4,11 @@ import dev.gnaspham1218.maifit.backend.ai.dto.AiQuota;
 import dev.gnaspham1218.maifit.backend.ai.entity.AiFeature;
 import dev.gnaspham1218.maifit.backend.ai.service.AiUsageService;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatAskRequest;
+import dev.gnaspham1218.maifit.backend.chat.dto.ChatCalculation;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatConversationResponse;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatMessageResponse;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatReplyResponse;
+import dev.gnaspham1218.maifit.backend.chat.dto.UpdateCalculationRequest;
 import dev.gnaspham1218.maifit.backend.chat.service.ChatHistoryService;
 import dev.gnaspham1218.maifit.backend.chat.service.ChatService;
 import dev.gnaspham1218.maifit.backend.common.response.ApiResponse;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,6 +42,15 @@ public class ChatController {
     public ApiResponse<ChatReplyResponse> ask(@AuthenticationPrincipal Jwt jwt,
                                               @Valid @RequestBody ChatAskRequest request) {
         return ApiResponse.ok(chatService.ask(userId(jwt), request.conversationId(), request.question()));
+    }
+
+    // PUT /api/chat/messages/{messageId}/calculation  {"items": [{"food": "Gạo tẻ", "preparation": "BOILED",
+    // "grams": 200, "estimated": false}]}. The corrected list; code recalculates. No AI call, no quota.
+    // data is null when the list is empty (the calculation was removed)
+    @PutMapping("/messages/{messageId}/calculation")
+    public ApiResponse<ChatCalculation> updateCalculation(@AuthenticationPrincipal Jwt jwt, @PathVariable Long messageId,
+                                                          @Valid @RequestBody UpdateCalculationRequest request) {
+        return ApiResponse.ok(historyService.updateCalculation(messageId, userId(jwt), request.items()));
     }
 
     // GET /api/chat/quota: today's limit and calls left, so the page can show them before the first question

@@ -1,5 +1,6 @@
 package dev.gnaspham1218.maifit.backend.chat.service;
 
+import dev.gnaspham1218.maifit.backend.chat.dto.ChatCalculation;
 import dev.gnaspham1218.maifit.backend.chat.entity.ChatMessage;
 import dev.gnaspham1218.maifit.backend.chat.entity.ChatOutcome;
 import dev.gnaspham1218.maifit.backend.common.exception.AppException;
@@ -51,6 +52,8 @@ public class ChatEngine {
     private final ChatAnswerer answerer;
     private final ModelAnswerValidator validator;
     private final MedicalQuestionGuard medicalGuard;
+    private final ChatPortionCalculator calculator;
+    private final FoodNames foodNames;
 
     /**
      * @param question a question already stripped and length-checked
@@ -93,7 +96,16 @@ public class ChatEngine {
         long modelMs = millisSince(started);
 
         // 5. Code decides what is shown (outside the try: a bug here must not refund nor hide as "AI unavailable")
-        return new ChatDecision(validator.validate(raw, chunks.size()), chunks, remaining, retrievalMs, modelMs);
+        ValidatedAnswer validated = validator.validate(raw, chunks);
+        // 6. A preparation the question does not state goes back to null: the user picks, the model never guesses
+        List<PortionRequest> portions = validated.portions().stream()
+                .map(p -> p.preparation() == null || foodNames.isPreparationStated(question, p.food(), p.preparation())
+                        ? p
+                        : new PortionRequest(p.food(), null, p.grams(), p.estimated()))
+                .toList();
+        // 7. Code calculates the portions the model read from the question (the model never does the arithmetic)
+        ChatCalculation calculation = calculator.calculate(portions);
+        return new ChatDecision(validated, chunks, remaining, retrievalMs, modelMs, calculation);
     }
 
     private static long millisSince(long startNanos) {

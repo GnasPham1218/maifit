@@ -13,7 +13,8 @@ import java.util.List;
  *                (the frontend shows its fixed text for the outcome, as for a new reply)
  * @param outcome null for USER messages
  * @param sources the sources saved with the answer (a snapshot), empty otherwise
+ * @param calculation portions calculated by code under the answer, or null
  */
 public record ChatMessageResponse(Long id, ChatRole role, String content, ChatOutcome outcome,
-                                  List<ChatSource> sources, Instant createdAt) {
+                                  List<ChatSource> sources, ChatCalculation calculation, Instant createdAt) {
 }

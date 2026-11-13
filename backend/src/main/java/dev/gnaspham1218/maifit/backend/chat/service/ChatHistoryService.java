@@ -1,5 +1,7 @@
 package dev.gnaspham1218.maifit.backend.chat.service;
 
+import dev.gnaspham1218.maifit.backend.chat.dto.ChatCalcItemRequest;
+import dev.gnaspham1218.maifit.backend.chat.dto.ChatCalculation;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatConversationResponse;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatMessageResponse;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatSource;
@@ -40,6 +42,7 @@ public class ChatHistoryService {
     private final ChatConversationRepository conversations;
     private final ChatMessageRepository messages;
     private final JsonMapper jsonMapper;
+    private final ChatPortionCalculator calculator;
 
     // ---------- used by the chat itself ----------
 
@@ -54,18 +57,39 @@ public class ChatHistoryService {
      * Saves one question and its reply. Creates the conversation when conversationId is null.
      * Ownership is checked again here: the conversation may have been deleted during the AI call.
      *
-     * @return the id of the conversation
+     * @return the ids of the conversation and of the reply
      */
     @Transactional
-    public Long saveExchange(Long userId, Long conversationId, String question,
-                             ChatOutcome outcome, String answer, String sourcesJson) {
+    public SavedExchange saveExchange(Long userId, Long conversationId, String question, ChatOutcome outcome,
+                                      String answer, String sourcesJson, String calculationJson) {
         ChatConversation conversation = conversationId == null
                 ? conversations.save(new ChatConversation(userId, question))
                 : requireOwned(conversationId, userId);
         conversation.touch();   // dirty checking writes updated_at at commit
         messages.save(ChatMessage.question(conversation.getId(), question));
-        messages.save(ChatMessage.answer(conversation.getId(), outcome, answer, sourcesJson));
-        return conversation.getId();
+        ChatMessage reply = messages.save(
+                ChatMessage.answer(conversation.getId(), outcome, answer, sourcesJson, calculationJson));
+        return new SavedExchange(conversation.getId(), reply.getId());
+    }
+
+    /**
+     * The user corrected the calculation under an answer (preparation, food, grams, remove, add).
+     * Code recalculates from the foods table: no AI call, no quota. Someone else's message is "not found".
+     *
+     * @return the new calculation, or null when the list is empty
+     */
+    @Transactional
+    public ChatCalculation updateCalculation(Long messageId, Long userId, List<ChatCalcItemRequest> items) {
+        ChatMessage message = messages.findById(messageId).orElseThrow(ChatHistoryService::notFound);
+        requireOwned(message.getConversationId(), userId);
+        if (message.getRole() != ChatRole.ASSISTANT || message.getOutcome() != ChatOutcome.ANSWERED) {
+            throw notFound();   // only an answer can carry a calculation
+        }
+        ChatCalculation updated = calculator.recalculate(items.stream()
+                .map(i -> new PortionRequest(i.food(), i.preparation(), i.grams(), i.estimated()))
+                .toList());
+        message.updateCalculation(updated == null ? null : jsonMapper.writeValueAsString(updated));
+        return updated;
     }
 
     // ---------- used by the history endpoints ----------
@@ -107,8 +131,11 @@ public class ChatHistoryService {
         List<ChatSource> sources = message.getSources() == null
                 ? List.of()
                 : jsonMapper.readValue(message.getSources(), SOURCES);
+        ChatCalculation calculation = message.getCalculation() == null
+                ? null
+                : jsonMapper.readValue(message.getCalculation(), ChatCalculation.class);
         return new ChatMessageResponse(message.getId(), message.getRole(), declined ? null : message.getContent(),
-                message.getOutcome(), sources, message.getCreatedAt());
+                message.getOutcome(), sources, calculation, message.getCreatedAt());
     }
 
     private ChatConversation requireOwned(Long conversationId, Long userId) {

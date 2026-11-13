@@ -22,7 +22,7 @@ class ChatEvalRunnerTest {
             .build();
 
     private static ChatEvalCase answered(String section) {
-        return new ChatEvalCase(1, EnumSet.of(ChatOutcome.ANSWERED), "q", section, "");
+        return new ChatEvalCase(1, EnumSet.of(ChatOutcome.ANSWERED), "q", section, "", "");
     }
 
     private static ChatDecision answer(String text) {
@@ -51,7 +51,7 @@ class ChatEvalRunnerTest {
 
     @Test
     void anUnexpectedOutcomeFails() {
-        ChatEvalCase medical = new ChatEvalCase(1, EnumSet.of(ChatOutcome.MEDICAL), "q", "", "");
+        ChatEvalCase medical = new ChatEvalCase(1, EnumSet.of(ChatOutcome.MEDICAL), "q", "", "", "");
 
         assertThat(ChatEvalRunner.check(medical, answer("Có dấu."))).contains("ANSWERED");
     }

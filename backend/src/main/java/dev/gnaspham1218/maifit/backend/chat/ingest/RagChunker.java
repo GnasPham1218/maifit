@@ -31,6 +31,7 @@ public class RagChunker {
     public static final String PUBLISHER = "publisher";
 
     public static final String TYPE_DOCUMENT = "document";
+    public static final String TYPE_FOOD = "food";
     private static final String PATH_SEPARATOR = " > ";
 
     private final TokenTextSplitter splitter;

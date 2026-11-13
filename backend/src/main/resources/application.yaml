@@ -82,6 +82,10 @@ app:
     # Retrieval gate. Measured 2026-11-12 on the 5 sources: in-scope questions 0.56-0.74,
     # out-of-scope 0.28-0.37. Below this score a chunk does not count; no chunk left = refusal, no AI call
     similarity-threshold: 0.45
+    food-top-k: 3               # food chunks (one per food name), searched apart from the documents
+    # Measured 2026-11-13 (ingest check): food questions 0.62-0.70 on the right food, general nutrition
+    # questions 0.46-0.58 on unrelated foods, out of scope 0.29-0.34. Foods named in the question skip it (hybrid)
+    food-similarity-threshold: 0.60
     history-messages: 6         # previous messages sent back so follow-up questions make sense
     model-timeout: 30s          # well under Nginx's 60 s: a slow Gemini reply is refunded instead of a silent 504
     # Chat only (photo recognition keeps Gemini's default). Unset: chat-eval 10/15 with calls stuck over 30 s

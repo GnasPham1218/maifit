@@ -40,7 +40,8 @@ class ChatHistoryServiceTest {
     void setUp() {
         conversations = mock(ChatConversationRepository.class);
         messages = mock(ChatMessageRepository.class);
-        service = new ChatHistoryService(conversations, messages, JsonMapper.builder().build());
+        service = new ChatHistoryService(conversations, messages, JsonMapper.builder().build(),
+                mock(ChatPortionCalculator.class));
         when(conversations.findByIdAndUserId(CONVERSATION, OWNER))
                 .thenReturn(Optional.of(new ChatConversation(OWNER, "Nên ăn bao nhiêu đạm?")));
         when(conversations.findByIdAndUserId(CONVERSATION, OTHER_USER)).thenReturn(Optional.empty());
@@ -64,6 +65,14 @@ class ChatHistoryServiceTest {
         when(conversations.deleteOwned(CONVERSATION, OTHER_USER)).thenReturn(0);
 
         assertNotFound(() -> service.deleteConversation(CONVERSATION, OTHER_USER));
+    }
+
+    @Test
+    void correctingAnotherUsersCalculationIsNotFound() {
+        when(messages.findById(99L)).thenReturn(Optional.of(
+                ChatMessage.answer(CONVERSATION, ChatOutcome.ANSWERED, "Cơm 130 kcal/100 g.", null, "{}")));
+
+        assertNotFound(() -> service.updateCalculation(99L, OTHER_USER, List.of()));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package dev.gnaspham1218.maifit.backend.chat.service;
 
+import dev.gnaspham1218.maifit.backend.chat.dto.ChatCalculation;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatSource;
 import dev.gnaspham1218.maifit.backend.chat.ingest.RagChunker;
 import org.springframework.ai.document.Document;
@@ -17,9 +18,15 @@ import java.util.Objects;
  * @param remainingToday what the quota reported, or null when the model was not called
  * @param retrievalMs    null when retrieval did not run
  * @param modelMs        null when the model was not called
+ * @param calculation    portions calculated by code from the foods table, or null
  */
 public record ChatDecision(ValidatedAnswer answer, List<Document> chunks, Integer remainingToday,
-                           Long retrievalMs, Long modelMs) {
+                           Long retrievalMs, Long modelMs, ChatCalculation calculation) {
+
+    public ChatDecision(ValidatedAnswer answer, List<Document> chunks, Integer remainingToday,
+                        Long retrievalMs, Long modelMs) {
+        this(answer, chunks, remainingToday, retrievalMs, modelMs, null);
+    }
 
     /** The cited chunks as sources, one per (url, section), in citation order. */
     public List<ChatSource> sources() {

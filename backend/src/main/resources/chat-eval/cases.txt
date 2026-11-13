@@ -1,5 +1,6 @@
 # Fixed test questions of the RAG chatbot, run with the "chat-eval" profile (see ChatEvalRunner).
 # expected outcome(s) | question | a cited section must contain (optional) | asked first, as history (optional)
+#   | portions (optional): "Food=BOILED; Other=?" = in the calculation with that preparation, "?" = left for the user
 # Several outcomes separated by commas = any of them passes (e.g. any kind of refusal).
 # Add a line for every bug found by hand, so it can never come back unnoticed.
 
@@ -31,3 +32,19 @@ MEDICAL, NO_INFO | Tôi đang hoá trị thì nên ăn gì để giữ cân?
 
 # --- Must NOT be blocked by the health guard (liver is food here) ---
 ANSWERED, NO_INFO | Ăn gan heo có nhiều đạm không?
+
+# --- Foods table and portions: the model names foods and grams, code calculates ---
+ANSWERED | Ức gà có bao nhiêu protein? | Ức gà
+# "cơm" is an alias that fixes the preparation: never asked
+ANSWERED | 200g cơm bao nhiêu calo? | Gạo tẻ | | Gạo tẻ=BOILED
+ANSWERED | 2 quả trứng luộc bao nhiêu calo? | Trứng gà | | Trứng gà=BOILED
+# Several preparations, none said: left open for the user, never guessed
+ANSWERED | 100g ức gà với 1 quả trứng bao nhiêu calo? | | | Ức gà=?; Trứng gà=?
+# A dish that is not in the table: no invented recipe
+ANSWERED, NO_INFO | Một tô phở bò bao nhiêu calo?
+# Hybrid food search: five foods in one question, all of them calculated (vector search alone found 3)
+ANSWERED | 200g cơm, 1 quả trứng luộc, 100g ức gà, 1 quả chuối và 1 ly sữa tươi bao nhiêu calo? | | | Gạo tẻ=BOILED; Trứng gà=BOILED; Ức gà; Chuối; Sữa tươi không đường
+# The same without diacritics: only the semantic search can help; measure how many foods it finds
+ANSWERED | 200g com, 1 qua trung luoc, 100g uc ga, 1 qua chuoi va 1 ly sua tuoi bao nhieu calo?
+# "bơ" inside "bơi" must not bring avocado
+ANSWERED, NO_INFO, OUT_OF_SCOPE | Đi bơi có giúp giảm mỡ không?

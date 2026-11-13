@@ -34,6 +34,20 @@ public class ChatPromptBuilder {
             5. citedChunks lists the numbers of the excerpts you used; it must not be empty for ANSWERED.
                For any other outcome, leave answer empty and citedChunks empty.
             6. Use <history> only to understand what a short follow-up question refers to.
+            7. portions: only for ANSWERED, and only when the question asks about the calories or nutrients of
+               an amount of food (grams, a bowl, a piece, a meal). One entry per food; otherwise leave it empty.
+               - excerpt: the number of the excerpt starting with "Thực phẩm:" for that food. Only foods that have
+                 such an excerpt; never split a dish that is not there into ingredients you guess.
+               - preparation: RAW (Sống), BOILED (Luộc), STEAMED (Hấp), FRIED (Chiên), BRAISED (Kho) or
+                 GRILLED (Nướng). Set it only when the question says how the food is cooked, when the name used
+                 in the question is listed under "Còn gọi" with a preparation in brackets, or when the excerpt has
+                 a single preparation. Otherwise null: never guess, the app asks the user. A weight alone
+                 ("100g ức gà") does not mean RAW.
+               - grams: the edible amount in grams. Use the amount from the question; if it gives none, or gives
+                 a bowl, a piece or similar, estimate a typical portion and set estimated to true.
+            8. Never calculate calories or nutrients for an amount yourself: the app calculates the portions from
+               the table and shows them under your answer. In the text give only the values per 100 g from the
+               excerpts, and say that the calculation for the amount is shown below.
             """;
 
     public String systemPrompt() {

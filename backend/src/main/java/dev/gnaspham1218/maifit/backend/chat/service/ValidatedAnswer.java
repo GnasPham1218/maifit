@@ -9,10 +9,16 @@ import java.util.List;
  *
  * @param answer      non-null only when outcome is ANSWERED
  * @param citedChunks 0-based indexes into the retrieved chunks, no duplicates, empty unless ANSWERED
+ * @param portions    food amounts to calculate, empty unless ANSWERED
  */
-public record ValidatedAnswer(ChatOutcome outcome, String answer, List<Integer> citedChunks) {
+public record ValidatedAnswer(ChatOutcome outcome, String answer, List<Integer> citedChunks,
+                              List<PortionRequest> portions) {
+
+    public ValidatedAnswer(ChatOutcome outcome, String answer, List<Integer> citedChunks) {
+        this(outcome, answer, citedChunks, List.of());
+    }
 
     public static ValidatedAnswer declined(ChatOutcome outcome) {
-        return new ValidatedAnswer(outcome, null, List.of());
+        return new ValidatedAnswer(outcome, null, List.of(), List.of());
     }
 }

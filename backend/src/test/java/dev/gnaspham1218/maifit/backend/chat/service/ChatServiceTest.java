@@ -8,6 +8,7 @@ import dev.gnaspham1218.maifit.backend.chat.ingest.RagChunker;
 import dev.gnaspham1218.maifit.backend.common.exception.AppException;
 import dev.gnaspham1218.maifit.backend.common.exception.ErrorCode;
 import dev.gnaspham1218.maifit.backend.config.ChatProperties;
+import dev.gnaspham1218.maifit.backend.food.repository.FoodRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.when;
 class ChatServiceTest {
 
     private static final long USER_ID = 7L;
-    private static final ChatProperties PROPERTIES = new ChatProperties(500, 5, 0.45, 6, Duration.ofSeconds(30),
+    private static final ChatProperties PROPERTIES = new ChatProperties(500, 5, 0.45, 3, 0.5, 6, Duration.ofSeconds(30),
             GoogleGenAiThinkingLevel.LOW);
 
     private ChatRetriever retriever;
@@ -50,9 +51,10 @@ class ChatServiceTest {
         history = mock(ChatHistoryService.class);
         aiUsage = mock(AiUsageService.class);
         ChatEngine engine = new ChatEngine(retriever, new ChatPromptBuilder(), answerer, new ModelAnswerValidator(),
-                new MedicalQuestionGuard());
+                new MedicalQuestionGuard(), new ChatPortionCalculator(mock(FoodRepository.class)), mock(FoodNames.class));
         service = new ChatService(engine, history, aiUsage, JsonMapper.builder().build(), PROPERTIES);
-        when(history.saveExchange(eq(USER_ID), any(), anyString(), any(), any(), any())).thenReturn(42L);
+        when(history.saveExchange(eq(USER_ID), any(), anyString(), any(), any(), any(), any()))
+                .thenReturn(new SavedExchange(42L, 99L));
     }
 
     private static Document chunk(String section, String url) {
@@ -80,7 +82,7 @@ class ChatServiceTest {
         assertThat(reply.remainingToday()).isNull();
         verifyNoInteractions(retriever, aiUsage, answerer);
         verify(history).saveExchange(USER_ID, null, "Tôi bị tiểu đường type 2, có nên uống creatine không?",
-                ChatOutcome.MEDICAL, null, null);
+                ChatOutcome.MEDICAL, null, null, null);
     }
 
     @Test
@@ -93,7 +95,7 @@ class ChatServiceTest {
         assertThat(reply.answer()).isNull();
         assertThat(reply.remainingToday()).isNull();
         verifyNoInteractions(aiUsage, answerer);
-        verify(history).saveExchange(USER_ID, null, "Thủ đô của Pháp?", ChatOutcome.NO_INFO, null, null);
+        verify(history).saveExchange(USER_ID, null, "Thủ đô của Pháp?", ChatOutcome.NO_INFO, null, null, null);
     }
 
     @Test
@@ -106,7 +108,7 @@ class ChatServiceTest {
                 .isInstanceOfSatisfying(AppException.class,
                         e -> assertThat(e.getErrorCode()).isEqualTo(ErrorCode.AI_UNAVAILABLE));
         verify(aiUsage).refund(USER_ID, AiFeature.CHAT);
-        verify(history, never()).saveExchange(any(), any(), any(), any(), any(), any());
+        verify(history, never()).saveExchange(any(), any(), any(), any(), any(), any(), any());
     }
 
     @Test
@@ -123,13 +125,15 @@ class ChatServiceTest {
 
         assertThat(reply.outcome()).isEqualTo(ChatOutcome.ANSWERED);
         assertThat(reply.conversationId()).isEqualTo(42L);
+        assertThat(reply.messageId()).isEqualTo(99L);
+        assertThat(reply.calculation()).isNull();   // no portion asked
         assertThat(reply.remainingToday()).isEqualTo(19);
         assertThat(reply.sources()).singleElement().satisfies(source -> {
             assertThat(source.section()).isEqualTo("Recommended intake");
             assertThat(source.url()).isEqualTo("https://a");
         });
         verify(history).saveExchange(eq(USER_ID), isNull(), eq("Nên ăn bao nhiêu đạm?"), eq(ChatOutcome.ANSWERED),
-                eq("Khoảng 1,4–2,0 g/kg/ngày."), anyString());
+                eq("Khoảng 1,4–2,0 g/kg/ngày."), anyString(), isNull());
     }
 
     @Test

@@ -10,6 +10,9 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
 
     List<Food> findAllByOrderByNameAscPreparationAsc();
 
+    /** Every preparation of one food, in table order (the chatbot calculates portions from these). */
+    List<Food> findByNameOrderById(String name);
+
     /**
      * Fuzzy, accent-insensitive search in food names AND aliases (pg_trgm + unaccent, see V6).
      * Each row: [0] food id (Long), [1] similarity 0..1 (Float), [2] locks_preparation (Boolean).
