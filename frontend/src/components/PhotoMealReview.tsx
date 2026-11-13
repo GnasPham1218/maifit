@@ -1,9 +1,9 @@
-import { Camera, ImageUp, Pencil, Plus, Trash2 } from 'lucide-react';
+import { Camera, Check, Crown, ImageUp, Pencil, Plus, ScanSearch, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router';
+import { ApiError } from '../apis/client';
 import { mealApi } from '../apis/mealApi';
 import { getErrorMessage } from '../constants/errorMessages';
-import { MEAL_TYPE_LABELS, PREPARATION_LABELS } from '../constants/meal';
+import { MEAL_TYPE_LABELS, PREPARATION_LABELS, PREPARATIONS, WEIGHED_WHEN_LABELS } from '../constants/meal';
 import type { Food, MealItemRequest, MealType, Preparation } from '../types/meal';
 import { resizeForUpload } from '../utils/image';
 import { edibleHint, leanHint } from '../utils/edible';
@@ -11,8 +11,9 @@ import { formatNumber } from '../utils/number';
 import { kcalFor, nutritionFor, parseGrams, sumNutrition, type FatTrim } from '../utils/nutrition';
 import { normalize } from '../utils/text';
 import { Button } from './Button';
+import { ButtonLink } from './ButtonLink';
+import { Chip } from './Chip';
 import { FoodChooser } from './FoodChooser';
-import { FormField } from './FormField';
 import { FatTrimSlider } from './FatTrimSlider';
 import { MacroLine } from './MacroLine';
 import { PhotoCropper } from './PhotoCropper';
@@ -22,6 +23,7 @@ interface Props {
   foods: Food[] | null; // for "change food" / "add a missed food"
   foodsById: Map<number, Food>; // calories come from here, never from the AI
   onSave: (items: MealItemRequest[]) => Promise<void>;
+  onManual: () => void; // out of photo scans: switch this dialog to the manual food search
 }
 
 interface Row {
@@ -52,13 +54,14 @@ const ACCEPT = 'image/jpeg,image/png,image/webp';
 // Photo -> AI suggestions -> the user fixes grams / removes wrong foods -> save.
 // The AI only names foods from our table and guesses grams; nothing is saved until "Lưu".
 // Shown inside a Modal (MealsPage), which gives the title and the close button.
-export function PhotoMealReview({ mealType, foods, foodsById, onSave }: Props) {
+export function PhotoMealReview({ mealType, foods, foodsById, onSave, onManual }: Props) {
   const [status, setStatus] = useState<Status>('idle');
   const [preview, setPreview] = useState<string | null>(null);
   const [rows, setRows] = useState<Row[]>([]);
   const [unmatched, setUnmatched] = useState<string[]>([]);
   const [remaining, setRemaining] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [limitReached, setLimitReached] = useState(false); // AI_DAILY_LIMIT: offer Premium or manual add
   const [busy, setBusy] = useState(false);
   const [choosing, setChoosing] = useState<Choosing>(null);
   const [newQuery, setNewQuery] = useState(''); // prefilled search for 'new' (an unmatched AI name, or empty)
@@ -131,7 +134,12 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave }: Props) {
     } catch (err) {
       if (id !== requestId.current) return;
       setStatus('idle');
-      setError(getErrorMessage(err));
+      if (err instanceof ApiError && err.code === 'AI_DAILY_LIMIT') {
+        setRemaining(0);
+        setLimitReached(true);
+      } else {
+        setError(getErrorMessage(err));
+      }
     }
   }
 
@@ -186,6 +194,20 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave }: Props) {
     setChoosing(null);
   }
 
+  // Same food, other preparation ("weighed after boiling", not raw): the portion and the AI estimate still hold
+  function changePreparation(key: number, food: Food) {
+    setRows(rows.map((r) => (r.key === key
+      ? { ...r, foodId: food.id, preparation: food.preparation, lowConfidence: false, fatPercent: 100 }
+      : r)));
+  }
+
+  // The other preparations of a food in our table, in the usual order (empty when there is only one)
+  function preparationsOf(name: string): Food[] {
+    const same = (foods ?? []).filter((f) => f.name === name);
+    if (same.length < 2) return [];
+    return PREPARATIONS.flatMap((p) => same.filter((f) => f.preparation === p));
+  }
+
   // A food the AI missed (or a close food for an unmatched AI name): the user types the grams
   function addMissed(food: Food) {
     const key = rows.reduce((max, r) => Math.max(max, r.key), -1) + 1; // unique within this list
@@ -201,7 +223,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave }: Props) {
   // initialQuery = what the AI saw, so the closest foods show without typing.
   // key: a new initial query starts a fresh chooser instead of keeping the old search.
   const chooser = (onPick: (food: Food) => void, idPrefix: string, initialQuery = '') => foods && (
-    <div className="grid gap-3 rounded-2xl bg-surface p-4">
+    <div className="grid gap-3 rounded-2xl border border-line p-4">
       <FoodChooser key={`${idPrefix}-${initialQuery}`} foods={foods} idPrefix={idPrefix} autoFocus
         initialQuery={initialQuery} onChange={(f) => { if (f) onPick(f); }} />
       <div>
@@ -210,9 +232,31 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave }: Props) {
     </div>
   );
 
-  return (
-    <div className="grid gap-4">
+  const scansLeft = remaining != null && (
+    <p className="text-center text-sm text-muted">Mỗi lần nhận diện dùng 1 lượt, hôm nay còn {remaining} lượt.</p>
+  );
 
+  // Out of scans: say so and offer both ways forward instead of a dead end
+  if (limitReached) {
+    return (
+      <div className="grid justify-items-center gap-4 py-4 text-center">
+        <span className="flex size-14 items-center justify-center rounded-full bg-gold/20 text-gold">
+          <Crown aria-hidden="true" className="size-7" />
+        </span>
+        <p className="text-lg font-semibold">Hết lượt nhận diện ảnh hôm nay</p>
+        <p className="max-w-sm text-muted">
+          Lượt mới có lúc 0 giờ. Bạn vẫn thêm được món bằng cách tìm tên, hoặc mở Premium để chụp tiếp ngay.
+        </p>
+        <div className="grid w-full gap-3 sm:grid-cols-2">
+          <ButtonLink to="/premium"><Crown aria-hidden="true" className="size-4" /> Mở khóa với Premium</ButtonLink>
+          <Button variant="secondary" onClick={onManual}>Thêm món bằng tay</Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-5">
       {/* capture="environment" opens the back camera on phones; the second input opens the gallery */}
       <input ref={cameraInput} type="file" accept={ACCEPT} capture="environment" className="hidden"
         onChange={(e) => { handleFile(e.target.files?.[0]); e.target.value = ''; }} />
@@ -221,117 +265,142 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave }: Props) {
 
       {status === 'idle' && (
         <>
-          <div className="grid gap-1 text-sm text-ink-soft">
-            <p className="font-medium text-ink">Cách chụp để AI đoán đúng:</p>
-            <ul className="list-disc pl-5">
+          <div className="grid gap-3 rounded-2xl bg-soft p-4 text-sm">
+            <p className="font-semibold">Chụp sao cho AI đoán đúng</p>
+            <ul className="grid list-disc gap-1.5 pl-5 text-muted">
               <li>Chụp từ trên xuống, đủ sáng, thấy cả đĩa hoặc bát.</li>
-              <li>Đừng chụp quá gần: đứng xa hơn một chút để chừa viền quanh món ăn, vì bạn sẽ cắt lại khung vuông ở bước sau.</li>
+              <li>Đứng xa hơn một chút để chừa viền quanh món: bước sau bạn sẽ cắt lại khung vuông.</li>
               <li>Chụp từng bữa riêng; để chảo, nồi, dụng cụ ra ngoài khung.</li>
             </ul>
-            <p>AI chỉ gợi ý món và số gram, bạn kiểm tra lại trước khi lưu.</p>
+            <p className="text-muted">AI chỉ gợi ý món và số gram. Calo tính từ bảng dữ liệu, bạn kiểm tra lại trước khi lưu.</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Button onClick={() => cameraInput.current?.click()}>
-              <Camera aria-hidden="true" className="size-4" /> Chụp ảnh
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Button size="lg" onClick={() => cameraInput.current?.click()}>
+              <Camera aria-hidden="true" className="size-5" /> Chụp ảnh
             </Button>
-            <Button variant="secondary" onClick={() => galleryInput.current?.click()}>
-              <ImageUp aria-hidden="true" className="size-4" /> Chọn ảnh có sẵn
+            <Button size="lg" variant="secondary" onClick={() => galleryInput.current?.click()}>
+              <ImageUp aria-hidden="true" className="size-5" /> Chọn ảnh có sẵn
             </Button>
           </div>
         </>
       )}
 
-      {status === 'cropping' && preview && (
-        <PhotoCropper src={preview} onConfirm={(square) => void analyze(square)}
-          onUseOriginal={() => void analyzeOriginal()} onCancel={pickAgain} onLoadError={cropFailed} />
-      )}
+               {status === 'cropping' && preview && (
+           <PhotoCropper src={preview} remaining={remaining} onConfirm={(square) => void analyze(square)}
+             onUseOriginal={() => void analyzeOriginal()} onCancel={pickAgain} onLoadError={cropFailed} />
+         )}
 
-      {preview && (status === 'analyzing' || status === 'review') && (
-        <div className="flex justify-center overflow-hidden rounded-2xl bg-black/5">
-          {/* object-contain + auto width: the whole photo stays visible, portrait or landscape, nothing is cropped */}
-          <img
-            src={preview}
-            alt="Ảnh bữa ăn đã chọn"
-            className="h-auto max-h-80 w-auto max-w-full object-contain"
-          />
+      {status === 'analyzing' && preview && (
+        <div className="grid gap-3">
+          <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl bg-black">
+            <img src={preview} alt="Ảnh đang nhận diện" className="mx-auto h-auto max-h-80 w-auto max-w-full object-contain" />
+            {/* A line sweeping over the photo while waiting; reduced motion leaves it still */}
+            <span aria-hidden="true" className="absolute inset-x-0 h-0.5 bg-accent shadow-[0_0_18px_6px] shadow-accent/60 animate-scan" />
+          </div>
+          <p role="status" className="flex items-center justify-center gap-2 font-semibold">
+            <ScanSearch aria-hidden="true" className="size-5 text-link" /> Đang nhận diện món…
+          </p>
+          <p className="text-center text-sm text-muted">Thường mất vài giây.</p>
         </div>
       )}
 
-      {status === 'analyzing' && <p className="text-sm text-muted" role="status">Đang nhận diện món…</p>}
-
       {status === 'review' && (
         <>
+          <div className="flex items-center gap-3">
+            {preview && (
+              <img src={preview} alt="Ảnh đã nhận diện" className="size-18 shrink-0 rounded-2xl object-cover" />
+            )}
+            <p className="text-sm text-muted">
+              AI chỉ nhận món và ước lượng gram. Calo tính từ bảng dữ liệu, bạn sửa gram để tính lại.
+            </p>
+          </div>
+
           {rows.length === 0 ? (
-            <p className="text-sm text-ink-soft">
+            <p className="text-sm text-muted">
               Không nhận ra món nào có trong danh sách. Bạn thử ảnh khác hoặc thêm món bên dưới.
             </p>
           ) : (
-            <ul className="divide-y divide-line">
+            <ul>
               {rows.map((row, i) => {
                 const food = foodsById.get(row.foodId);
                 const g = parsed[i];
+                const options = preparationsOf(row.name);
+                const leanFood = food?.leanVersionId != null ? foodsById.get(food.leanVersionId) : undefined;
                 return (
-                  <li key={row.key} className="grid gap-3 py-3">
-                    {/* Name on the left, actions pinned to the top-right corner */}
-                    <div className="flex items-start gap-2">
+                  <li key={row.key} className="grid gap-3 border-t border-line py-3 first:border-t-0">
+                    <div className="flex items-center gap-2">
                       <div className="min-w-0 flex-1">
-                        <p className="flex items-center gap-2 font-medium">
-                          <span className="truncate">{row.name}</span>
-                          {row.preparation !== 'RAW' && (
-                            <span className="shrink-0 rounded-full bg-lime px-2 py-0.5 text-xs font-normal">
+                        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-semibold">
+                          <span>{row.name}</span>
+                          {row.preparation !== 'RAW' && options.length === 0 && (
+                            <span className="rounded-full bg-soft px-2 py-0.5 text-xs font-normal text-link">
                               {PREPARATION_LABELS[row.preparation]}
                             </span>
                           )}
                           {row.lowConfidence && (
-                            <span className="shrink-0 rounded-full border border-danger px-2 py-0.5 text-xs font-normal text-danger">
+                            <span className="rounded-full border border-gold bg-gold/15 px-2 py-0.5 text-xs font-medium">
                               Kiểm tra lại
                             </span>
                           )}
                         </p>
                         <p className="text-xs text-muted">
                           {row.aiGrams != null
-                            ? `${sameName(row.aiName, row.name) ? '' : `AI thấy “${row.aiName}” · `}ước lượng ${formatNumber(row.aiGrams)} g`
+                            ? `${sameName(row.aiName, row.name) ? '' : `AI thấy “${row.aiName}”, `}ước lượng ${formatNumber(row.aiGrams)} g`
                             : row.aiName
                               ? `Đã đổi từ “${row.aiName}”`
                               : 'Bạn thêm thủ công'}
                         </p>
                       </div>
-                      <div className="-mt-1 -mr-2 flex shrink-0">
+                      <label className="flex shrink-0 items-center gap-1 text-sm text-muted">
+                        <span className="sr-only">Số gram {row.name}</span>
+                        <input inputMode="decimal" value={row.grams} aria-invalid={g == null}
+                          onChange={(e) => setRows(rows.map((r) => (r.key === row.key ? { ...r, grams: e.target.value } : r)))}
+                          className={`h-10 w-16 rounded-xl border bg-field px-2 text-right text-base text-ink tabular-nums
+                            focus-visible:outline-2 focus-visible:outline-accent ${g == null ? 'border-danger' : 'border-line'}`} />
+                        g
+                      </label>
+                      <span className="w-16 shrink-0 text-right font-display text-lg font-semibold tabular-nums">
+                        {food && g != null ? formatNumber(Math.round(kcalFor(food, g, trimFor(row)))) : '—'}
+                      </span>
+                      <div className="-mr-2 flex shrink-0">
                         <button type="button" onClick={() => setChoosing(choosing === row.key ? null : row.key)}
-                          className={`flex size-9 cursor-pointer items-center justify-center rounded-full hover:bg-surface hover:text-ink ${
-                            choosing === row.key ? 'bg-surface text-ink' : 'text-muted'}`}
+                          className={`flex size-9 cursor-pointer items-center justify-center rounded-full hover:bg-soft hover:text-ink ${
+                            choosing === row.key ? 'bg-soft text-ink' : 'text-muted'}`}
                           aria-label={`Đổi ${row.name} thành món khác`} aria-expanded={choosing === row.key}
                           title="Sửa món (AI nhận sai)">
                           <Pencil aria-hidden="true" className="size-4" />
                         </button>
                         <button type="button" onClick={() => setRows(rows.filter((r) => r.key !== row.key))}
-                          className="flex size-9 cursor-pointer items-center justify-center rounded-full text-muted hover:bg-surface hover:text-danger"
+                          className="flex size-9 cursor-pointer items-center justify-center rounded-full text-muted hover:bg-soft hover:text-danger"
                           aria-label={`Bỏ ${row.name}`} title="Bỏ món này">
                           <Trash2 aria-hidden="true" className="size-4" />
                         </button>
                       </div>
                     </div>
+                    {g == null && <p className="-mt-2 text-xs text-danger">Số gram từ 0,1 đến 5000.</p>}
 
-                    <div className="flex items-end gap-3">
-                      <div className="w-28">
-                        <FormField label="Số gram" name={`photo-grams-${row.key}`} inputMode="decimal"
-                          value={row.grams}
-                          onChange={(e) => setRows(rows.map((r) => (r.key === row.key ? { ...r, grams: e.target.value } : r)))}
-                          error={g == null ? '0,1–5000 g' : undefined} />
-                      </div>
-                      <p className="pb-2.5 text-lg font-light">
-                        {food && g != null ? `≈ ${formatNumber(kcalFor(food, g, trimFor(row)))}` : '—'}{' '}
-                        <span className="text-sm text-muted">kcal</span>
-                      </p>
-                    </div>
-                    {food && g != null && <MacroLine nutrition={nutritionFor(food, g, trimFor(row))} />}
-                    {food?.leanVersionId != null && foodsById.get(food.leanVersionId) && (
-                      <FatTrimSlider id={`photo-fat-trim-${row.key}`} food={food} leanFood={foodsById.get(food.leanVersionId)!}
+                    {/* The same food weighed at another stage changes the calories a lot (raw vs boiled rice) */}
+                    {options.length > 0 && (
+                      <fieldset className="grid gap-2">
+                        <legend className="mb-2 text-sm">Bạn cân {row.name.toLowerCase()} lúc nào?</legend>
+                        <div className="flex flex-wrap gap-2">
+                          {options.map((f) => (
+                            <Chip key={f.id} size="sm" selected={f.id === row.foodId}
+                              onClick={() => changePreparation(row.key, f)}>
+                              {WEIGHED_WHEN_LABELS[f.preparation]}
+                            </Chip>
+                          ))}
+                        </div>
+                      </fieldset>
+                    )}
+
+                    {food && leanFood && (
+                      <FatTrimSlider id={`photo-fat-trim-${row.key}`} food={food} leanFood={leanFood}
                         value={row.fatPercent}
                         onChange={(v) => setRows(rows.map((r) => (r.key === row.key ? { ...r, fatPercent: v } : r)))} />
                     )}
-                    {food && edibleHint(food) && <p className="text-xs text-ink-soft">{edibleHint(food)}</p>}
-                    {food && leanHint(food) && <p className="text-xs text-ink-soft">{leanHint(food)}</p>}
+                    {food && edibleHint(food) && <p className="text-xs text-muted">{edibleHint(food)}</p>}
+                    {food && leanHint(food) && <p className="text-xs text-muted">{leanHint(food)}</p>}
 
                     {choosing === row.key && chooser((f) => changeFood(row.key, f), `swap-${row.key}`, row.aiName ?? '')}
                   </li>
@@ -342,14 +411,14 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave }: Props) {
 
           {unmatched.length > 0 && (
             <div className="grid gap-2">
-              <p className="text-sm text-ink-soft">
+              <p className="text-sm text-muted">
                 AI còn thấy các món chưa có trong danh sách. Bấm vào một món để chọn món gần giống:
               </p>
               <div className="flex flex-wrap gap-2">
                 {unmatched.map((n) => (
                   <button key={n} type="button" disabled={!foods}
                     onClick={() => { setNewQuery(n); setChoosing('new'); }}
-                    className="cursor-pointer rounded-full border border-dashed border-line bg-surface px-3 py-1.5 text-sm hover:bg-bg disabled:cursor-not-allowed">
+                    className="cursor-pointer rounded-full border border-dashed border-line px-3 py-1.5 text-sm hover:bg-soft disabled:cursor-not-allowed">
                     {n}
                   </button>
                 ))}
@@ -360,40 +429,36 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave }: Props) {
           {choosing === 'new' ? (
             chooser(addMissed, 'photo-add', newQuery)
           ) : (
-            <div>
-              <Button variant="secondary" size="sm" onClick={() => { setNewQuery(''); setChoosing('new'); }} disabled={!foods}>
-                <Plus aria-hidden="true" className="size-4" /> Thêm món bị sót
+            <button type="button" onClick={() => { setNewQuery(''); setChoosing('new'); }} disabled={!foods}
+              className="inline-flex cursor-pointer items-center gap-1.5 justify-self-start rounded-full py-1 font-semibold text-link hover:underline disabled:cursor-not-allowed">
+              <Plus aria-hidden="true" className="size-4" /> Thêm món AI bỏ sót
+            </button>
+          )}
+
+          <div className="grid gap-3 border-t border-line pt-4">
+            <div className="flex items-end justify-between gap-4">
+              <div className="grid min-w-0 gap-1">
+                <MacroLine nutrition={total} className="text-sm text-muted" />
+                {incomplete && (
+                  <p className="text-xs text-muted">Một số món chưa đủ số liệu dinh dưỡng, tổng chỉ tính phần đã biết.</p>
+                )}
+              </div>
+              <p className="shrink-0 font-display text-4xl font-bold tabular-nums">
+                {formatNumber(Math.round(total.kcal))} <span className="font-sans text-sm font-normal text-muted">kcal</span>
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-[auto_minmax(0,1fr)]">
+              <Button variant="secondary" onClick={pickAgain} disabled={busy}>Chọn ảnh khác</Button>
+              <Button onClick={() => void handleSave()} disabled={busy || !allValid}>
+                <Check aria-hidden="true" className="size-4" />
+                {busy ? 'Đang lưu…' : `Lưu ${rows.length} món vào ${MEAL_TYPE_LABELS[mealType].toLowerCase()}`}
               </Button>
             </div>
-          )}
-
-          {rows.length > 0 && (
-            <div className="grid gap-1">
-              <p className="text-lg">
-                Tổng ≈ <span className="font-semibold">{formatNumber(total.kcal)}</span>{' '}
-                <span className="text-sm text-muted">kcal (tính từ bảng dữ liệu, không phải do AI)</span>
-              </p>
-              <MacroLine nutrition={total} className="text-sm text-muted" />
-              {incomplete && (
-                <p className="text-xs text-muted">Một số món chưa đủ số liệu dinh dưỡng, tổng trên chỉ tính phần đã biết.</p>
-              )}
-            </div>
-          )}
-
-          <div className="flex flex-wrap items-center gap-2">
-            <Button onClick={() => void handleSave()} disabled={busy || !allValid}>
-              {busy ? 'Đang lưu…' : `Lưu vào ${MEAL_TYPE_LABELS[mealType].toLowerCase()}`}
-            </Button>
-            <Button variant="secondary" onClick={pickAgain} disabled={busy}>Chọn ảnh khác</Button>
+            {scansLeft}
           </div>
         </>
       )}
 
-      {remaining != null && (
-        <p className="text-xs text-muted">
-          Còn {remaining} lượt nhận diện ảnh hôm nay. <Link to="/premium">Thêm lượt với Premium</Link>
-        </p>
-      )}
       {error && <p className="text-sm text-danger" role="alert">{error}</p>}
     </div>
   );

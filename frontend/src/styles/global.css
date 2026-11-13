@@ -56,12 +56,18 @@
   /* Rep counter feedback on the camera: animate-rep-pop (the check mark), animate-toast (a message) */
   --animate-rep-pop: rep-pop 0.9s ease-out forwards;
   --animate-toast: toast 2.2s ease-out forwards;
+  /* Photo recognition: a line sweeping down and up over the photo while the AI works */
+  --animate-scan: scan 1.6s ease-in-out infinite alternate;
 
   @keyframes rep-pop {
     0% { opacity: 0; transform: scale(0.6); }
     20% { opacity: 1; transform: scale(1.1); }
     70% { opacity: 1; transform: scale(1); }
     100% { opacity: 0; transform: scale(1); }
+  }
+  @keyframes scan {
+    from { top: 0; }
+    to { top: calc(100% - 2px); }
   }
   @keyframes toast {
     0% { opacity: 0; transform: translateY(8px); }

@@ -219,7 +219,8 @@ export default function MealsPage() {
         )}
         {dialog?.kind === 'photo' && (
           <PhotoMealReview key={`photo-${dialog.mealType}`} mealType={dialog.mealType} foods={foods} foodsById={foodsById}
-            onSave={(items) => addRecognized(dialog.mealType, items)} />
+            onSave={(items) => addRecognized(dialog.mealType, items)}
+            onManual={() => setDialog({ kind: 'pick', mealType: dialog.mealType })} />
         )}
         {dialog?.kind === 'edit' && editing && (
           <MealItemEditor key={`edit-${editing.id}`} item={editing} mealType={dialog.mealType}
