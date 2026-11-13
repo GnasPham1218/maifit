@@ -1,4 +1,4 @@
-import { Activity, Crown, Dumbbell, House, LogOut, Trophy, UserRound, Utensils, type LucideIcon } from 'lucide-react';
+import { Activity, Crown, Dumbbell, House, LogOut, MessageCircle, Trophy, UserRound, Utensils, type LucideIcon } from 'lucide-react';
 import { NavLink, Outlet, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 
@@ -14,6 +14,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/meals', label: 'Ăn uống', icon: Utensils },
   { to: '/workout', label: 'Tập luyện', icon: Activity },
   { to: '/leaderboard', label: 'Bảng xếp hạng', icon: Trophy },
+  { to: '/chat', label: 'Trợ lý AI', icon: MessageCircle },
   { to: '/premium', label: 'Premium', icon: Crown },
   { to: '/profile', label: 'Hồ sơ', icon: UserRound },
 ];
@@ -60,7 +61,8 @@ export default function MainLayout() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3 md:flex-col">
+        {/* Desktop only: the bottom bar on phones has room for the pages alone (logout is on the profile page) */}
+        <div className="hidden items-center gap-3 md:flex md:flex-col">
           <button
             type="button"
             onClick={() => void handleLogout()}
