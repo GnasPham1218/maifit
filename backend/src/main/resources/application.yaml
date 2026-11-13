@@ -83,6 +83,7 @@ app:
     # out-of-scope 0.28-0.37. Below this score a chunk does not count; no chunk left = refusal, no AI call
     similarity-threshold: 0.45
     history-messages: 6         # previous messages sent back so follow-up questions make sense
+    model-timeout: 30s          # well under Nginx's 60 s: a slow Gemini reply is refunded instead of a silent 504
   food-request:
     daily-limit: 5   # "Báo thiếu món": distinct names per user per day (Vietnam time)
   jwt:

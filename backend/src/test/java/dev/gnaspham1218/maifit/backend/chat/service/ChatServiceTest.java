@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ import static org.mockito.Mockito.when;
 class ChatServiceTest {
 
     private static final long USER_ID = 7L;
-    private static final ChatProperties PROPERTIES = new ChatProperties(500, 5, 0.45, 6);
+    private static final ChatProperties PROPERTIES = new ChatProperties(500, 5, 0.45, 6, Duration.ofSeconds(30));
 
     private ChatRetriever retriever;
     private ChatAnswerer answerer;
@@ -47,7 +48,7 @@ class ChatServiceTest {
         history = mock(ChatHistoryService.class);
         aiUsage = mock(AiUsageService.class);
         service = new ChatService(retriever, new ChatPromptBuilder(), answerer, new ModelAnswerValidator(),
-                history, aiUsage, JsonMapper.builder().build(), PROPERTIES);
+                new MedicalQuestionGuard(), history, aiUsage, JsonMapper.builder().build(), PROPERTIES);
         when(history.saveExchange(eq(USER_ID), any(), anyString(), any(), any(), any())).thenReturn(42L);
     }
 
@@ -65,6 +66,18 @@ class ChatServiceTest {
                 .isInstanceOfSatisfying(AppException.class,
                         e -> assertThat(e.getErrorCode()).isEqualTo(ErrorCode.VALIDATION_FAILED));
         verifyNoInteractions(retriever, answerer, aiUsage, history);
+    }
+
+    @Test
+    void aHealthQuestionIsRefusedBeforeRetrievalQuotaAndModel() {
+        ChatReplyResponse reply = service.ask(USER_ID, null, "Tôi bị tiểu đường type 2, có nên uống creatine không?");
+
+        assertThat(reply.outcome()).isEqualTo(ChatOutcome.MEDICAL);
+        assertThat(reply.answer()).isNull();
+        assertThat(reply.remainingToday()).isNull();
+        verifyNoInteractions(retriever, aiUsage, answerer);
+        verify(history).saveExchange(USER_ID, null, "Tôi bị tiểu đường type 2, có nên uống creatine không?",
+                ChatOutcome.MEDICAL, null, null);
     }
 
     @Test

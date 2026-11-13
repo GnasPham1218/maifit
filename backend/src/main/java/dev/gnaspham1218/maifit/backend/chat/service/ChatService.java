@@ -39,6 +39,7 @@ public class ChatService {
     private final ChatPromptBuilder promptBuilder;
     private final ChatAnswerer answerer;
     private final ModelAnswerValidator validator;
+    private final MedicalQuestionGuard medicalGuard;
     private final ChatHistoryService history;
     private final AiUsageService aiUsageService;
     private final JsonMapper jsonMapper;
@@ -57,7 +58,14 @@ public class ChatService {
                 ? List.of()
                 : history.recentMessages(conversationId, userId, properties.historyMessages());
 
-        // 3. Retrieval gate (Ollama). Nothing relevant: refuse by code, no quota, no Gemini call
+        // 3. Health questions are refused by code: no retrieval, no quota, no model
+        if (medicalGuard.isMedical(question)) {
+            return save(userId, conversationId, question, ValidatedAnswer.declined(ChatOutcome.MEDICAL),
+                    List.of(), null, null, null);
+        }
+
+        // 4. Retrieval gate (Ollama). Nothing relevant: refuse by code, no quota, no Gemini call
+        long started = System.nanoTime();
         List<Document> chunks;
         try {
             chunks = retriever.retrieve(question);
@@ -65,39 +73,46 @@ public class ChatService {
             log.error("Chat retrieval failed for user {}", userId, e);
             throw new AppException(ErrorCode.AI_UNAVAILABLE);
         }
+        long retrievalMs = millisSince(started);
         if (chunks.isEmpty()) {
             return save(userId, conversationId, question, ValidatedAnswer.declined(ChatOutcome.NO_INFO),
-                    chunks, null);
+                    chunks, null, retrievalMs, null);
         }
 
-        // 4. Spend one call of today's quota (429 when none left)
+        // 5. Spend one call of today's quota (429 when none left)
         int remaining = aiUsageService.acquire(userId, AiFeature.CHAT);
 
-        // 5. Ask the model; a failed call gives the quota back
+        // 6. Ask the model (bounded by app.chat.model-timeout); a failed or timed-out call gives the quota back
+        started = System.nanoTime();
         ModelAnswer raw;
         try {
             raw = answerer.answer(promptBuilder.systemPrompt(), promptBuilder.userPrompt(recent, chunks, question));
         } catch (RuntimeException e) {
             aiUsageService.refund(userId, AiFeature.CHAT);
-            log.error("Chat model call failed for user {}", userId, e);
+            log.error("Chat model call failed for user {} after {} ms", userId, millisSince(started), e);
             throw new AppException(ErrorCode.AI_UNAVAILABLE);
         }
+        long modelMs = millisSince(started);
 
-        // 6. Code decides what is shown (outside the try: a bug here must not refund nor hide as "AI unavailable")
+        // 7. Code decides what is shown (outside the try: a bug here must not refund nor hide as "AI unavailable")
         ValidatedAnswer checked = validator.validate(raw, chunks.size());
-        return save(userId, conversationId, question, checked, chunks, remaining);
+        return save(userId, conversationId, question, checked, chunks, remaining, retrievalMs, modelMs);
+    }
+
+    private static long millisSince(long startNanos) {
+        return (System.nanoTime() - startNanos) / 1_000_000;
     }
 
     private ChatReplyResponse save(Long userId, Long conversationId, String question, ValidatedAnswer checked,
-                                   List<Document> chunks, Integer remaining) {
+                                   List<Document> chunks, Integer remaining, Long retrievalMs, Long modelMs) {
         List<ChatSource> sources = sources(checked, chunks);
         String sourcesJson = sources.isEmpty() ? null : jsonMapper.writeValueAsString(sources);
         Long savedId = history.saveExchange(userId, conversationId, question,
                 checked.outcome(), checked.answer(), sourcesJson);
 
-        log.info("Chat user={} conversation={} outcome={} chunks={} topScore={}",
+        log.info("Chat user={} conversation={} outcome={} chunks={} topScore={} retrievalMs={} modelMs={}",
                 userId, savedId, checked.outcome(), chunks.size(),
-                chunks.isEmpty() ? null : chunks.get(0).getScore());
+                chunks.isEmpty() ? null : chunks.get(0).getScore(), retrievalMs, modelMs);
         return new ChatReplyResponse(savedId, checked.outcome(), checked.answer(), sources, remaining);
     }
 
