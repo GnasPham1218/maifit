@@ -1,6 +1,6 @@
 import { DrawingUtils, PoseLandmarker } from '@mediapipe/tasks-vision';
 import { Camera, CameraOff, Check, Gauge, Maximize2, Minimize2, RotateCcw, Save } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useBlocker } from 'react-router';
 import { workoutApi } from '../apis/workoutApi';
 import { useEffect, useRef, useState } from 'react';
 import { Alert } from '../components/Alert';
@@ -258,6 +258,10 @@ export default function WorkoutPage() {
     resetCounter(); // reps of another exercise must not carry over
   }
 
+  // Moving to another page of the app (sidebar, tabs, Back) with a set not saved: ask first.
+  // beforeunload below only covers closing or reloading the browser tab.
+  const blocker = useBlocker(unsaved);
+
   // Closing or reloading the tab with a set not saved: the browser asks first
   useEffect(() => {
     if (!unsaved) return;
@@ -454,6 +458,31 @@ export default function WorkoutPage() {
         </div>
   );
 
+  // Same choices as the dialog above, for leaving the page instead of turning the camera off
+  const leaveDialog = blocker.state === 'blocked' && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4" role="dialog"
+          aria-modal="true" aria-labelledby="leave-title">
+          <div className="grid w-full max-w-sm gap-4 rounded-card bg-surface p-6">
+            <p id="leave-title" className="text-lg font-semibold">Set chưa được lưu</p>
+            <p className="text-sm text-ink-soft">
+              Bạn đã tập {view.reps} rep {exercise.label.toLowerCase()} nhưng chưa lưu. Rời trang sẽ mất set này.
+            </p>
+            <div className="grid gap-2">
+              <Button disabled={saving} onClick={() => void saveSet().then((ok) => {
+                if (ok) blocker.proceed();
+                else blocker.reset(); // the error stays on the page
+              })}>
+                <Save aria-hidden="true" className="size-4" /> {saving ? 'Đang lưu…' : 'Lưu rồi đi'}
+              </Button>
+              <Button variant="secondary" disabled={saving} onClick={() => blocker.proceed()}>
+                Rời trang, không lưu
+              </Button>
+              <Button variant="secondary" disabled={saving} onClick={() => blocker.reset()}>Ở lại tập tiếp</Button>
+            </div>
+          </div>
+        </div>
+  );
+
   const stage = (
     <div
       ref={stageRef}
@@ -537,6 +566,7 @@ export default function WorkoutPage() {
       )}
 
       {unsavedDialog}
+      {leaveDialog}
 
       {/* Controls on the camera: always the fullscreen toggle; in focus mode, the others too */}
       <div className="absolute inset-x-3 bottom-3 flex items-center justify-end gap-2">
@@ -616,7 +646,7 @@ export default function WorkoutPage() {
             <Button onClick={() => void saveSet()} disabled={!unsaved || saving}>
               <Save aria-hidden="true" className="size-4" /> {saving ? 'Đang lưu…' : 'Lưu set'}
             </Button>
-            <Link to="/leaderboard" className="text-sm">Bảng xếp hạng</Link>
+            <Link to="/workout/leaderboard" className="text-sm">Bảng xếp hạng</Link>
           </div>
           {saveNote && (
             <p className={`mt-2 text-sm ${saveNote.ok ? 'text-success' : 'text-danger'}`} role="status">{saveNote.text}</p>
