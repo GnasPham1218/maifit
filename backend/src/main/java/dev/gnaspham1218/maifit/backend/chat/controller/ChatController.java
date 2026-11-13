@@ -1,5 +1,8 @@
 package dev.gnaspham1218.maifit.backend.chat.controller;
 
+import dev.gnaspham1218.maifit.backend.ai.dto.AiQuota;
+import dev.gnaspham1218.maifit.backend.ai.entity.AiFeature;
+import dev.gnaspham1218.maifit.backend.ai.service.AiUsageService;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatAskRequest;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatConversationResponse;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatMessageResponse;
@@ -28,6 +31,7 @@ public class ChatController {
 
     private final ChatService chatService;
     private final ChatHistoryService historyService;
+    private final AiUsageService aiUsageService;
 
     // POST /api/chat/messages  {"conversationId": 12, "question": "..."}  (no conversationId = new conversation)
     // 200 for answers AND refusals: a refusal is a normal result, its reason is in "outcome"
@@ -35,6 +39,12 @@ public class ChatController {
     public ApiResponse<ChatReplyResponse> ask(@AuthenticationPrincipal Jwt jwt,
                                               @Valid @RequestBody ChatAskRequest request) {
         return ApiResponse.ok(chatService.ask(userId(jwt), request.conversationId(), request.question()));
+    }
+
+    // GET /api/chat/quota: today's limit and calls left, so the page can show them before the first question
+    @GetMapping("/quota")
+    public ApiResponse<AiQuota> quota(@AuthenticationPrincipal Jwt jwt) {
+        return ApiResponse.ok(aiUsageService.quota(userId(jwt), AiFeature.CHAT));
     }
 
     // GET /api/chat/conversations: my latest conversations, most recently used first

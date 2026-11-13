@@ -76,6 +76,8 @@ public class PaymentService {
                 props.premium().days(),
                 aiUsageService.freeFoodVisionLimit(),
                 aiUsageService.premiumFoodVisionLimit(),
+                aiUsageService.freeChatLimit(),
+                aiUsageService.premiumChatLimit(),
                 pending);
     }
 
