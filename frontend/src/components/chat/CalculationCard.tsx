@@ -151,7 +151,9 @@ export function CalculationCard({ calculation, onSave }: CalculationCardProps) {
             <div className="flex items-center gap-2">
               <span className="min-w-0 flex-1">
                 <span className="font-medium">{item.food}</span>
-                {item.preparation && <span className="text-ink-soft"> · {PREPARATION_LABELS[item.preparation]}</span>}
+                {item.preparation && item.options.length === 1 && (
+                  <span className="text-ink-soft"> · {PREPARATION_LABELS[item.preparation]}</span>
+                )}
               </span>
               <label className="flex items-center gap-1 text-xs text-muted">
                 <span className="sr-only">Số gram {item.food}</span>
@@ -181,15 +183,23 @@ export function CalculationCard({ calculation, onSave }: CalculationCardProps) {
               </button>
             </div>
 
-            {item.preparation === null && (
-              <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label={`Cách chế biến ${item.food}`}>
-                <span className="text-xs text-ink-soft">Chế biến thế nào?</span>
-                {item.options.map((option) => (
-                  <button key={option} type="button" disabled={busy} onClick={() => setPreparation(index, option)}
-                    className="cursor-pointer rounded-full bg-sky px-3 py-1 text-xs hover:bg-sky-strong hover:text-white disabled:cursor-wait disabled:opacity-60">
-                    {PREPARATION_LABELS[option]}
-                  </button>
-                ))}
+            {/* Always shown when the food has several preparations: pick one, or change the one chosen */}
+            {item.options.length > 1 && (
+              <div className="flex flex-wrap items-center gap-1.5" role="radiogroup" aria-label={`Cách chế biến ${item.food}`}>
+                {item.preparation === null && <span className="text-xs text-ink-soft">Chế biến thế nào?</span>}
+                {item.options.map((option) => {
+                  const selected = option === item.preparation;
+                  return (
+                    <button key={option} type="button" role="radio" aria-checked={selected} disabled={busy}
+                      onClick={() => {
+                        if (!selected) setPreparation(index, option);
+                      }}
+                      className={`cursor-pointer rounded-full px-3 py-1 text-xs disabled:cursor-wait disabled:opacity-60 ${
+                        selected ? 'bg-ink text-white' : 'bg-sky hover:bg-sky-strong hover:text-white'}`}>
+                      {PREPARATION_LABELS[option]}
+                    </button>
+                  );
+                })}
               </div>
             )}
 
