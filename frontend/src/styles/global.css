@@ -108,6 +108,22 @@
   }
 }
 
+/* Modal (native <dialog>): slides up on phones, fades and scales in from md. @starting-style = the
+   values just before it opens, so the browser animates from them without JavaScript */
+dialog.modal[open] {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.2s, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@starting-style {
+  dialog.modal[open] { opacity: 0; transform: translateY(24px); }
+}
+@media (min-width: 48rem) {
+  @starting-style {
+    dialog.modal[open] { transform: scale(0.96); }
+  }
+}
+
 /* Every animation off for people who asked their system for less motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

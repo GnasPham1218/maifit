@@ -19,6 +19,11 @@ import VerifyEmailPage from './pages/VerifyEmailPage';
 import WorkoutPage from './pages/WorkoutPage';
 
 export const router = createBrowserRouter([
+  // Component gallery, development only: import.meta.env.DEV is false in a production build, so this
+  // route and its lazily imported page are dropped from the bundle
+  ...(import.meta.env.DEV
+    ? [{ path: '/dev/ui', lazy: async () => ({ Component: (await import('./pages/DevUiPage')).default }) }]
+    : []),
   {
     // Logged-in area
     element: <ProtectedRoute />,
