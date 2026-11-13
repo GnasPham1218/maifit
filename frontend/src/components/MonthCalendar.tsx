@@ -17,7 +17,7 @@ interface Props {
 
 const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 const ARROW =
-  'flex size-9 cursor-pointer items-center justify-center rounded-full hover:bg-bg disabled:cursor-not-allowed disabled:opacity-40';
+  'flex size-9 cursor-pointer items-center justify-center rounded-full hover:bg-soft disabled:cursor-not-allowed disabled:opacity-40';
 
 // Month grid: each day shows its value (kcal, reps…) + optionally a small bar vs a target. Tap a day to open it.
 export function MonthCalendar({
@@ -62,18 +62,18 @@ export function MonthCalendar({
               className={
                 'flex min-h-14 min-w-0 cursor-pointer flex-col items-center justify-start gap-0.5 rounded-2xl px-0.5 pt-1.5 ' +
                 'transition-colors disabled:cursor-not-allowed disabled:opacity-30 ' +
-                (selected ? 'bg-ink text-white' : `hover:bg-bg ${date === today ? 'ring-1 ring-ink' : ''}`)
+                (selected ? 'bg-accent text-on-accent' : `hover:bg-soft ${date === today ? 'ring-1 ring-accent' : ''}`)
               }
             >
               <span className="text-sm font-medium">{Number(date.slice(8))}</span>
               {value != null && (
                 <>
-                  <span className={`text-[10px] leading-tight ${selected ? 'text-white/80' : 'text-muted'}`}>
+                  <span className={`text-[10px] leading-tight ${selected ? 'text-on-accent/80' : 'text-muted'}`}>
                     {formatNumber(Math.round(value))}
                   </span>
                   {percent != null && (
-                    <span className={`h-1 w-3/4 overflow-hidden rounded-full ${selected ? 'bg-white/25' : 'bg-line'}`}>
-                      <span className={`block h-full rounded-full ${selected ? 'bg-white' : 'bg-sky-strong'}`}
+                    <span className={`h-1 w-3/4 overflow-hidden rounded-full ${selected ? 'bg-on-accent/25' : 'bg-line'}`}>
+                      <span className={`block h-full rounded-full ${selected ? 'bg-on-accent' : 'bg-accent'}`}
                         style={{ width: `${percent}%` }} />
                     </span>
                   )}

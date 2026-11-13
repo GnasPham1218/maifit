@@ -8,12 +8,13 @@ interface ModalProps {
   children: ReactNode;
   footer?: ReactNode;
   size?: 'md' | 'lg';
+  closeOnBackdrop?: boolean; // false for dialogs holding unsaved work; Esc and the X still close
 }
 
 // The native <dialog> with showModal(): the browser traps focus, makes the page behind inert,
 // closes on Esc and puts it in the top layer (above every z-index). Less code than a custom one, and correct.
 // Phones: a bottom sheet. From md: a centered dialog. The open animation is CSS (@starting-style).
-export function Modal({ open, onClose, title, children, footer, size = 'md' }: ModalProps) {
+export function Modal({ open, onClose, title, children, footer, size = 'md', closeOnBackdrop = true }: ModalProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
@@ -29,7 +30,7 @@ export function Modal({ open, onClose, title, children, footer, size = 'md' }: M
       // Esc and close() both end here: the parent state follows
       onClose={onClose}
       // A click on the backdrop is a click on the <dialog> itself (the content is inside a child)
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      onClick={(e) => { if (closeOnBackdrop && e.target === e.currentTarget) onClose(); }}
       className={`modal m-0 mt-auto max-h-[92dvh] w-full max-w-none overflow-hidden rounded-t-[28px] bg-surface p-0 text-ink
         backdrop:bg-black/60 md:m-auto md:rounded-[28px] ${size === 'lg' ? 'md:max-w-2xl' : 'md:max-w-lg'}`}>
       <div className="flex max-h-[92dvh] flex-col">

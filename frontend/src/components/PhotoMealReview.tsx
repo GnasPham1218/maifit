@@ -1,4 +1,4 @@
-import { Camera, ImageUp, Pencil, Plus, Trash2, X } from 'lucide-react';
+import { Camera, ImageUp, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { mealApi } from '../apis/mealApi';
@@ -22,7 +22,6 @@ interface Props {
   foods: Food[] | null; // for "change food" / "add a missed food"
   foodsById: Map<number, Food>; // calories come from here, never from the AI
   onSave: (items: MealItemRequest[]) => Promise<void>;
-  onClose: () => void;
 }
 
 interface Row {
@@ -52,7 +51,8 @@ const ACCEPT = 'image/jpeg,image/png,image/webp';
 
 // Photo -> AI suggestions -> the user fixes grams / removes wrong foods -> save.
 // The AI only names foods from our table and guesses grams; nothing is saved until "Lưu".
-export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }: Props) {
+// Shown inside a Modal (MealsPage), which gives the title and the close button.
+export function PhotoMealReview({ mealType, foods, foodsById, onSave }: Props) {
   const [status, setStatus] = useState<Status>('idle');
   const [preview, setPreview] = useState<string | null>(null);
   const [rows, setRows] = useState<Row[]>([]);
@@ -211,14 +211,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
   );
 
   return (
-    <div className="grid gap-4 rounded-2xl bg-bg p-4">
-      <div className="flex items-center justify-between gap-3">
-        <p className="font-medium">Nhận diện ảnh: {MEAL_TYPE_LABELS[mealType].toLowerCase()}</p>
-        <button type="button" onClick={onClose} aria-label="Đóng"
-          className="flex size-9 cursor-pointer items-center justify-center rounded-full hover:bg-surface">
-          <X aria-hidden="true" className="size-4" />
-        </button>
-      </div>
+    <div className="grid gap-4">
 
       {/* capture="environment" opens the back camera on phones; the second input opens the gallery */}
       <input ref={cameraInput} type="file" accept={ACCEPT} capture="environment" className="hidden"
@@ -380,7 +373,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onClose }:
                 Tổng ≈ <span className="font-semibold">{formatNumber(total.kcal)}</span>{' '}
                 <span className="text-sm text-muted">kcal (tính từ bảng dữ liệu, không phải do AI)</span>
               </p>
-              <MacroLine nutrition={total} className="block text-sm text-ink-soft" />
+              <MacroLine nutrition={total} className="text-sm text-muted" />
               {incomplete && (
                 <p className="text-xs text-muted">Một số món chưa đủ số liệu dinh dưỡng, tổng trên chỉ tính phần đã biết.</p>
               )}

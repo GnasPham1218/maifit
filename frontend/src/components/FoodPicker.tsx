@@ -1,7 +1,5 @@
-import { X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { getErrorMessage } from '../constants/errorMessages';
-import { MEAL_TYPE_LABELS } from '../constants/meal';
 import type { Food, MealType } from '../types/meal';
 import { edibleHint, leanHint } from '../utils/edible';
 import { formatNumber } from '../utils/number';
@@ -16,11 +14,11 @@ interface Props {
   mealType: MealType;
   foods: Food[] | null; // null while loading
   onAdd: (foodId: number, grams: number, fatPercent: number | null) => Promise<void>;
-  onClose: () => void;
 }
 
-// Add one food to a meal: search by name -> "weighed raw or cooked?" -> grams (calories shown live)
-export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
+// Add one food to a meal: search by name -> "weighed raw or cooked?" -> grams (calories shown live).
+// Shown inside a Modal (MealsPage), which gives the title and the close button.
+export function FoodPicker({ mealType, foods, onAdd }: Props) {
   const [food, setFood] = useState<Food | null>(null);
   const [grams, setGrams] = useState('');
   const [fatPercent, setFatPercent] = useState(100); // 100 = as listed (mua về, chưa lọc mỡ)
@@ -45,14 +43,7 @@ export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
   }
 
   return (
-    <div className="grid gap-4 rounded-2xl bg-bg p-4">
-      <div className="flex items-center justify-between gap-3">
-        <p className="font-medium">Thêm vào {MEAL_TYPE_LABELS[mealType].toLowerCase()}</p>
-        <button type="button" onClick={onClose} aria-label="Đóng"
-          className="flex size-9 cursor-pointer items-center justify-center rounded-full hover:bg-surface">
-          <X aria-hidden="true" className="size-4" />
-        </button>
-      </div>
+    <div className="grid gap-4">
 
       {foods == null ? (
         <p className="text-sm text-muted">Đang tải danh sách món…</p>
@@ -69,9 +60,9 @@ export function FoodPicker({ mealType, foods, onAdd, onClose }: Props) {
                   value={grams} onChange={(e) => setGrams(e.target.value)}
                   error={grams !== '' && parsed == null ? 'Từ 0,1 đến 5000 g' : undefined} />
               </div>
-              <p className="pb-2.5 text-lg font-light">
-                {parsed != null ? `≈ ${formatNumber(kcalFor(food, parsed, trim))}` : '—'}{' '}
-                <span className="text-sm text-muted">kcal</span>
+              <p className="pb-1 font-display text-4xl font-bold tabular-nums">
+                {parsed != null ? formatNumber(kcalFor(food, parsed, trim)) : '—'}{' '}
+                <span className="font-sans text-sm font-normal text-muted">kcal</span>
               </p>
               <Button type="submit" disabled={busy || parsed == null} className="mb-0.5">
                 {busy ? 'Đang thêm…' : 'Thêm'}

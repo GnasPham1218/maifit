@@ -1,3 +1,4 @@
+import { MACROS, type MacroKey } from '../constants/macros';
 import type { Nutrition } from '../types/meal';
 import { formatNumber } from '../utils/number';
 
@@ -6,24 +7,24 @@ interface Props {
   className?: string;
 }
 
-const PARTS: { label: string; pick: (n: Nutrition) => number | null }[] = [
-  { label: 'Đạm', pick: (n) => n.proteinG },
-  { label: 'Carb', pick: (n) => n.carbG },
-  { label: 'Béo', pick: (n) => n.fatG },
-  { label: 'Xơ', pick: (n) => n.fiberG },
+const PARTS: { key: MacroKey; label: string; pick: (n: Nutrition) => number | null }[] = [
+  { key: 'protein', label: 'Đạm', pick: (n) => n.proteinG },
+  { key: 'carb', label: 'Carb', pick: (n) => n.carbG },
+  { key: 'fat', label: 'Béo', pick: (n) => n.fatG },
+  { key: 'fiber', label: 'Xơ', pick: (n) => n.fiberG },
 ];
 
-// One compact line under a food: "Đạm 12 g · Carb 30 g · Béo 5 g · Xơ 2 g".
+// One compact line under a food: a color swatch per macro, then "Đạm 12 g".
 // "—" when the source has no data for that value (never shown as 0, which would be a claim).
-// A <span> (display: block), not a <p>: it also sits inside row <button>s, where a <p> is invalid HTML.
-export function MacroLine({ nutrition, className = 'block text-xs text-muted' }: Props) {
+// Spans only: it also sits inside row <button>s, where a <p> or <div> is invalid HTML.
+export function MacroLine({ nutrition, className = 'text-xs text-muted' }: Props) {
   return (
-    <span className={className}>
-      {PARTS.map(({ label, pick }, i) => {
+    <span className={`flex flex-wrap gap-x-3 gap-y-1 ${className}`}>
+      {PARTS.map(({ key, label, pick }) => {
         const v = pick(nutrition);
         return (
-          <span key={label} className="whitespace-nowrap">
-            {i > 0 && ' · '}
+          <span key={key} className="inline-flex items-center gap-1.5 whitespace-nowrap">
+            <span aria-hidden="true" className={`size-2 rounded-sm ${MACROS[key].swatch}`} />
             {label} {v == null ? '—' : `${formatNumber(v)} g`}
           </span>
         );
