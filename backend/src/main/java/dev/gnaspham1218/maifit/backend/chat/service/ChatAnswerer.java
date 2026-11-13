@@ -4,6 +4,8 @@ import dev.gnaspham1218.maifit.backend.config.ChatProperties;
 import jakarta.annotation.PreDestroy;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
+import org.springframework.ai.google.genai.common.GoogleGenAiThinkingLevel;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -19,6 +21,10 @@ import java.util.concurrent.TimeoutException;
  * The only class that calls the chat model. Kept apart so ChatService can be tested without Gemini.
  * The model gets no tools: whatever a question makes it say, it cannot read or change anything.
  *
+ * Calls use app.chat.thinking-level for this request only (photo recognition keeps the global default).
+ * Unset, Gemini 3 sometimes "thought" for over 30 s or cut its JSON short: 10/15 in the chat-eval
+ * set; LOW gave 14/15 and 15/15 (2026-11-13).
+ *
  * Every call is bounded by app.chat.model-timeout. Spring AI 2.0.2 documents no timeout property for
  * Google GenAI, and Nginx gives up after 60 s: without a bound, a slow reply would be charged to the
  * user while they only see a 504. With it, ChatService refunds the call and answers 503.
@@ -27,18 +33,24 @@ import java.util.concurrent.TimeoutException;
 public class ChatAnswerer {
 
     private final ChatClient chatClient;
+    private final GoogleGenAiThinkingLevel thinkingLevel;
     private final Duration timeout;
     // A virtual thread per call: waiting on Gemini costs almost nothing
     private final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
     public ChatAnswerer(ChatModel chatModel, ChatProperties properties) {
         this.chatClient = ChatClient.builder(chatModel).build();
+        this.thinkingLevel = properties.thinkingLevel();
         this.timeout = properties.modelTimeout();
     }
 
     /** entity() asks for JSON matching ModelAnswer and parses it; it throws if the reply is not valid JSON. */
     public ModelAnswer answer(String systemPrompt, String userPrompt) {
         return callWithTimeout(executor, () -> chatClient.prompt()
+                // In Spring AI 2.0.2 options() takes a builder (not built options). A new one per call: builders
+                // are mutable and calls run in parallel. Only the fields set here override application.yaml,
+                // so the model name stays as configured.
+                .options(GoogleGenAiChatOptions.builder().thinkingLevel(thinkingLevel))
                 .system(systemPrompt)
                 .user(userPrompt)
                 .call()

@@ -84,6 +84,9 @@ app:
     similarity-threshold: 0.45
     history-messages: 6         # previous messages sent back so follow-up questions make sense
     model-timeout: 30s          # well under Nginx's 60 s: a slow Gemini reply is refunded instead of a silent 504
+    # Chat only (photo recognition keeps Gemini's default). Unset: chat-eval 10/15 with calls stuck over 30 s
+    # and cut JSON; LOW: 14/15 then 15/15, 1.5-3.5 s per call (2026-11-13). Valid: MINIMAL, LOW, MEDIUM, HIGH
+    thinking-level: LOW
   food-request:
     daily-limit: 5   # "Báo thiếu món": distinct names per user per day (Vietnam time)
   jwt:

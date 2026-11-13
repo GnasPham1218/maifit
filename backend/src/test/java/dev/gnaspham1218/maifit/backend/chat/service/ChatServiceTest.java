@@ -11,6 +11,7 @@ import dev.gnaspham1218.maifit.backend.config.ChatProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.google.genai.common.GoogleGenAiThinkingLevel;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.time.Duration;
@@ -29,11 +30,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-// The order of the steps in ChatService: what is called, what is charged, what is saved (no DB, no AI)
+// ChatService + the real ChatEngine: what is called, what is charged, what is saved (no DB, no AI)
 class ChatServiceTest {
 
     private static final long USER_ID = 7L;
-    private static final ChatProperties PROPERTIES = new ChatProperties(500, 5, 0.45, 6, Duration.ofSeconds(30));
+    private static final ChatProperties PROPERTIES = new ChatProperties(500, 5, 0.45, 6, Duration.ofSeconds(30),
+            GoogleGenAiThinkingLevel.LOW);
 
     private ChatRetriever retriever;
     private ChatAnswerer answerer;
@@ -47,8 +49,9 @@ class ChatServiceTest {
         answerer = mock(ChatAnswerer.class);
         history = mock(ChatHistoryService.class);
         aiUsage = mock(AiUsageService.class);
-        service = new ChatService(retriever, new ChatPromptBuilder(), answerer, new ModelAnswerValidator(),
-                new MedicalQuestionGuard(), history, aiUsage, JsonMapper.builder().build(), PROPERTIES);
+        ChatEngine engine = new ChatEngine(retriever, new ChatPromptBuilder(), answerer, new ModelAnswerValidator(),
+                new MedicalQuestionGuard());
+        service = new ChatService(engine, history, aiUsage, JsonMapper.builder().build(), PROPERTIES);
         when(history.saveExchange(eq(USER_ID), any(), anyString(), any(), any(), any())).thenReturn(42L);
     }
 
