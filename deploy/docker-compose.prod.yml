@@ -51,6 +51,8 @@ services:
       # ":-" (not an empty value) because Spring treats an empty GEMINI_MODEL as set and skips its default
       GEMINI_API_KEY: ${GEMINI_API_KEY:?set GEMINI_API_KEY in deploy/.env}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash-lite}
+      # Chat only (photo recognition uses GEMINI_MODEL)
+      GEMINI_CHAT_MODEL: ${GEMINI_CHAT_MODEL:-gemini-3.1-flash-lite}
       # CAPTCHA (Cloudflare Turnstile) secret key, checked server-side on register and forgot-password
       TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY:?set TURNSTILE_SECRET_KEY in deploy/.env}
       # Payments (payOS): keys of the payment channel. The checksum key is what proves a webhook is real.
@@ -58,7 +60,7 @@ services:
       PAYOS_API_KEY: ${PAYOS_API_KEY:?set PAYOS_API_KEY in deploy/.env}
       PAYOS_CHECKSUM_KEY: ${PAYOS_CHECKSUM_KEY:?set PAYOS_CHECKSUM_KEY in deploy/.env}
       # Price of Premium in VND; ":-" for the same reason as GEMINI_MODEL
-      PREMIUM_PRICE: ${PREMIUM_PRICE:-39000}
+      PREMIUM_PRICE: ${PREMIUM_PRICE:-29999}
     ports:
       # 127.0.0.1 : 8080         : 8080
       # chỉ VPS   : cổng trên VPS : cổng trong container

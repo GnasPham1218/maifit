@@ -35,4 +35,16 @@ public interface AiUsageRepository extends JpaRepository<AiUsage, AiUsageId> {
               AND feature = :feature
             """, nativeQuery = true)
     void refund(Long userId, LocalDate usageDate, String feature);
+
+    // The row exists: acquire() created it before the call
+    @Modifying
+    @Query(value = """
+            UPDATE ai_usage
+            SET input_tokens = input_tokens + :input,
+                output_tokens = output_tokens + :output
+            WHERE user_id = :userId
+              AND usage_date = :usageDate
+              AND feature = :feature
+            """, nativeQuery = true)
+    void addTokens(Long userId, LocalDate usageDate, String feature, long input, long output);
 }

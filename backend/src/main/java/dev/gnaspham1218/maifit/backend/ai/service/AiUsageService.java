@@ -1,6 +1,7 @@
 package dev.gnaspham1218.maifit.backend.ai.service;
 
 import dev.gnaspham1218.maifit.backend.ai.dto.AiQuota;
+import dev.gnaspham1218.maifit.backend.ai.dto.TokenUsage;
 import dev.gnaspham1218.maifit.backend.ai.entity.AiFeature;
 import dev.gnaspham1218.maifit.backend.ai.entity.AiUsage;
 import dev.gnaspham1218.maifit.backend.ai.entity.AiUsageId;
@@ -30,9 +31,9 @@ public class AiUsageService {
             AiUsageRepository repo,
             PremiumService premiumService,
             @Value("${app.ai.daily-limit.food-vision:3}") int foodVisionLimit,
-            @Value("${app.ai.daily-limit.food-vision-premium:30}") int foodVisionPremiumLimit,
-            @Value("${app.ai.daily-limit.chat:5}") int chatLimit,
-            @Value("${app.ai.daily-limit.chat-premium:20}") int chatPremiumLimit) {
+            @Value("${app.ai.daily-limit.food-vision-premium:10}") int foodVisionPremiumLimit,
+            @Value("${app.ai.daily-limit.chat:2}") int chatLimit,
+            @Value("${app.ai.daily-limit.chat-premium:5}") int chatPremiumLimit) {
         this.repo = repo;
         this.premiumService = premiumService;
         this.foodVisionLimit = foodVisionLimit;
@@ -92,6 +93,16 @@ public class AiUsageService {
     public void refund(Long userId, AiFeature feature) {
         LocalDate today = ZonedDateTime.now(AppTime.ZONE).toLocalDate();
         repo.refund(userId, today, feature.name());
+    }
+
+    /** Adds the tokens Gemini billed for one call (to measure the real cost per call). */
+    @Transactional
+    public void recordTokens(Long userId, AiFeature feature, TokenUsage usage) {
+        if (usage.input() == 0 && usage.output() == 0) {
+            return; // the provider sent no usage
+        }
+        LocalDate today = ZonedDateTime.now(AppTime.ZONE).toLocalDate();
+        repo.addTokens(userId, today, feature.name(), usage.input(), usage.output());
     }
 
     // The limit is looked up on every call, so Premium applies (and ends) without any extra step:
