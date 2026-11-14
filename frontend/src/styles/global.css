@@ -106,6 +106,20 @@
   --color-info-bg: #262b3a;
 }
 
+/* Accent picked in the profile (data-accent on <html>, set by utils/accent.ts and public/theme-init.js).
+   No attribute = the default blue above. Each accent: the fill (white text on it >= 4.5:1), a link color
+   readable as small text, and a soft tint for chips; the dark theme gets its own link and tint. */
+[data-accent='teal']   { --color-accent: #0f766e; --color-link: #0f766e; --color-soft: #dcf3f0; }
+[data-accent='green']  { --color-accent: #15803d; --color-link: #15803d; --color-soft: #dcf5e3; }
+[data-accent='orange'] { --color-accent: #c2410c; --color-link: #c2410c; --color-soft: #fde9df; }
+[data-accent='purple'] { --color-accent: #7c3aed; --color-link: #6d28d9; --color-soft: #efe7fd; }
+[data-accent='pink']   { --color-accent: #db2777; --color-link: #be185d; --color-soft: #fce7f1; }
+[data-theme='dark'][data-accent='teal']   { --color-link: #5fd4c4; --color-soft: #1f3533; }
+[data-theme='dark'][data-accent='green']  { --color-link: #6fd89a; --color-soft: #1f3426; }
+[data-theme='dark'][data-accent='orange'] { --color-link: #ff9a6b; --color-soft: #3a2a22; }
+[data-theme='dark'][data-accent='purple'] { --color-link: #b79cff; --color-soft: #2c2640; }
+[data-theme='dark'][data-accent='pink']   { --color-link: #ff8fbf; --color-soft: #3a2230; }
+
 /* Form controls, scrollbars and the like follow the theme too */
 :root { color-scheme: light; }
 [data-theme='dark'] { color-scheme: dark; }

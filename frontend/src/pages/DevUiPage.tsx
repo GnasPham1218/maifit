@@ -11,7 +11,6 @@ import { MacroBars } from '../components/MacroBars';
 import { MacroDonut } from '../components/MacroDonut';
 import { Modal } from '../components/Modal';
 import { SegmentedTabs } from '../components/SegmentedTabs';
-import { StatTile } from '../components/StatTile';
 import { ThemeSwitcher } from '../components/ThemeSwitcher';
 
 // Development only (route added when import.meta.env.DEV): every base component in one place,
@@ -62,12 +61,6 @@ export default function DevUiPage() {
           <Button variant="hero" onClick={() => setEaten(1240)}>Đặt lại</Button>
         </div>
       </Card>
-
-      <div className="grid gap-4 sm:grid-cols-3">
-        <StatTile label="Năng lượng nghỉ (BMR)" value="1.680" unit="kcal" />
-        <StatTile label="Mục tiêu ăn" value="2.100" unit="kcal" hint="Giảm mỡ" />
-        <StatTile tone="hero" label="Hạng của bạn" value="#4" unit="312 rep" />
-      </div>
 
       <Card title="Chip, tab, ảnh đại diện">
         <div className="grid gap-5">

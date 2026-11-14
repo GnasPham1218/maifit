@@ -7,8 +7,10 @@ import { Avatar } from '../components/Avatar';
 import { FormField } from '../components/FormField';
 import { PaymentDialog } from '../components/premium/PaymentDialog';
 import { PremiumBlock } from '../components/premium/PremiumBlock';
-import { MacroDetails, ProfileStats } from '../components/profile/ProfileStats';
+import { AppearanceCard } from '../components/profile/AppearanceCard';
+import { AiQuotaCard, EnergyStats, MacroDetails } from '../components/profile/ProfileStats';
 import { ProfileSection } from '../components/profile/ProfileSection';
+import { TrainingTimeCard } from '../components/profile/TrainingTimeCard';
 import { WeightSection } from '../components/profile/WeightSection';
 import { usePremiumCheckout } from '../hooks/usePremiumCheckout';
 import { SelectField } from '../components/SelectField';
@@ -18,7 +20,6 @@ import type { ActivityLevel, Goal, Profile, Sex } from '../types/profile';
 import { optionalNumber } from '../utils/number';
 import { Button } from '../components/Button';
 import { useAuth } from '../hooks/useAuth';
-import { ThemeSwitcher } from '../components/ThemeSwitcher';
 
 interface FormState {
   sex: Sex;
@@ -167,13 +168,14 @@ export default function ProfilePage() {
 
   return (
     <div className="grid gap-4 md:gap-5">
-      {/* Phones: two cards (who + Premium). md+: one card with Premium on the right. */}
-      <section className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] md:items-center md:gap-6 md:rounded-card md:bg-surface md:p-7">
-        <div className="flex flex-wrap items-center gap-4 rounded-card bg-surface p-5 md:gap-6 md:bg-transparent md:p-0">
+      {/* The page's one graphite block (same in both themes, like the home and leaderboard heroes):
+          who you are, and Premium on the right (below on phones) */}
+      <section className="grid gap-5 rounded-card bg-hero p-5 text-hero-ink md:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] md:items-center md:gap-6 md:p-7">
+        <div className="flex flex-wrap items-center gap-4 md:gap-6">
           <Avatar name={name} size={96} premium={premium} />
           <div className="grid min-w-0 flex-1 gap-2">
-            <p className="truncate font-display text-3xl font-bold md:text-4xl">{name}</p>
-            <p className="flex flex-wrap items-center gap-2 text-sm text-muted">
+            <p className="truncate pb-[0.08em] font-display text-3xl leading-[1.2] font-bold md:text-4xl">{name}</p>
+            <p className="flex flex-wrap items-center gap-2 text-sm text-hero-muted">
               {premium && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-gold px-2.5 py-0.5 text-xs font-bold text-[#1c1e24]">
                   <Crown aria-hidden="true" className="size-3.5" /> Premium
@@ -181,20 +183,24 @@ export default function ProfilePage() {
               )}
               <span className="truncate">{user?.email}</span>
             </p>
-            <Button variant="secondary" size="sm" className="justify-self-start" onClick={() => void handleLogout()} disabled={loggingOut}>
+            <Button variant="hero" size="sm" className="justify-self-start" onClick={() => void handleLogout()} disabled={loggingOut}>
               <LogOut aria-hidden="true" className="size-4" /> {loggingOut ? 'Đang đăng xuất…' : 'Đăng xuất'}
             </Button>
           </div>
         </div>
-        <div className="rounded-card bg-surface md:rounded-none md:bg-transparent">
-          <PremiumBlock checkout={checkout} onBuy={openPayment} />
-        </div>
+        <PremiumBlock checkout={checkout} onBuy={openPayment} />
       </section>
 
       {!profile && (
         <Alert type="info">Nhập vài thông tin để MAIFit tính lượng calo phù hợp cho bạn mỗi ngày.</Alert>
       )}
-      {profile?.energy && <ProfileStats energy={profile.energy} goal={profile.goal} refreshKey={statsKey} />}
+      {profile?.energy && <EnergyStats energy={profile.energy} goal={profile.goal} />}
+
+      {/* Rows 2 and 3 share the same two columns, so their cards line up */}
+      <div className="grid gap-4 md:gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+        <TrainingTimeCard />
+        <AiQuotaCard refreshKey={statsKey} />
+      </div>
 
       <div className="grid items-start gap-4 md:gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
         <ProfileSection title="Thông tin cơ thể" subtitle="Lưu xong, calo mục tiêu được tính lại ngay.">
@@ -241,13 +247,7 @@ export default function ProfilePage() {
         {profile && <WeightSection onChanged={() => void reloadProfile()} />}
       </div>
 
-      <section className="flex flex-wrap items-center justify-between gap-4 rounded-card bg-surface p-5 md:p-6">
-        <div>
-          <h2 className="text-lg font-semibold">Giao diện</h2>
-          <p className="text-sm text-muted">Áp dụng trên thiết bị này</p>
-        </div>
-        <ThemeSwitcher />
-      </section>
+      <AppearanceCard />
 
       <PaymentDialog open={payOpen} onClose={closePayment} checkout={checkout} name={name} />
     </div>

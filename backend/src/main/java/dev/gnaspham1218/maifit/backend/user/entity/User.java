@@ -48,6 +48,10 @@ public class User {
     @Column(insertable = false, updatable = false)
     private Instant premiumUntil;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 16)
+    private AccentColor accentColor;
+
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
@@ -58,6 +62,7 @@ public class User {
         this.displayName = displayName;
         this.emailVerified = false;
         this.role = Role.USER;
+        this.accentColor = AccentColor.BLUE;
         this.createdAt = Instant.now();
     }
 
@@ -68,5 +73,9 @@ public class User {
 
     public void changePasswordHash(String newPasswordHash) {
         this.passwordHash = newPasswordHash;
+    }
+
+    public void changeAccentColor(AccentColor accentColor) {
+        this.accentColor = accentColor;
     }
 }

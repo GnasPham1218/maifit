@@ -10,4 +10,14 @@
   }
   var dark = pref === 'dark' || (pref === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+
+  // Accent color (src/utils/accent.ts): remembered on this device, the account confirms it after login
+  try {
+    var accent = localStorage.getItem('maifit-accent');
+    if (['TEAL', 'GREEN', 'ORANGE', 'PURPLE', 'PINK'].indexOf(accent) >= 0) {
+      document.documentElement.dataset.accent = accent.toLowerCase();
+    }
+  } catch (e) {
+    // Storage blocked: the default blue
+  }
 })();

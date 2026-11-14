@@ -8,6 +8,7 @@ import dev.gnaspham1218.maifit.backend.workout.dto.DailyWorkoutsResponse;
 import dev.gnaspham1218.maifit.backend.workout.dto.DayExerciseReps;
 import dev.gnaspham1218.maifit.backend.workout.dto.MonthlyWorkoutSummary;
 import dev.gnaspham1218.maifit.backend.workout.dto.WorkoutResponse;
+import dev.gnaspham1218.maifit.backend.workout.dto.WorkoutTimeSummary;
 import dev.gnaspham1218.maifit.backend.workout.entity.WorkoutExercise;
 import dev.gnaspham1218.maifit.backend.workout.entity.WorkoutSession;
 import dev.gnaspham1218.maifit.backend.workout.repository.WorkoutSessionRepository;
@@ -20,7 +21,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // Reps are counted in the browser, which the user controls (DevTools, a video in front of the
 // camera...). The server cannot see the movement, so it rejects what is impossible or abusive:
@@ -106,6 +109,20 @@ public class WorkoutService {
                         ((Number) row[2]).longValue()))
                 .toList();
         return new MonthlyWorkoutSummary(m.toString(), days);
+    }
+
+    // Training time today / this week / this month and the bars of the last days, weeks and months
+    @Transactional(readOnly = true)
+    public WorkoutTimeSummary timeSummary(Long userId) {
+        LocalDate today = LocalDate.now(AppTime.ZONE);
+        Instant from = WorkoutTimeSummarizer.firstDay(today).atStartOfDay(AppTime.ZONE).toInstant();
+        Instant to = today.plusDays(1).atStartOfDay(AppTime.ZONE).toInstant(); // exclusive
+        Map<LocalDate, WorkoutTimeSummarizer.Day> byDay = new HashMap<>();
+        for (Object[] row : repository.sumTimePerDay(userId, from, to, AppTime.ZONE.getId())) {
+            byDay.put(toLocalDate(row[0]),
+                    new WorkoutTimeSummarizer.Day(((Number) row[1]).longValue(), ((Number) row[2]).intValue()));
+        }
+        return WorkoutTimeSummarizer.summarize(byDay, today);
     }
 
     // Only the owner can delete: someone else's id answers 404 (not 403), so ids cannot be probed.

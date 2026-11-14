@@ -52,3 +52,24 @@ export interface Leaderboard {
   me: LeaderboardEntry | null; // null: no session in this window yet
   streakDays: number;
 }
+
+// GET /api/workouts/time-summary (Vietnam time, weeks start on Monday)
+export interface TimeTotal {
+  seconds: number;
+  sets: number;
+  days: number; // days with at least one set
+}
+
+export interface TimeBucket {
+  start: string; // yyyy-MM-dd: the day, the Monday of the week, or the 1st of the month
+  seconds: number;
+}
+
+export interface WorkoutTimeSummary {
+  today: TimeTotal;
+  thisWeek: TimeTotal;
+  thisMonth: TimeTotal;
+  days: TimeBucket[]; // last 7 days, oldest first
+  weeks: TimeBucket[]; // last 6 weeks
+  months: TimeBucket[]; // last 6 months
+}

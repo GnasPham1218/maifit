@@ -9,14 +9,17 @@ import { Alert } from '../Alert';
 const GOAL_SHORT: Record<Goal, string> = { LOSE: 'giảm cân', MAINTAIN: 'giữ cân', GAIN: 'tăng cân' };
 
 // Phones: the three numbers share one card. md+: each number is its own card (the wrapper is display: contents).
-const STAT = 'grid min-w-0 content-start gap-1 md:rounded-card md:bg-surface md:p-6';
+const STAT = 'grid min-w-0 content-start gap-1 md:rounded-card md:p-6';
 
-function Stat({ label, value, unit }: { label: string; value: number; unit: string }) {
+function Stat({ label, value, unit, accent = false }: { label: string; value: number; unit: string; accent?: boolean }) {
+  // The target is the number that matters most: an accent card from md
+  const tone = accent ? 'md:bg-accent md:text-on-accent' : 'md:bg-surface';
+  const soft = accent ? 'text-muted md:text-on-accent/80' : 'text-muted';
   return (
-    <div className={STAT}>
-      <p className="text-xs text-muted md:text-sm">{label}</p>
+    <div className={`${STAT} ${tone}`}>
+      <p className={`text-xs md:text-sm md:whitespace-nowrap ${soft}`}>{label}</p>
       <p className="font-display text-3xl leading-none font-bold tabular-nums md:text-5xl">{formatNumber(value)}</p>
-      <p className="text-xs text-muted md:text-sm">{unit}</p>
+      <p className={`text-xs md:text-sm ${soft}`}>{unit}</p>
     </div>
   );
 }
@@ -29,15 +32,36 @@ function QuotaBar({ label, quota }: { label: string; quota: AiQuota }) {
         <span>{label}</span>
         <span className="text-muted tabular-nums">còn {quota.remainingToday}/{quota.limit}</span>
       </p>
-      <div className="h-1.5 overflow-hidden rounded-full bg-line">
+      <div className="h-2 overflow-hidden rounded-full bg-surface/70">
         <div className="h-full rounded-full bg-accent" style={{ width: `${Math.round(share * 100)}%` }} />
       </div>
     </div>
   );
 }
 
-// BMR, TDEE, target, and today's AI calls left. refreshKey: bumped after paying (the limits grow).
-export function ProfileStats({ energy, goal, refreshKey }: { energy: EnergyTargets; goal: Goal; refreshKey: number }) {
+// BMR, TDEE and the target. Row of three cards from md, one card on phones.
+export function EnergyStats({ energy, goal }: { energy: EnergyTargets; goal: Goal }) {
+  const custom = energy.targetKcal !== energy.suggestedKcal;
+  return (
+    <div className="grid gap-4">
+      {energy.deficitSkippedForMinor && (
+        <Alert type="info">
+          Bạn dưới 18 tuổi nên MAIFit không trừ calo để giảm cân: cơ thể đang phát triển cần đủ năng lượng. Mục tiêu
+          được đặt bằng mức duy trì.
+        </Alert>
+      )}
+      <div className="grid grid-cols-3 gap-3 rounded-card bg-surface p-5 text-ink md:gap-4 md:bg-transparent md:p-0">
+        <Stat label="Năng lượng nghỉ (BMR)" value={energy.bmr} unit="kcal mỗi ngày" />
+        <Stat label="Tiêu hao cả ngày (TDEE)" value={energy.tdee} unit="kcal mỗi ngày" />
+        <Stat label="Mục tiêu ăn" value={energy.targetKcal} accent
+          unit={custom ? `kcal, tự đặt (gợi ý ${formatNumber(energy.suggestedKcal)})` : `kcal, ${GOAL_SHORT[goal]}`} />
+      </div>
+    </div>
+  );
+}
+
+// Today's AI calls left. refreshKey: bumped after paying (the limits grow).
+export function AiQuotaCard({ refreshKey }: { refreshKey: number }) {
   const [quotas, setQuotas] = useState<AiQuotas | null>(null);
 
   useEffect(() => {
@@ -53,35 +77,18 @@ export function ProfileStats({ energy, goal, refreshKey }: { energy: EnergyTarge
     };
   }, [refreshKey]);
 
-  const custom = energy.targetKcal !== energy.suggestedKcal;
   return (
-    <div className="grid gap-4">
-      {energy.deficitSkippedForMinor && (
-        <Alert type="info">
-          Bạn dưới 18 tuổi nên MAIFit không trừ calo để giảm cân: cơ thể đang phát triển cần đủ năng lượng. Mục tiêu
-          được đặt bằng mức duy trì.
-        </Alert>
+    <section className="grid min-w-0 content-between gap-4 rounded-card bg-soft p-5 text-ink md:p-6" aria-labelledby="quota-title">
+      <h2 id="quota-title" className="text-sm text-muted">Lượt AI hôm nay</h2>
+      {quotas ? (
+        <div className="grid gap-3.5">
+          <QuotaBar label="Ảnh món ăn" quota={quotas.foodVision} />
+          <QuotaBar label="MBotFit" quota={quotas.chat} />
+        </div>
+      ) : (
+        <p className="text-sm text-muted">Đang tải…</p>
       )}
-      <div className="grid gap-4 md:grid-cols-4">
-        <div className="grid grid-cols-3 gap-3 rounded-card bg-surface p-5 md:contents">
-          <Stat label="Năng lượng nghỉ (BMR)" value={energy.bmr} unit="kcal mỗi ngày" />
-          <Stat label="Tiêu hao cả ngày (TDEE)" value={energy.tdee} unit="kcal mỗi ngày" />
-          <Stat label="Mục tiêu ăn" value={energy.targetKcal}
-            unit={custom ? `kcal, tự đặt (gợi ý ${formatNumber(energy.suggestedKcal)})` : `kcal, ${GOAL_SHORT[goal]}`} />
-        </div>
-        <div className="grid min-w-0 content-start gap-3 rounded-card bg-surface p-5 md:p-6">
-          <p className="text-sm text-muted">Lượt AI hôm nay</p>
-          {quotas ? (
-            <>
-              <QuotaBar label="Ảnh món ăn" quota={quotas.foodVision} />
-              <QuotaBar label="MBotFit" quota={quotas.chat} />
-            </>
-          ) : (
-            <p className="text-sm text-muted">Đang tải…</p>
-          )}
-        </div>
-      </div>
-    </div>
+    </section>
   );
 }
 

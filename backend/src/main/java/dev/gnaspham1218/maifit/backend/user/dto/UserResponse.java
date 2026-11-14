@@ -6,6 +6,7 @@ public record UserResponse(
         String email,
         String username,
         String displayName,
-        String role
+        String role,
+        String accentColor // BLUE, TEAL... (AccentColor), the frontend picks the hex values
 ) {
 }

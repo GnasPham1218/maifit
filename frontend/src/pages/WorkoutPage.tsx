@@ -18,6 +18,7 @@ import { EXERCISE_IDS, EXERCISES, type ExerciseId } from '../exercises';
 import { savedPoseModel, savePoseModel, usePoseLandmarker, type PoseModel } from '../hooks/usePoseLandmarker';
 import { analyzeFrame, type FrameAnalysis } from '../utils/pose/analyzeFrame';
 import { createLandmarkFilter } from '../utils/pose/landmarkFilter';
+import { currentAccentColor } from '../utils/accent';
 import type { RepEvent, RepPhase } from '../utils/pose/repCounter';
 import {
   holdProgress,
@@ -34,7 +35,6 @@ const FPS_WARMUP_MS = 3000;
 
 const SKELETON_OK = '#e9eef8';
 const SKELETON_BAD = '#ff6b6b';
-const JOINT_DOT = '#2b6cf6'; // the accent, same in both themes (the camera is always dark)
 
 // What the screen shows; the full counter state lives in a ref and changes every frame
 interface View {
@@ -318,6 +318,7 @@ export default function WorkoutPage() {
 
     const landmarker = pose.landmarker;
     const drawer = new DrawingUtils(ctx);
+    const jointDot = currentAccentColor(); // the canvas cannot read CSS variables: the user's accent, read once
     const current = EXERCISES[exerciseId];
     let frameId = 0;
     let lastVideoTime = -1;
@@ -372,7 +373,7 @@ export default function WorkoutPage() {
       if (image) {
         const color = state.formMessage ? SKELETON_BAD : SKELETON_OK;
         drawer.drawConnectors(image, PoseLandmarker.POSE_CONNECTIONS, { color, lineWidth: 4 });
-        drawer.drawLandmarks(image, { color: state.formMessage ? SKELETON_BAD : JOINT_DOT, radius: 4 });
+        drawer.drawLandmarks(image, { color: state.formMessage ? SKELETON_BAD : jointDot, radius: 4 });
       }
       if (analysis.joint && state.angle != null) {
         const size = Math.round(canvas.height / 16);

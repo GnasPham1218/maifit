@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 import { authApi } from '../apis/authApi';
 import { setSessionExpiredHandler } from '../apis/client';
 import type { AuthStatus, User } from '../types/auth';
+import { applyAccent, isAccentColor } from '../utils/accent';
 import { AuthContext, type AuthContextValue } from './authContext';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -51,9 +52,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const updateUser = useCallback((next: User) => setUser(next), []);
+
+  // The account's accent color wins over the one remembered on this device (another device may have changed it)
+  const accent = user?.accentColor;
+  useEffect(() => {
+    if (isAccentColor(accent)) applyAccent(accent);
+  }, [accent]);
+
   const value = useMemo<AuthContextValue>(
-    () => ({ user, status, login, logout }),
-    [user, status, login, logout],
+    () => ({ user, status, login, logout, updateUser }),
+    [user, status, login, logout, updateUser],
   );
 
   return <AuthContext value={value}>{children}</AuthContext>;
