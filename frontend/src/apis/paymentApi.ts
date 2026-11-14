@@ -1,8 +1,11 @@
-import type { PaymentOrder, PremiumPlan } from '../types/payment';
+import type { PaymentOrder, PremiumPlan, Pricing } from '../types/payment';
 import { api } from './client';
 
 export const paymentApi = {
   plan: () => api<PremiumPlan>('/payments/plan'),
+
+  // Public: visitors see the real price and limits (no login, no token)
+  pricing: () => api<Pricing>('/payments/pricing', { auth: false }),
 
   // No body: the price comes from the server. Returns the order still waiting for payment if there is one.
   checkout: () => api<PaymentOrder>('/payments/checkout', { method: 'POST' }),

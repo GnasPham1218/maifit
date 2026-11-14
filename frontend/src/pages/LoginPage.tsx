@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AuthHeading } from '../components/AuthHeading';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { Alert } from '../components/Alert';
 import { FormField } from '../components/FormField';
@@ -31,7 +32,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <h2 className="mb-5 text-lg font-semibold">Đăng nhập</h2>
+      <AuthHeading title="Chào mừng trở lại">Đăng nhập để xem tiến độ hôm nay.</AuthHeading>
       {error && <Alert type="error">{error}</Alert>}
       <form
         className="grid gap-3.5"
@@ -58,14 +59,14 @@ export default function LoginPage() {
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
+        <Link to="/forgot-password" className="justify-self-end text-sm font-medium">Quên mật khẩu?</Link>
         <Button type="submit" disabled={submitting}>
           {submitting ? 'Đang đăng nhập…' : 'Đăng nhập'}
         </Button>
       </form>
-      <div className="mt-4.5 flex flex-wrap justify-between gap-2 text-sm">
-        <Link to="/forgot-password">Quên mật khẩu?</Link>
-        <Link to="/register">Tạo tài khoản</Link>
-      </div>
+      <p className="mt-5 text-center text-sm text-muted">
+        Chưa có tài khoản? <Link to="/register" className="font-medium">Tạo tài khoản</Link>
+      </p>
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AuthHeading } from '../components/AuthHeading';
 import { Link } from 'react-router';
 import { authApi } from '../apis/authApi';
 import { Alert } from '../components/Alert';
@@ -65,7 +66,7 @@ export default function RegisterPage() {
   if (registeredEmail) {
     return (
       <>
-        <h2 className="mb-5 text-lg font-semibold">Kiểm tra email của bạn</h2>
+        <AuthHeading title="Kiểm tra email" />
         <Alert type="success">
           Đã gửi liên kết xác thực tới <strong>{registeredEmail}</strong>. Liên kết có hiệu lực trong 24 giờ.
           Nếu không thấy, hãy kiểm tra cả mục Spam.
@@ -79,7 +80,7 @@ export default function RegisterPage() {
 
   return (
     <>
-      <h2 className="mb-5 text-lg font-semibold">Tạo tài khoản</h2>
+      <AuthHeading title="Tạo tài khoản">Miễn phí. Mỗi ngày có lượt nhận diện ảnh món ăn và hỏi MBotFit.</AuthHeading>
       {error && <Alert type="error">{error}</Alert>}
       <form
         className="grid gap-3.5"

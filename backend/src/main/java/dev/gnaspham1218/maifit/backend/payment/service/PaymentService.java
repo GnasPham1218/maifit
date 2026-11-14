@@ -7,6 +7,7 @@ import dev.gnaspham1218.maifit.backend.common.time.AppTime;
 import dev.gnaspham1218.maifit.backend.config.PaymentProperties;
 import dev.gnaspham1218.maifit.backend.payment.dto.PaymentOrderResponse;
 import dev.gnaspham1218.maifit.backend.payment.dto.PremiumPlanResponse;
+import dev.gnaspham1218.maifit.backend.payment.dto.PricingResponse;
 import dev.gnaspham1218.maifit.backend.payment.entity.PaymentOrder;
 import dev.gnaspham1218.maifit.backend.payment.entity.PaymentProviderType;
 import dev.gnaspham1218.maifit.backend.payment.entity.PaymentStatus;
@@ -79,6 +80,13 @@ public class PaymentService {
                 aiUsageService.freeChatLimit(),
                 aiUsageService.premiumChatLimit(),
                 pending);
+    }
+
+    /** Price and daily limits only, for visitors (public endpoint). */
+    public PricingResponse pricing() {
+        return new PricingResponse(props.premium().price(), props.premium().days(),
+                aiUsageService.freeFoodVisionLimit(), aiUsageService.premiumFoodVisionLimit(),
+                aiUsageService.freeChatLimit(), aiUsageService.premiumChatLimit());
     }
 
     /** Start (or continue) paying for Premium: returns an order with the bank-transfer QR. */

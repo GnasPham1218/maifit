@@ -27,3 +27,13 @@ export interface PremiumPlan {
   premiumDailyChats: number;
   pendingOrder: PaymentOrder | null; // an order still waiting for payment
 }
+
+// GET /api/payments/pricing (public): the landing page shows the server's real price and limits
+export interface Pricing {
+  price: number; // VND
+  days: number;
+  freeDailyScans: number;
+  premiumDailyScans: number;
+  freeDailyChats: number;
+  premiumDailyChats: number;
+}

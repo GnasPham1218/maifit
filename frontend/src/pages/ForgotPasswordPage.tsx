@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AuthHeading } from '../components/AuthHeading';
 import { Link } from 'react-router';
 import { authApi } from '../apis/authApi';
 import { Alert } from '../components/Alert';
@@ -34,7 +35,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <>
-      <h2 className="mb-5 text-lg font-semibold">Quên mật khẩu</h2>
+      <AuthHeading title="Quên mật khẩu">Nhập email đã đăng ký, MAIFit gửi liên kết đặt lại mật khẩu.</AuthHeading>
       {sent ? (
         // Same text whether the account exists or not (the backend does the same)
         <Alert type="success">
