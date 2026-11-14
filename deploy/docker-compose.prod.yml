@@ -61,11 +61,33 @@ services:
       PAYOS_CHECKSUM_KEY: ${PAYOS_CHECKSUM_KEY:?set PAYOS_CHECKSUM_KEY in deploy/.env}
       # Price of Premium in VND; ":-" for the same reason as GEMINI_MODEL
       PREMIUM_PRICE: ${PREMIUM_PRICE:-29999}
+      # RAG embeddings (bge-m3): call Ollama by its service name inside the Docker network
+      OLLAMA_BASE_URL: http://ollama:11434
     ports:
       # 127.0.0.1 : 8080         : 8080
       # chỉ VPS   : cổng trên VPS : cổng trong container
       # → Nginx trên VPS gọi http://127.0.0.1:8080, Internet KHÔNG gọi được
       - "127.0.0.1:8080:8080"
+
+  # ---------------- OLLAMA (embeddings for the chatbot) ----------------
+  ollama:
+    # Pinned version: "latest" could change the embedding runtime under us on any restart
+    image: ollama/ollama:0.40.14
+    restart: unless-stopped
+    # bge-m3 needs ~1.2 GB; the cap keeps Postgres and the backend safe if Ollama misbehaves
+    mem_limit: 1536m
+    environment:
+      OLLAMA_KEEP_ALIVE: "-1"         # keep the model in RAM: no multi-second reload on the first question
+      OLLAMA_MAX_LOADED_MODELS: "1"   # only bge-m3 ever runs here
+      OLLAMA_NUM_PARALLEL: "1"        # one request at a time: less RAM, fine for embedding short questions
+    volumes:
+      - ollama:/root/.ollama          # downloaded models survive container re-creation
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    # No "ports": only containers on this network (the backend) can reach 11434
 
   # ---------------- FRONTEND ----------------
   frontend:
@@ -78,9 +100,10 @@ services:
 
 volumes:
   pgdata:
+  ollama:
 
-# Docker Compose tự tạo một mạng nội bộ cho 3 service trên.
-# Trong mạng đó: "db", "backend", "frontend" là tên máy (DNS nội bộ).
+# Docker Compose tự tạo một mạng nội bộ cho 4 service trên.
+# Trong mạng đó: "db", "backend", "ollama", "frontend" là tên máy (DNS nội bộ).
 #
 # SAI — tuyệt đối không viết:  ports: - "8080:8080"
 #   → cổng mở ra MỌI địa chỉ, Internet gọi thẳng được, và đi vòng qua ufw.
