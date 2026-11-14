@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useMatches, useNavigate } from 'react-router';
 import { Avatar } from '../components/Avatar';
+import { Logo, LogoMark } from '../components/brand/Logo';
 import { useAuth } from '../hooks/useAuth';
 import { usePremium } from '../hooks/usePremium';
 import { isRouteHandle } from '../types/route';
@@ -111,19 +112,15 @@ export default function MainLayout() {
       <aside className={`fixed inset-y-0 left-0 z-20 hidden flex-col bg-side py-6 transition-[width] duration-200 md:flex ${size.aside}`}>
         {/* md: the logo goes home (the sidebar is icons only anyway). lg: the logo folds the sidebar. */}
         <Link to="/" className="mb-8 flex items-center justify-center lg:hidden">
-          <span aria-hidden="true" className="flex size-9 items-center justify-center rounded-xl bg-accent font-display text-lg font-bold text-on-accent">
-            M
-          </span>
+          <LogoMark className="size-9" />
           <span className="sr-only">MAIFit, trang chủ</span>
         </Link>
         <button type="button" onClick={toggleSidebar} aria-expanded={!collapsed}
           aria-label={collapsed ? 'Mở rộng thanh bên' : 'Thu gọn thanh bên'} title={collapsed ? 'Mở rộng' : 'Thu gọn'}
           className={`mb-8 hidden cursor-pointer items-center gap-2 rounded-2xl py-1 hover:bg-white/8 focus-visible:outline-2 focus-visible:outline-accent lg:flex ${
             collapsed ? 'justify-center' : 'px-3'}`}>
-          <span aria-hidden="true" className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-accent font-display text-lg font-bold text-on-accent">
-            M
-          </span>
-          {!collapsed && <span className="font-display text-2xl font-bold tracking-wide text-hero-ink">MAIFit</span>}
+          <LogoMark className="size-9" />
+          {!collapsed && <Logo tone="hero" className="text-2xl" />}
           {!collapsed && <PanelLeftClose aria-hidden="true" className="ml-auto size-5 text-hero-muted" />}
         </button>
 
