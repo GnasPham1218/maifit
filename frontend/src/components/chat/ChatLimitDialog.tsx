@@ -30,7 +30,7 @@ export function ChatLimitDialog({ open, onClose, plan }: Props) {
       )}
       footer={(
         <div className="grid gap-2">
-          <ButtonLink to="/premium" className="w-full"><Crown aria-hidden="true" className="size-4" /> Mở khóa với Premium</ButtonLink>
+          <ButtonLink to="/profile" state={{ openPay: true }} className="w-full"><Crown aria-hidden="true" className="size-4" /> Mở khóa với Premium</ButtonLink>
           <Button variant="ghost" className="w-full" onClick={onClose}>Để mai hỏi tiếp</Button>
         </div>
       )}>

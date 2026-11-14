@@ -33,6 +33,8 @@ export function WorkoutHistoryCard({ history }: { history: WorkoutHistoryState }
   const [deleting, setDeleting] = useState(false);
 
   const total = (sessions ?? []).reduce((sum, s) => sum + s.reps, 0);
+  // Time actually training: each set from "in position" to its last rep (the same duration the server checks)
+  const totalSec = (sessions ?? []).reduce((sum, s) => sum + s.durationSec, 0);
   const totals = EXERCISE_IDS.map((id) => ({
     id,
     reps: (sessions ?? []).filter((s) => s.exercise === id).reduce((sum, s) => sum + s.reps, 0),
@@ -70,7 +72,7 @@ export function WorkoutHistoryCard({ history }: { history: WorkoutHistoryState }
           <div className="mt-4 mb-1.5 flex flex-wrap items-end justify-between gap-3">
             <p className="flex items-baseline gap-2.5">
               <span className="font-display text-5xl leading-none font-semibold tabular-nums">{formatNumber(total)}</span>
-              <span className="text-muted">rep · {sessions.length} set</span>
+              <span className="text-muted">rep · {sessions.length} set · {formatDuration(totalSec)} tập</span>
             </p>
             <div className="flex flex-wrap gap-2">
               {totals.map((t) => (

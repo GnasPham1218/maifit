@@ -248,7 +248,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onManual }
           Lượt mới có lúc 0 giờ. Bạn vẫn thêm được món bằng cách tìm tên, hoặc mở Premium để chụp tiếp ngay.
         </p>
         <div className="grid w-full gap-3 sm:grid-cols-2">
-          <ButtonLink to="/premium"><Crown aria-hidden="true" className="size-4" /> Mở khóa với Premium</ButtonLink>
+          <ButtonLink to="/profile" state={{ openPay: true }}><Crown aria-hidden="true" className="size-4" /> Mở khóa với Premium</ButtonLink>
           <Button variant="secondary" onClick={onManual}>Thêm món bằng tay</Button>
         </div>
       </div>

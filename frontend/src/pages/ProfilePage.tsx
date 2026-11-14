@@ -1,18 +1,22 @@
-import { LogOut } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Crown, LogOut } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { bodyCheckinApi, profileApi } from '../apis/profileApi';
 import { Alert } from '../components/Alert';
-import { BodyCheckinSection } from '../components/BodyCheckinSection';
-import { EnergySummary } from '../components/EnergySummary';
+import { Avatar } from '../components/Avatar';
 import { FormField } from '../components/FormField';
+import { PaymentDialog } from '../components/premium/PaymentDialog';
+import { PremiumBlock } from '../components/premium/PremiumBlock';
+import { MacroDetails, ProfileStats } from '../components/profile/ProfileStats';
+import { ProfileSection } from '../components/profile/ProfileSection';
+import { WeightSection } from '../components/profile/WeightSection';
+import { usePremiumCheckout } from '../hooks/usePremiumCheckout';
 import { SelectField } from '../components/SelectField';
 import { ACTIVITY_OPTIONS, GOAL_OPTIONS, SEX_OPTIONS } from '../constants/profile';
 import { getErrorMessage, getFieldErrors } from '../constants/errorMessages';
 import type { ActivityLevel, Goal, Profile, Sex } from '../types/profile';
 import { optionalNumber } from '../utils/number';
 import { Button } from '../components/Button';
-import { Card } from '../components/Card';
 import { useAuth } from '../hooks/useAuth';
 import { ThemeSwitcher } from '../components/ThemeSwitcher';
 
@@ -48,32 +52,14 @@ function toForm(p: Profile): FormState {
   };
 }
 
-// The only logout button on phones (the bottom bar keeps its room for the pages)
-function LogoutCard() {
+export default function ProfilePage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [busy, setBusy] = useState(false);
-
-  async function handleLogout() {
-    setBusy(true);
-    await logout();
-    navigate('/login', { replace: true });
-  }
-
-  return (
-    <Card className="flex flex-wrap items-center justify-between gap-3">
-      <p className="min-w-0 text-sm text-ink-soft">
-        Đang đăng nhập: <span className="font-medium text-ink">{user?.displayName}</span>
-      </p>
-      <Button variant="secondary" onClick={() => void handleLogout()} disabled={busy}>
-        <LogOut aria-hidden="true" className="size-4" />
-        {busy ? 'Đang đăng xuất…' : 'Đăng xuất'}
-      </Button>
-    </Card>
-  );
-}
-
-export default function ProfilePage() {
+  const location = useLocation();
+  const checkout = usePremiumCheckout();
+  const [payOpen, setPayOpen] = useState(false);
+  const [statsKey, setStatsKey] = useState(0); // bumped after paying: the AI limits grow
+  const [loggingOut, setLoggingOut] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
@@ -146,62 +132,124 @@ export default function ProfilePage() {
     }
   }
 
+  async function handleLogout() {
+    setLoggingOut(true);
+    await logout();
+    navigate('/login', { replace: true });
+  }
+
+  // Mua / Gia hạn: open the dialog, then create the order (or get back the one still waiting)
+  function openPayment() {
+    setPayOpen(true);
+    if (!checkout.waiting) void checkout.checkout();
+  }
+
+  function closePayment() {
+    if (checkout.paid) setStatsKey((k) => k + 1);
+    checkout.clearFinished();
+    setPayOpen(false);
+  }
+
+  // "Mở khóa với Premium" elsewhere (chat, photo limits, old /premium links) lands here with openPay
+  const openPayRequested = (location.state as { openPay?: unknown } | null)?.openPay === true;
+  const handledOpenPay = useRef(false);
+  useEffect(() => {
+    if (!openPayRequested || handledOpenPay.current || !checkout.plan) return;
+    handledOpenPay.current = true;
+    navigate('.', { replace: true, state: null }); // a reload must not open it again
+    openPayment();
+  });
+
   if (loading) return <p className="text-sm text-muted">Đang tải…</p>;
 
+  const name = user?.displayName ?? '';
+  const premium = checkout.plan?.premium ?? false;
+
   return (
-    <section className="grid gap-4">
-      <h2 className="mb-2 text-xl font-semibold">Hồ sơ của bạn</h2>
+    <div className="grid gap-4 md:gap-5">
+      {/* Phones: two cards (who + Premium). md+: one card with Premium on the right. */}
+      <section className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] md:items-center md:gap-6 md:rounded-card md:bg-surface md:p-7">
+        <div className="flex flex-wrap items-center gap-4 rounded-card bg-surface p-5 md:gap-6 md:bg-transparent md:p-0">
+          <Avatar name={name} size={96} premium={premium} />
+          <div className="grid min-w-0 flex-1 gap-2">
+            <p className="truncate font-display text-3xl font-bold md:text-4xl">{name}</p>
+            <p className="flex flex-wrap items-center gap-2 text-sm text-muted">
+              {premium && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-gold px-2.5 py-0.5 text-xs font-bold text-[#1c1e24]">
+                  <Crown aria-hidden="true" className="size-3.5" /> Premium
+                </span>
+              )}
+              <span className="truncate">{user?.email}</span>
+            </p>
+            <Button variant="secondary" size="sm" className="justify-self-start" onClick={() => void handleLogout()} disabled={loggingOut}>
+              <LogOut aria-hidden="true" className="size-4" /> {loggingOut ? 'Đang đăng xuất…' : 'Đăng xuất'}
+            </Button>
+          </div>
+        </div>
+        <div className="rounded-card bg-surface md:rounded-none md:bg-transparent">
+          <PremiumBlock checkout={checkout} onBuy={openPayment} />
+        </div>
+      </section>
+
       {!profile && (
         <Alert type="info">Nhập vài thông tin để MAIFit tính lượng calo phù hợp cho bạn mỗi ngày.</Alert>
       )}
+      {profile?.energy && <ProfileStats energy={profile.energy} goal={profile.goal} refreshKey={statsKey} />}
 
-      {profile?.energy && <EnergySummary energy={profile.energy} />}
+      <div className="grid items-start gap-4 md:gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+        <ProfileSection title="Thông tin cơ thể" subtitle="Lưu xong, calo mục tiêu được tính lại ngay.">
+          {error && <Alert type="error">{error}</Alert>}
+          {saved && <Alert type="success">Đã lưu hồ sơ.</Alert>}
+          <form
+            className="grid gap-3.5 sm:grid-cols-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              void handleSubmit();
+            }}
+          >
+            <FormField label="Ngày sinh" name="birthDate" type="date" required
+              value={form.birthDate} error={fieldErrors.birthDate}
+              onChange={(e) => setForm({ ...form, birthDate: e.target.value })} />
+            <SelectField label="Giới tính" name="sex" options={SEX_OPTIONS} value={form.sex}
+              onChange={(e) => setForm({ ...form, sex: e.target.value as Sex })} />
+            <FormField label="Chiều cao (cm)" name="heightCm" type="number" step="0.1" min="100" max="250" required
+              value={form.heightCm} error={fieldErrors.heightCm}
+              onChange={(e) => setForm({ ...form, heightCm: e.target.value })} />
+            {needsWeight && (
+              <FormField label="Cân nặng hiện tại (kg)" name="weightKg" type="number" step="0.1" min="20" max="400"
+                required value={form.weightKg} error={fieldErrors.weightKg}
+                onChange={(e) => setForm({ ...form, weightKg: e.target.value })} />
+            )}
+            <SelectField label="Mức vận động" name="activityLevel" options={ACTIVITY_OPTIONS}
+              value={form.activityLevel}
+              onChange={(e) => setForm({ ...form, activityLevel: e.target.value as ActivityLevel })} />
+            <SelectField label="Mục tiêu" name="goal" options={GOAL_OPTIONS} value={form.goal}
+              onChange={(e) => setForm({ ...form, goal: e.target.value as Goal })} />
+            <FormField label="Calo tự đặt (không bắt buộc)" name="customTargetKcal" type="number"
+              min="1000" max="6000" value={form.customTargetKcal} error={fieldErrors.customTargetKcal}
+              onChange={(e) => setForm({ ...form, customTargetKcal: e.target.value })} />
+            <div className="flex items-end justify-end sm:col-span-2">
+              <Button type="submit" disabled={submitting}>
+                {submitting ? 'Đang lưu…' : 'Lưu thay đổi'}
+              </Button>
+            </div>
+          </form>
+          {profile?.energy && <MacroDetails energy={profile.energy} />}
+        </ProfileSection>
 
-      <Card title="Thông tin cơ bản">
-        {error && <Alert type="error">{error}</Alert>}
-        {saved && <Alert type="success">Đã lưu hồ sơ.</Alert>}
-        <form
-          className="grid grid-cols-[repeat(auto-fit,minmax(min(220px,100%),1fr))] items-end gap-3.5"
-          onSubmit={(e) => {
-            e.preventDefault();
-            void handleSubmit();
-          }}
-        >
-          <SelectField label="Giới tính" name="sex" options={SEX_OPTIONS} value={form.sex}
-            onChange={(e) => setForm({ ...form, sex: e.target.value as Sex })} />
-          <FormField label="Ngày sinh" name="birthDate" type="date" required
-            value={form.birthDate} error={fieldErrors.birthDate}
-            onChange={(e) => setForm({ ...form, birthDate: e.target.value })} />
-          <FormField label="Chiều cao (cm)" name="heightCm" type="number" step="0.1" min="100" max="250" required
-            value={form.heightCm} error={fieldErrors.heightCm}
-            onChange={(e) => setForm({ ...form, heightCm: e.target.value })} />
-          {needsWeight && (
-            <FormField label="Cân nặng hiện tại (kg)" name="weightKg" type="number" step="0.1" min="20" max="400"
-              required value={form.weightKg} error={fieldErrors.weightKg}
-              onChange={(e) => setForm({ ...form, weightKg: e.target.value })} />
-          )}
-          <SelectField label="Mức vận động" name="activityLevel" options={ACTIVITY_OPTIONS}
-            value={form.activityLevel}
-            onChange={(e) => setForm({ ...form, activityLevel: e.target.value as ActivityLevel })} />
-          <SelectField label="Mục tiêu" name="goal" options={GOAL_OPTIONS} value={form.goal}
-            onChange={(e) => setForm({ ...form, goal: e.target.value as Goal })} />
-          <FormField label="Calo tự đặt (không bắt buộc)" name="customTargetKcal" type="number"
-            min="1000" max="6000" value={form.customTargetKcal} error={fieldErrors.customTargetKcal}
-            onChange={(e) => setForm({ ...form, customTargetKcal: e.target.value })} />
-          <Button type="submit" disabled={submitting}>
-            {submitting ? 'Đang lưu…' : 'Lưu hồ sơ'}
-          </Button>
-        </form>
-      </Card>
+        {/* Check-ins need a profile first, so TDEE can be recomputed right away */}
+        {profile && <WeightSection onChanged={() => void reloadProfile()} />}
+      </div>
 
-      {/* Check-ins need a profile first, so TDEE can be recomputed right away */}
-      {profile && <BodyCheckinSection onChanged={() => void reloadProfile()} />}
-
-      <Card title="Giao diện">
+      <section className="flex flex-wrap items-center justify-between gap-4 rounded-card bg-surface p-5 md:p-6">
+        <div>
+          <h2 className="text-lg font-semibold">Giao diện</h2>
+          <p className="text-sm text-muted">Áp dụng trên thiết bị này</p>
+        </div>
         <ThemeSwitcher />
-      </Card>
+      </section>
 
-      <LogoutCard />
-    </section>
+      <PaymentDialog open={payOpen} onClose={closePayment} checkout={checkout} name={name} />
+    </div>
   );
 }

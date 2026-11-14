@@ -14,7 +14,6 @@ import LeaderboardPage from './pages/LeaderboardPage';
 import LoginPage from './pages/LoginPage';
 import MealsPage from './pages/MealsPage';
 import NotFoundPage from './pages/NotFoundPage';
-import PremiumPage from './pages/PremiumPage';
 import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
@@ -59,8 +58,8 @@ export const router = createBrowserRouter([
           // The chat page draws its own heading (bot picture, back button on phones)
           { path: '/chat', element: <ChatPage />, handle: { title: 'MBotFit', ownHeading: true } },
           { path: '/chat/:conversationId', element: <ChatPage />, handle: { title: 'MBotFit', ownHeading: true } },
-          // Not in the nav any more; reachable until step 9 moves the payment flow into the profile
-          { path: '/premium', element: <PremiumPage />, handle: { title: 'Premium' } },
+          // Premium is bought from the profile now; old links open the payment there
+          { path: '/premium', element: <Navigate to="/profile" replace state={{ openPay: true }} /> },
           { path: '/profile', element: <ProfilePage />, handle: { title: 'Hồ sơ' } },
         ],
       },
