@@ -58,7 +58,7 @@ export function SetLogCard({ attempts, reps, joint, downBelow, title, live }: Pr
 
           <DepthChart attempts={attempts} reps={reps} notCounted={notCounted} downBelow={downBelow} />
 
-          <ol className={`mt-3.5 ${showAll ? 'max-h-80 overflow-y-auto' : ''}`}>
+          <ol className={`mt-3.5 ${showAll ? 'scroll-soft scroll-fade -mr-2 max-h-80 overflow-y-auto pr-2' : ''}`}>
             {(showAll ? rows : rows.slice(0, ROWS)).map((a) => <Row key={a.seq} attempt={a} joint={joint} />)}
           </ol>
           {rows.length > ROWS && (

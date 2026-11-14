@@ -140,6 +140,48 @@ dialog.modal[open] {
   }
 }
 
+/* Scroll areas inside cards (chat list, messages, set log). One look for the whole app:
+   - scroll-soft: a thin rounded scrollbar, invisible at rest, shown on hover/focus.
+     Chrome/Firefox use the standard properties; Safari uses the ::-webkit-scrollbar ones.
+   - scroll-fade: the top/bottom edge fades out only where content is hidden. Driven by the scroll
+     position itself (scroll-driven animation), no JavaScript. Browsers without it: no fade, still works. */
+@utility scroll-soft {
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.2s;
+  &:hover,
+  &:focus-within {
+    scrollbar-color: color-mix(in oklab, var(--color-muted) 45%, transparent) transparent;
+  }
+  &::-webkit-scrollbar { width: 6px; height: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { border-radius: 999px; background: transparent; }
+  &:hover::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--color-muted) 45%, transparent); }
+  &::-webkit-scrollbar-thumb:active { background: var(--color-accent); }
+}
+
+@property --fade-top { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --fade-bottom { syntax: '<length>'; inherits: false; initial-value: 0px; }
+
+@keyframes scroll-fade {
+  0% { --fade-top: 0px; --fade-bottom: 28px; }
+  8% { --fade-top: 28px; --fade-bottom: 28px; }
+  92% { --fade-top: 28px; --fade-bottom: 28px; }
+  100% { --fade-top: 28px; --fade-bottom: 0px; }
+}
+
+@utility scroll-fade {
+  @supports (animation-timeline: scroll()) {
+    /* Nothing to scroll = inactive timeline = both fades stay 0 */
+    mask-image: linear-gradient(to bottom, transparent, #000 var(--fade-top), #000 calc(100% - var(--fade-bottom)), transparent);
+    animation: scroll-fade linear both;
+    animation-timeline: scroll(self);
+    /* Not motion: keep it when the reduced-motion rule below shortens every animation */
+    animation-duration: auto !important;
+  }
+}
+
 /* Every animation off for people who asked their system for less motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

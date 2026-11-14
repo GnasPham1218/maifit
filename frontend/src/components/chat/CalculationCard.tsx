@@ -164,7 +164,7 @@ export function CalculationCard({ calculation, onSave }: CalculationCardProps) {
                   <span className="font-medium">{item.food}</span>
                 )}
                 {item.preparation && item.options.length === 1 && (
-                  <span className="text-ink-soft"> · {PREPARATION_LABELS[item.preparation]}</span>
+                  <span className="text-muted"> · {PREPARATION_LABELS[item.preparation]}</span>
                 )}
               </span>
               <label className="flex items-center gap-1 text-xs text-muted">
@@ -198,7 +198,7 @@ export function CalculationCard({ calculation, onSave }: CalculationCardProps) {
             {/* Always shown when the food has several preparations: pick one, or change the one chosen */}
             {item.options.length > 1 && (
               <div className="flex flex-wrap items-center gap-1.5" role="radiogroup" aria-label={`Cách chế biến ${item.food}`}>
-                {item.preparation === null && <span className="text-xs text-ink-soft">Chế biến thế nào?</span>}
+                {item.preparation === null && <span className="text-xs text-muted">Chế biến thế nào?</span>}
                 {item.options.map((option) => {
                   const selected = option === item.preparation;
                   return (
@@ -207,7 +207,7 @@ export function CalculationCard({ calculation, onSave }: CalculationCardProps) {
                         if (!selected) setPreparation(index, option);
                       }}
                       className={`cursor-pointer rounded-full px-3 py-1 text-xs disabled:cursor-wait disabled:opacity-60 ${
-                        selected ? 'bg-ink text-white' : 'bg-sky hover:bg-sky-strong hover:text-white'}`}>
+                        selected ? 'bg-accent text-on-accent' : 'bg-soft text-link hover:bg-accent hover:text-on-accent'}`}>
                       {PREPARATION_LABELS[option]}
                     </button>
                   );
@@ -230,7 +230,7 @@ export function CalculationCard({ calculation, onSave }: CalculationCardProps) {
         </div>
       ) : calculation.items.length < MAX_ITEMS && (
         <button type="button" disabled={busy} onClick={() => void openChooser('new')}
-          className="mt-2 inline-flex cursor-pointer items-center gap-1 text-xs font-medium text-sky-strong disabled:opacity-60">
+          className="mt-2 inline-flex cursor-pointer items-center gap-1 text-xs font-medium text-link disabled:opacity-60">
           <Plus aria-hidden="true" className="size-3.5" /> Thêm món
         </button>
       )}
@@ -244,7 +244,7 @@ export function CalculationCard({ calculation, onSave }: CalculationCardProps) {
             <p className="text-xs text-muted">{macros(calculation.total)}</p>
           </>
         ) : (
-          <p className="text-xs text-ink-soft">Chọn cách chế biến để tính tổng.</p>
+          <p className="text-xs text-muted">Chọn cách chế biến để tính tổng.</p>
         )}
       </div>
 
@@ -257,14 +257,14 @@ export function CalculationCard({ calculation, onSave }: CalculationCardProps) {
             </p>
           ) : (
             <>
-              <label htmlFor={`log-meal-${calculation.items.length}`} className="text-xs text-ink-soft">Ghi vào</label>
+              <label htmlFor={`log-meal-${calculation.items.length}`} className="text-xs text-muted">Ghi vào</label>
               <select id={`log-meal-${calculation.items.length}`} value={mealType} disabled={busy}
                 onChange={(e) => setMealType(e.target.value as MealType)}
                 className="rounded-full border border-line bg-surface px-2 py-1 text-xs">
                 {MEAL_TYPES.map((type) => <option key={type} value={type}>{MEAL_TYPE_LABELS[type]}</option>)}
               </select>
               <button type="button" disabled={busy} onClick={() => void logMeal()}
-                className="cursor-pointer rounded-full bg-ink px-3 py-1 text-xs font-medium text-white enabled:hover:bg-ink-soft disabled:cursor-wait disabled:opacity-60">
+                className="cursor-pointer rounded-full bg-accent px-3 py-1 text-xs font-semibold text-on-accent enabled:hover:opacity-90 disabled:cursor-wait disabled:opacity-60">
                 Ghi vào nhật ký hôm nay
               </button>
             </>
@@ -306,7 +306,7 @@ function Chooser({ foods, idPrefix, initialQuery, onChange, canApply, onApply, o
       )}
       <div className="flex gap-2">
         <button type="button" disabled={!canApply} onClick={onApply}
-          className="inline-flex cursor-pointer items-center gap-1 rounded-full bg-ink px-3 py-1 text-xs font-medium text-white disabled:cursor-not-allowed disabled:opacity-40">
+          className="inline-flex cursor-pointer items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-on-accent disabled:cursor-not-allowed disabled:opacity-40">
           <Check aria-hidden="true" className="size-3.5" /> Dùng món này
         </button>
         <button type="button" onClick={onCancel}

@@ -43,7 +43,7 @@ export function Modal({ open, onClose, title, children, footer, size = 'md', clo
             <X aria-hidden="true" className="size-4" />
           </button>
         </header>
-        <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-5 md:px-7">{children}</div>
+        <div className="scroll-soft min-h-0 flex-1 overflow-y-auto px-5 pb-5 md:px-7">{children}</div>
         {footer && <footer className="border-t border-line px-5 py-4 md:px-7">{footer}</footer>}
       </div>
     </dialog>

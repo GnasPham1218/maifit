@@ -56,8 +56,9 @@ export const router = createBrowserRouter([
           },
           // Old address (bookmarks, shared links) -> the leaderboard tab
           { path: '/leaderboard', element: <Navigate to="/workout/leaderboard" replace /> },
-          { path: '/chat', element: <ChatPage />, handle: { title: 'MBotFit' } },
-          { path: '/chat/:conversationId', element: <ChatPage />, handle: { title: 'MBotFit' } },
+          // The chat page draws its own heading (bot picture, back button on phones)
+          { path: '/chat', element: <ChatPage />, handle: { title: 'MBotFit', ownHeading: true } },
+          { path: '/chat/:conversationId', element: <ChatPage />, handle: { title: 'MBotFit', ownHeading: true } },
           // Not in the nav any more; reachable until step 9 moves the payment flow into the profile
           { path: '/premium', element: <PremiumPage />, handle: { title: 'Premium' } },
           { path: '/profile', element: <ProfilePage />, handle: { title: 'Hồ sơ' } },

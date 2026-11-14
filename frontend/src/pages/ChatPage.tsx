@@ -1,15 +1,19 @@
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Clock } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import { chatApi } from '../apis/chatApi';
 import { ApiError } from '../apis/client';
 import { Alert } from '../components/Alert';
+import { Button } from '../components/Button';
 import { Card } from '../components/Card';
+import { BotAvatar } from '../components/chat/BotAvatar';
 import { ChatComposer } from '../components/chat/ChatComposer';
+import { ChatLimitDialog } from '../components/chat/ChatLimitDialog';
 import { ChatMessageBubble, PendingBubble } from '../components/chat/ChatMessageBubble';
 import { ConversationList } from '../components/chat/ConversationList';
 import { CHAT_DISCLAIMER, SUGGESTED_QUESTIONS, chatLimitText } from '../constants/chat';
 import { getErrorMessage } from '../constants/errorMessages';
+import { usePremiumPlan } from '../hooks/usePremiumPlan';
 import type { ChatCalcItemRequest, ChatConversation, ChatMessage, ChatQuota, ChatReply } from '../types/chat';
 
 type View = number | 'new'; // an existing conversation, or a new one
@@ -56,6 +60,8 @@ export default function ChatPage() {
   const [conversations, setConversations] = useState<ChatConversation[] | null>(null);
   const [quota, setQuota] = useState<ChatQuota | null>(null);
   const [listError, setListError] = useState<string | null>(null);
+  const plan = usePremiumPlan();
+  const [limitOpen, setLimitOpen] = useState(false); // free plan out of questions: what Premium gives
 
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [loadError, setLoadError] = useState<{ id: number; message: string } | null>(null);
@@ -167,14 +173,15 @@ export default function ChatPage() {
       chatApi.conversations().then(setConversations).catch(() => {}); // new title / order
     } catch (err) {
       // Nothing was saved: take the question back out of the thread and into the input
-      const message = err instanceof ApiError && err.code === 'AI_DAILY_LIMIT'
-        ? chatLimitText(quota?.limit ?? null)
-        : getErrorMessage(err);
-      if (err instanceof ApiError && err.code === 'AI_DAILY_LIMIT') {
-        setQuota((q) => (q ? { ...q, remainingToday: 0 } : q));
-      }
-      setSendError({ view: askedIn, message });
       if (viewRef.current === askedIn) setDraft((current) => current || question);
+      if (err instanceof ApiError && err.code === 'AI_DAILY_LIMIT') {
+        // The input turns into the "out of questions" bar; without a known quota, say it in an alert
+        if (quota) setQuota({ ...quota, remainingToday: 0 });
+        else setSendError({ view: askedIn, message: chatLimitText(null) });
+        if (plan && !plan.premium) setLimitOpen(true);
+      } else {
+        setSendError({ view: askedIn, message: getErrorMessage(err) });
+      }
     } finally {
       setSending(null);
     }
@@ -203,23 +210,39 @@ export default function ChatPage() {
     textareaRef.current?.focus();
   }
 
+  const outOfQuestions = quota !== null && quota.remainingToday <= 0;
+  const freePlan = plan !== null && !plan.premium;
+
   return (
-    <div className="grid gap-5 md:grid-cols-[18rem_minmax(0,1fr)]">
-      <Card className={`min-w-0 md:block ${onListOnlyOnMobile ? '' : 'hidden'}`}>
+    <>
+    {/* Phones in a conversation: a back button to the list. md+: the list is always beside it. */}
+    <header className="-mt-2 mb-5 flex items-center gap-3 md:mt-0 md:mb-6 md:gap-4">
+      {!onListOnlyOnMobile && (
+        <Link to="/chat" aria-label="Danh sách trò chuyện"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-line text-ink hover:bg-soft md:hidden">
+          <ArrowLeft aria-hidden="true" className="size-[18px]" />
+        </Link>
+      )}
+      <BotAvatar className="size-9 text-[13px] md:size-12 md:text-[17px]" />
+      <div className="min-w-0">
+        <h1 className="font-display text-3xl font-bold tracking-wide md:text-4xl">MBotFit</h1>
+        <p className="hidden text-sm text-muted md:block">Trợ lý dinh dưỡng và tập luyện của MAIFit, có trích nguồn</p>
+      </div>
+    </header>
+
+    {/* items-start: the list is as tall as its rows (up to the chat's height, then it scrolls) */}
+    <div className="grid items-start gap-5 md:grid-cols-[17rem_minmax(0,1fr)]">
+      <Card className={`min-w-0 flex-col p-4 md:flex md:max-h-[calc(100dvh-12rem)] ${onListOnlyOnMobile ? 'flex' : 'hidden'}`}>
         {listError && <Alert type="error">{listError}</Alert>}
         <ConversationList conversations={conversations} onDelete={handleDelete} />
       </Card>
 
       <Card className={`h-[calc(100dvh-16rem)] min-h-[26rem] min-w-0 flex-col md:flex md:h-[calc(100dvh-12rem)] ${
         onListOnlyOnMobile ? 'hidden' : 'flex'}`}>
-        <Link to="/chat" className="mb-3 inline-flex items-center gap-1 text-sm text-muted md:hidden">
-          <ArrowLeft aria-hidden="true" className="size-4" /> Danh sách
-        </Link>
-
-        <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+        <div className="scroll-soft scroll-fade -mr-2 min-h-0 flex-1 overflow-x-hidden overflow-y-auto pr-3">
           {view === null || messages === null ? (
             <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-              <p className="text-ink-soft">Không tìm thấy cuộc trò chuyện.</p>
+              <p className="text-muted">Không tìm thấy cuộc trò chuyện.</p>
               <Link to="/chat/new" className="font-medium">Bắt đầu cuộc trò chuyện mới</Link>
             </div>
           ) : loadErrorHere ? (
@@ -228,12 +251,16 @@ export default function ChatPage() {
             <p className="text-muted">Đang tải…</p>
           ) : messages.length === 0 && !pendingHere ? (
             <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-              <p className="text-lg font-semibold">Hỏi trợ lý MAIFit về dinh dưỡng và tập luyện</p>
+              <BotAvatar className="size-16 text-[22px]" />
+              <div className="grid gap-1">
+                <p className="text-lg font-semibold">Hỏi MBotFit về dinh dưỡng và tập luyện</p>
+                <p className="text-sm text-muted">Câu trả lời lấy từ tài liệu của MAIFit và ghi rõ nguồn.</p>
+              </div>
               <ul className="grid w-full max-w-md gap-2">
                 {SUGGESTED_QUESTIONS.map((q) => (
                   <li key={q}>
                     <button type="button" onClick={() => pickSuggestion(q)}
-                      className="w-full cursor-pointer rounded-2xl border border-line px-4 py-3 text-left hover:bg-bg">
+                      className="w-full cursor-pointer rounded-2xl border border-line px-4 py-3 text-left transition-colors hover:bg-soft">
                       {q}
                     </button>
                   </li>
@@ -241,7 +268,8 @@ export default function ChatPage() {
               </ul>
             </div>
           ) : (
-            <ol className="grid gap-3" aria-live="polite">
+            <ol className="grid grid-cols-[minmax(0,1fr)] gap-3.5" aria-live="polite">
+              {/* minmax(0, 1fr): a long answer or source wraps inside the column instead of widening it */}
               {messages.map((m) => (
                 <ChatMessageBubble key={m.id} message={m} onUpdateCalculation={handleUpdateCalculation} />
               ))}
@@ -260,15 +288,30 @@ export default function ChatPage() {
         {view !== null && messages !== null && (
           <div className="mt-4">
             {errorHere && <Alert type="error">{errorHere}</Alert>}
-            <ChatComposer value={draft} onChange={setDraft} onSend={() => void handleSend()}
-              sending={sending !== null} textareaRef={textareaRef} />
-            <p className="mt-2 text-xs text-muted">
-              {quota && <>Còn {quota.remainingToday}/{quota.limit} lượt hôm nay · </>}
+            {outOfQuestions ? (
+              // Out of questions: no input to type into for nothing; the server would refuse anyway
+              <div className="flex flex-wrap items-center gap-3 rounded-[22px] border border-line bg-bg p-4" role="status">
+                <Clock aria-hidden="true" className="size-5 shrink-0 text-muted" />
+                <p className="min-w-0 flex-[1_1_200px]">
+                  <span className="font-semibold">Hết lượt hỏi hôm nay</span>
+                  <span className="block text-sm text-muted">Bạn đã dùng {quota.limit}/{quota.limit} câu. Lượt mới có lúc 0 giờ.</span>
+                </p>
+                {freePlan && <Button size="sm" onClick={() => setLimitOpen(true)}>Xem Premium</Button>}
+              </div>
+            ) : (
+              <ChatComposer value={draft} onChange={setDraft} onSend={() => void handleSend()}
+                sending={sending !== null} textareaRef={textareaRef} />
+            )}
+            <p className="mt-2 px-1 text-xs text-muted">
+              {quota && !outOfQuestions && <>Còn {quota.remainingToday}/{quota.limit} lượt hôm nay. </>}
               {CHAT_DISCLAIMER}
             </p>
           </div>
         )}
       </Card>
     </div>
+
+    {plan && freePlan && <ChatLimitDialog open={limitOpen} onClose={() => setLimitOpen(false)} plan={plan} />}
+    </>
   );
 }
