@@ -56,6 +56,15 @@ public class Food {
     @Column(nullable = false)
     private String source;
 
+    // The source's own name for the item ("Rice, white, long-grain, regular, enriched, cooked"), V17.
+    // Null for estimated rows, which combine two items.
+    @Column(name = "source_description")
+    private String sourceDescription;
+
+    // True when the source has no exact match for this Vietnamese food and the closest item is used (V17)
+    @Column(name = "source_approximate", nullable = false)
+    private boolean sourceApproximate;
+
     // Non-null only on the "as sold" (fatty) row of a pair that has a matching lean-only row
     // (V11 — currently just Sườn thăn heo / Sườn lưng heo). Lets a meal item interpolate
     // nutrition between this row and leanVersion using meal_items.fat_percent.

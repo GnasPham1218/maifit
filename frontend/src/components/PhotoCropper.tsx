@@ -180,7 +180,7 @@ export function PhotoCropper({ src, remaining, onConfirm, onUseOriginal, onCance
           <p className="text-center text-sm text-white/60">
             Dùng 1 lượt nhận diện{remaining != null ? `, hôm nay còn ${remaining} lượt` : ''}.{' '}
             <button type="button" onClick={onUseOriginal} disabled={busy}
-              className="cursor-pointer font-medium text-white underline underline-offset-2 disabled:cursor-not-allowed">
+              className="cursor-pointer font-semibold text-white transition-colors hover:text-white/75 disabled:cursor-not-allowed">
               Gửi cả ảnh, không cắt
             </button>
           </p>

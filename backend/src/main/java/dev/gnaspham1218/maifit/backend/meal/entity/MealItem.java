@@ -70,6 +70,11 @@ public class MealItem {
         this.grams = grams;
     }
 
+    // Another preparation of the same food (checked by MealService). aiGrams stays: the portion did not change.
+    public void changeFood(Food food) {
+        this.food = food;
+    }
+
     public void changeFatPercent(Integer fatPercent) {
         this.fatPercent = fatPercent;
     }

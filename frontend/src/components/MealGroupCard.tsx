@@ -48,11 +48,10 @@ export function MealGroupCard({ mealType, meals, disabled, onEdit, onAddClick, o
                 <span className="min-w-0 flex-1">
                   <span className="flex min-w-0 items-center gap-2">
                     <span className="truncate font-medium">{item.foodName}</span>
-                    {item.preparation !== 'RAW' && (
-                      <span className="shrink-0 rounded-full bg-soft px-2 py-0.5 text-xs text-link">
-                        {PREPARATION_LABELS[item.preparation]}
-                      </span>
-                    )}
+                    {/* Always shown, "Sống" too: 100 g raw rice is about 3x the calories of 100 g cooked */}
+                    <span className="shrink-0 rounded-full bg-soft px-2 py-0.5 text-xs text-link">
+                      {PREPARATION_LABELS[item.preparation]}
+                    </span>
                   </span>
                   <span className="block text-sm text-muted">{formatNumber(item.grams)} g</span>
                 </span>

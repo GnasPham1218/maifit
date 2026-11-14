@@ -5,6 +5,7 @@ import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
 import WorkoutLayout from './layouts/WorkoutLayout';
 import ChatPage from './pages/ChatPage';
+import FoodDetailsPage from './pages/FoodDetailsPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomePage from './pages/HomePage';
 import LeaderboardPage from './pages/LeaderboardPage';
@@ -33,6 +34,7 @@ export const router = createBrowserRouter([
         children: [
           { path: '/', element: <HomePage />, handle: { title: 'Trang chủ', greeting: true } },
           { path: '/meals', element: <MealsPage />, handle: { title: 'Ăn uống' } },
+          { path: '/foods/:id', element: <FoodDetailsPage />, handle: { title: 'Chi tiết món', ownHeading: true } },
           {
             path: '/workout',
             element: <WorkoutLayout />,

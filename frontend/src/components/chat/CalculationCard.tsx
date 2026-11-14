@@ -10,7 +10,10 @@ import type { Food, MealType, Nutrition, Preparation } from '../../types/meal';
 import { eatenAtFor, todayVn } from '../../utils/date';
 import { formatNumber } from '../../utils/number';
 import { parseGrams } from '../../utils/nutrition';
+import { ButtonLink } from '../ButtonLink';
 import { FoodChooser } from '../FoodChooser';
+import { Modal } from '../Modal';
+import { FoodDetailsView } from '../food/FoodDetailsView';
 
 interface CalculationCardProps {
   calculation: ChatCalculation;
@@ -24,7 +27,7 @@ const ICON_BUTTON = 'flex size-8 shrink-0 cursor-pointer items-center justify-ce
 
 function macros(n: Nutrition): string {
   const part = (label: string, value: number | null) => (value === null ? null : `${label} ${formatNumber(value)} g`);
-  return [part('Đạm', n.proteinG), part('Tinh bột', n.carbG), part('Béo', n.fatG)].filter(Boolean).join(' · ');
+  return [part('Đạm', n.proteinG), part('Carb', n.carbG), part('Béo', n.fatG)].filter(Boolean).join(' · ');
 }
 
 const toRequest = (item: ChatCalcItem): ChatCalcItemRequest => ({
@@ -44,6 +47,7 @@ function mealTypeNow(): MealType {
 // backend from the foods table. The user can correct anything (the AI is a suggestion), then log it as a meal.
 export function CalculationCard({ calculation, onSave }: CalculationCardProps) {
   const [busy, setBusy] = useState(false);
+  const [viewing, setViewing] = useState<number | null>(null); // food whose details are open
   const [error, setError] = useState<string | null>(null);
   const [gramDrafts, setGramDrafts] = useState<Record<number, string>>({});
   const [choosing, setChoosing] = useState<number | 'new' | null>(null); // row whose food is being changed
@@ -150,7 +154,15 @@ export function CalculationCard({ calculation, onSave }: CalculationCardProps) {
           <li key={`${index}-${item.food}`} className="grid gap-1.5">
             <div className="flex items-center gap-2">
               <span className="min-w-0 flex-1">
-                <span className="font-medium">{item.food}</span>
+                {item.foodId != null ? (
+                  <button type="button" onClick={() => setViewing(item.foodId)}
+                    className="cursor-pointer text-left font-medium text-link transition-colors hover:text-ink"
+                    aria-label={`Xem chi tiết ${item.food}`}>
+                    {item.food}
+                  </button>
+                ) : (
+                  <span className="font-medium">{item.food}</span>
+                )}
                 {item.preparation && item.options.length === 1 && (
                   <span className="text-ink-soft"> · {PREPARATION_LABELS[item.preparation]}</span>
                 )}
@@ -241,7 +253,7 @@ export function CalculationCard({ calculation, onSave }: CalculationCardProps) {
           {logged ? (
             <p className="flex items-center gap-1.5 text-xs text-success" role="status">
               <Check aria-hidden="true" className="size-3.5" />
-              Đã ghi vào {MEAL_TYPE_LABELS[logged].toLowerCase()} hôm nay. <Link to="/meals" className="underline">Xem nhật ký</Link>
+              Đã ghi vào {MEAL_TYPE_LABELS[logged].toLowerCase()} hôm nay. <Link to="/meals" className="font-medium">Xem nhật ký</Link>
             </p>
           ) : (
             <>
@@ -261,6 +273,14 @@ export function CalculationCard({ calculation, onSave }: CalculationCardProps) {
       )}
 
       {error && <p className="mt-2 text-xs text-danger" role="alert">{error}</p>}
+
+      {/* A food's details over the chat: the card and its unsaved corrections stay as they are */}
+      <Modal open={viewing != null} onClose={() => setViewing(null)} title="Chi tiết món">
+        {viewing != null && (
+          <FoodDetailsView id={viewing} onSelect={setViewing}
+            actions={(v) => <ButtonLink to={`/foods/${v.id}`} variant="secondary">Mở trang riêng</ButtonLink>} />
+        )}
+      </Modal>
     </div>
   );
 }

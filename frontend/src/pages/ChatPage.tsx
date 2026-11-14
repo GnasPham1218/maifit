@@ -1,6 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router';
+import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import { chatApi } from '../apis/chatApi';
 import { ApiError } from '../apis/client';
 import { Alert } from '../components/Alert';
@@ -59,7 +59,12 @@ export default function ChatPage() {
 
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [loadError, setLoadError] = useState<{ id: number; message: string } | null>(null);
-  const [draft, setDraft] = useState('');
+  const location = useLocation();
+  // "Hỏi MBotFit về món này" on a food page: the question is written, the user decides to send it
+  const [draft, setDraft] = useState(() => {
+    const prefill = (location.state as { draft?: unknown } | null)?.draft;
+    return typeof prefill === 'string' ? prefill : '';
+  });
   const [sending, setSending] = useState<Sending | null>(null);
   const [slow, setSlow] = useState(false);
   const [sendError, setSendError] = useState<{ view: View; message: string } | null>(null);
@@ -215,7 +220,7 @@ export default function ChatPage() {
           {view === null || messages === null ? (
             <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
               <p className="text-ink-soft">Không tìm thấy cuộc trò chuyện.</p>
-              <Link to="/chat/new" className="font-medium underline">Bắt đầu cuộc trò chuyện mới</Link>
+              <Link to="/chat/new" className="font-medium">Bắt đầu cuộc trò chuyện mới</Link>
             </div>
           ) : loadErrorHere ? (
             <Alert type="error">{loadErrorHere}</Alert>

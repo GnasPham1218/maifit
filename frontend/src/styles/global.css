@@ -110,7 +110,11 @@
     @apply min-h-screen bg-ground font-sans text-ink antialiased;
   }
   a {
-    @apply text-link underline underline-offset-2;
+    /* No underline anywhere (design choice): links are blue, turn to ink on hover */
+    @apply text-link no-underline transition-colors;
+  }
+  a:hover {
+    @apply text-ink;
   }
 }
 

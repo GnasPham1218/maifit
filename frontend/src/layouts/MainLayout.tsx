@@ -129,7 +129,7 @@ export default function MainLayout() {
                 <p className="text-sm text-muted first-letter:uppercase">{todayLabel()}</p>
                 <h1 className="truncate font-display text-3xl font-bold tracking-wide md:text-4xl">Chào {name}</h1>
               </>
-            ) : (
+            ) : handle?.ownHeading ? null : (
               <h1 className="truncate font-display text-3xl font-bold tracking-wide md:text-4xl">{handle?.title}</h1>
             )}
           </div>

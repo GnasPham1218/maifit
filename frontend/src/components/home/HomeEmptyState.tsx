@@ -39,7 +39,7 @@ export function HomeEmptyState({ hasProfile }: { hasProfile: boolean }) {
         <ul className="mt-2">
           {STARTERS.map(({ to, icon: Icon, title, hint }) => (
             <li key={to} className="border-t border-line first:border-t-0">
-              <Link to={to} className="flex items-center gap-4 py-3.5 text-ink no-underline hover:text-ink">
+              <Link to={to} className="flex items-center gap-4 py-3.5 text-ink hover:text-ink">
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-soft text-link">
                   <Icon aria-hidden="true" className="size-5" />
                 </span>

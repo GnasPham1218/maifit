@@ -11,6 +11,7 @@ interface Props {
   idPrefix: string; // keeps input ids unique when several choosers are on the page
   autoFocus?: boolean;
   initialQuery?: string; // e.g. what the AI saw ("bún mọc"), so close foods show without typing
+  initialFood?: Food | null; // start with this food already chosen (back from its detail view, "Thêm vào bữa ăn")
   onChange: (food: Food | null) => void; // null = no complete choice yet
 }
 
@@ -19,13 +20,13 @@ const SUGGEST_DELAY_MS = 300; // wait until the user stops typing before asking 
 
 const CHIP = 'cursor-pointer rounded-full border px-3 py-1.5 text-sm transition-colors';
 const chipClass = (selected: boolean) =>
-  `${CHIP} ${selected ? 'border-ink bg-ink text-white' : 'border-line bg-surface hover:bg-bg'}`;
+  `${CHIP} ${selected ? 'border-accent bg-accent text-on-accent' : 'border-line bg-surface hover:bg-soft'}`;
 
 // Search a food by name (accent-insensitive), then "weighed raw or cooked?" when it has several states
-export function FoodChooser({ foods, idPrefix, autoFocus, initialQuery = '', onChange }: Props) {
-  const [query, setQuery] = useState(initialQuery);
-  const [name, setName] = useState<string | null>(null);
-  const [foodId, setFoodId] = useState<number | null>(null);
+export function FoodChooser({ foods, idPrefix, autoFocus, initialQuery = '', initialFood = null, onChange }: Props) {
+  const [query, setQuery] = useState(initialFood?.name ?? initialQuery);
+  const [name, setName] = useState<string | null>(initialFood?.name ?? null);
+  const [foodId, setFoodId] = useState<number | null>(initialFood?.id ?? null);
 
   // One entry per food name; its rows are the preparation states, RAW first
   const byName = useMemo(() => {

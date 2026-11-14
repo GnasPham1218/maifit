@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { foodApi } from '../apis/foodApi';
 import { mealApi } from '../apis/mealApi';
 import { profileApi } from '../apis/profileApi';
@@ -11,18 +12,17 @@ import { DaySwitch } from '../components/meals/DaySwitch';
 import { PhotoInfoCard } from '../components/meals/PhotoInfoCard';
 import { Modal } from '../components/Modal';
 import { MonthCalendar } from '../components/MonthCalendar';
-import { MonthlyKcalChart } from '../components/MonthlyKcalChart';
 import { NutritionHero } from '../components/NutritionHero';
 import { PhotoMealReview } from '../components/PhotoMealReview';
 import { getErrorMessage } from '../constants/errorMessages';
 import { MEAL_TYPE_LABELS, MEAL_TYPES } from '../constants/meal';
 import type { DailyMeals, Food, MealItemRequest, MealType, MonthlySummary } from '../types/meal';
 import type { EnergyTargets } from '../types/profile';
-import { eatenAtFor, monthOf, todayVn } from '../utils/date';
+import { eatenAtFor, mealTypeAt, monthOf, todayVn } from '../utils/date';
 
 // The one dialog open at a time. Edit keeps ids, not objects: after a reload the fresh item is looked up again.
 type Dialog =
-  | { kind: 'pick'; mealType: MealType }
+  | { kind: 'pick'; mealType: MealType; foodId?: number } // foodId: opened from a food page
   | { kind: 'photo'; mealType: MealType }
   | { kind: 'edit'; mealType: MealType; mealId: number; itemId: number };
 
@@ -34,7 +34,18 @@ export default function MealsPage() {
   const [energy, setEnergy] = useState<EnergyTargets | null>(null);
   const [foods, setFoods] = useState<Food[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [dialog, setDialog] = useState<Dialog | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  // From a food page ("Thêm vào bữa ăn"): open the add dialog with that food, for the meal of the hour
+  const [dialog, setDialog] = useState<Dialog | null>(() => {
+    const foodId = (location.state as { addFoodId?: unknown } | null)?.addFoodId;
+    return typeof foodId === 'number' ? { kind: 'pick', mealType: mealTypeAt(), foodId } : null;
+  });
+
+  // Used once: clear it so a reload or Back does not open the dialog again
+  useEffect(() => {
+    if (location.state != null) navigate(location.pathname, { replace: true, state: null });
+  }, [location.state, location.pathname, navigate]);
 
   // Reference data, loaded once: the calorie target and the food list (cached for the whole session)
   useEffect(() => {
@@ -136,8 +147,8 @@ export default function MealsPage() {
     setDialog(null);
   }
 
-  async function saveGrams(mealId: number, itemId: number, grams: number, fatPercent: number | null) {
-    await mealApi.updateItemGrams(mealId, itemId, grams, fatPercent);
+  async function saveItem(mealId: number, itemId: number, grams: number, fatPercent: number | null, foodId: number) {
+    await mealApi.updateItem(mealId, itemId, { grams, fatPercent, foodId });
     await reload();
     setDialog(null);
   }
@@ -152,8 +163,6 @@ export default function MealsPage() {
   const editing = dialog?.kind === 'edit'
     ? day?.meals.find((m) => m.id === dialog.mealId)?.items.find((i) => i.id === dialog.itemId)
     : undefined;
-  const editingFood = editing ? foodsById.get(editing.foodId) : undefined;
-  const editingLean = editingFood?.leanVersionId != null ? foodsById.get(editingFood.leanVersionId) : undefined;
 
   const dialogTitle = !dialog
     ? ''
@@ -177,8 +186,10 @@ export default function MealsPage() {
         <div className={`grid gap-5 ${loading ? 'opacity-60' : ''}`} aria-busy={loading}>
           <NutritionHero title="Tổng trong ngày" eaten={day.totals} targetKcal={targetKcal} targets={targets} />
 
-          <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-            <div className="grid gap-4 sm:grid-cols-2">
+          {/* Both columns end at the same line: the meal cards share the height of the row equally
+              (auto-rows-fr) and the calendar card grows to fill its column, so no empty gap is left under either */}
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+            <div className="grid auto-rows-fr gap-4 sm:grid-cols-2">
               {MEAL_TYPES.map((type) => (
                 <MealGroupCard key={type} mealType={type} disabled={loading}
                   meals={day.meals.filter((m) => m.mealType === type)}
@@ -188,8 +199,8 @@ export default function MealsPage() {
               ))}
             </div>
 
-            <div className="grid gap-5">
-              <Card className="min-w-0">
+            <div className="flex flex-col gap-5">
+              <Card className="min-w-0 flex-1">
                 <MonthCalendar month={viewMonth} valueByDate={kcalByDate} unit="kcal" emptyLabel="chưa ghi bữa ăn"
                   target={targetKcal} footnote={targetKcal != null ? 'Thanh dưới mỗi ngày: calo so với mục tiêu.' : undefined}
                   selectedDate={date} today={today} onSelectDate={selectDate} onChangeMonth={setViewMonth} />
@@ -198,14 +209,6 @@ export default function MealsPage() {
             </div>
           </div>
 
-          <Card title="Calo theo ngày" className="min-w-0">
-            {summary?.month === viewMonth ? (
-              <MonthlyKcalChart month={viewMonth} kcalByDate={kcalByDate} targetKcal={targetKcal}
-                selectedDate={date} today={today} onSelectDate={selectDate} />
-            ) : (
-              <p className="text-sm text-muted">Đang tải…</p>
-            )}
-          </Card>
         </div>
       )}
 
@@ -213,19 +216,23 @@ export default function MealsPage() {
           The photo and picker dialogs hold unsaved work, so a tap on the backdrop does not close them. */}
       <Modal open={dialog != null} onClose={() => setDialog(null)} title={dialogTitle}
         size={dialog?.kind === 'photo' ? 'lg' : 'md'} closeOnBackdrop={dialog?.kind === 'edit'}>
-        {dialog?.kind === 'pick' && (
-          <FoodPicker key={`pick-${dialog.mealType}`} mealType={dialog.mealType} foods={foods}
+        {/* With a food from its page, wait for the food list: the picker reads its initial food once */}
+        {dialog?.kind === 'pick' && (dialog.foodId != null && foods == null ? (
+          <p className="text-muted">Đang tải…</p>
+        ) : (
+          <FoodPicker key="pick" mealType={dialog.mealType} foods={foods}
+            initialFood={dialog.foodId != null ? foodsById.get(dialog.foodId) : null}
+            onMealTypeChange={(mealType) => setDialog({ ...dialog, mealType })}
             onAdd={(foodId, grams, fatPercent) => addFood(dialog.mealType, foodId, grams, fatPercent)} />
-        )}
+        ))}
         {dialog?.kind === 'photo' && (
           <PhotoMealReview key={`photo-${dialog.mealType}`} mealType={dialog.mealType} foods={foods} foodsById={foodsById}
             onSave={(items) => addRecognized(dialog.mealType, items)}
             onManual={() => setDialog({ kind: 'pick', mealType: dialog.mealType })} />
         )}
         {dialog?.kind === 'edit' && editing && (
-          <MealItemEditor key={`edit-${editing.id}`} item={editing} mealType={dialog.mealType}
-            food={editingFood} leanFood={editingLean}
-            onSave={(grams, fatPercent) => saveGrams(dialog.mealId, dialog.itemId, grams, fatPercent)}
+          <MealItemEditor key={`edit-${editing.id}`} item={editing} mealType={dialog.mealType} foods={foods}
+            onSave={(grams, fatPercent, foodId) => saveItem(dialog.mealId, dialog.itemId, grams, fatPercent, foodId)}
             onRemove={() => removeItem(dialog.mealId, dialog.itemId)} />
         )}
       </Modal>

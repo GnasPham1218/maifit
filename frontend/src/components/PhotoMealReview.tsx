@@ -430,7 +430,7 @@ export function PhotoMealReview({ mealType, foods, foodsById, onSave, onManual }
             chooser(addMissed, 'photo-add', newQuery)
           ) : (
             <button type="button" onClick={() => { setNewQuery(''); setChoosing('new'); }} disabled={!foods}
-              className="inline-flex cursor-pointer items-center gap-1.5 justify-self-start rounded-full py-1 font-semibold text-link hover:underline disabled:cursor-not-allowed">
+              className="inline-flex cursor-pointer items-center gap-1.5 justify-self-start rounded-full py-1 font-semibold text-link transition-colors hover:text-ink disabled:cursor-not-allowed">
               <Plus aria-hidden="true" className="size-4" /> Thêm món AI bỏ sót
             </button>
           )}

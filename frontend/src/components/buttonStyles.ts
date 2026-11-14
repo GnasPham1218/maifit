@@ -6,7 +6,7 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
 
 // active:scale gives a small "press" feedback; the global reduced-motion rule turns it off.
 const BASE =
-  'inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border font-semibold no-underline ' +
+  'inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border font-semibold ' +
   'transition-[background-color,border-color,transform] duration-150 active:scale-[0.97] ' +
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ' +
   'disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100';

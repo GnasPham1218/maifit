@@ -13,6 +13,15 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     /** Every preparation of one food, in table order (the chatbot calculates portions from these). */
     List<Food> findByNameOrderById(String name);
 
+    /** Other names of a food, from the aliases of all its preparations (food detail page). */
+    @Query(value = """
+            SELECT DISTINCT a.alias
+            FROM food_aliases a JOIN foods f ON f.id = a.food_id
+            WHERE f.name = :name
+            ORDER BY a.alias
+            """, nativeQuery = true)
+    List<String> findAliasesByFoodName(String name);
+
     /**
      * Fuzzy, accent-insensitive search in food names AND aliases (pg_trgm + unaccent, see V6).
      * Each row: [0] food id (Long), [1] similarity 0..1 (Float), [2] locks_preparation (Boolean).
