@@ -20,6 +20,9 @@ class MedicalQuestionGuardTest {
             "Đang mang thai có nên ăn nhiều đạm?",
             "Uống thuốc giảm cân có hiệu quả không?",
             "Bệnh gout nên ăn gì?",
+            "Tôi đang hoá trị thì nên ăn gì để giữ cân?",   // old accent style, reached the model (chat-eval)
+            "Đang hóa trị có nên tập tạ không?",
+            "dang xa tri nen an gi",
             "I am diabetic, how much protein?"})
     void healthQuestionsAreRefused(String question) {
         assertThat(guard.isMedical(question)).isTrue();
