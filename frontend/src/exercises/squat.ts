@@ -8,6 +8,7 @@ const STANDING_MAX_TILT = 70;
 export const SQUAT: Exercise = {
   id: 'SQUAT',
   label: 'Squat',
+  jointLabel: 'gối',
   sides: [
     [23, 25, 27], // hip - knee - ankle
     [24, 26, 28],

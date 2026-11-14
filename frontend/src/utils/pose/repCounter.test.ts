@@ -141,6 +141,38 @@ describe('stepRepCounter: feedback', () => {
     expect(state.event?.kind).toBe('TOO_FAST');
   });
 
+  it('reports a rise that stops short of the top, then counts the next full rep', () => {
+    // down to 85, up only to 132 (top is 160), down again to 88, then all the way up
+    const state = run([170, 120, 90, 85, 110, 132, 110, 95, 88, 120, 150, 170]);
+    expect(state.reps).toBe(1);
+    expect(state.event?.kind).toBe('COUNTED');
+    expect(state.event?.seq).toBe(2);
+  });
+
+  it('says how high the short rise went, and how low the attempt went', () => {
+    const state = run([170, 120, 90, 85, 110, 132, 110, 95]);
+    expect(state.reps).toBe(0);
+    expect(state.event).toEqual({ kind: 'NOT_UP', seq: 1, low: 85, high: 132 });
+  });
+
+  it('starts the next attempt from the new bottom (its own lowest angle)', () => {
+    const state = run([170, 90, 85, 132, 95, 92, 170]);
+    expect(state.event).toEqual({ kind: 'COUNTED', seq: 2, low: 92 });
+  });
+
+  it('still counts a slow rise with a pause halfway (no second dip)', () => {
+    const state = run([170, 120, 90, 85, 110, 130, 130, 130, 128, 131, 150, 170]);
+    expect(state.reps).toBe(1);
+    expect(state.event?.seq).toBe(1);
+  });
+
+  it('does not call shake at the bottom a short rise', () => {
+    // never more than shallowMargin above downBelow (100 + 20)
+    const state = run([170, 95, 85, 115, 90, 112, 88, 170]);
+    expect(state.reps).toBe(1);
+    expect(state.event?.seq).toBe(1);
+  });
+
   it('numbers events so the screen can replay the same feedback twice', () => {
     const state = run([...fullRep, ...fullRep]);
     expect(state.event?.seq).toBe(2);

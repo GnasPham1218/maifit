@@ -1,12 +1,18 @@
 import { DrawingUtils, PoseLandmarker } from '@mediapipe/tasks-vision';
-import { Camera, CameraOff, Check, Gauge, Maximize2, Minimize2, RotateCcw, Save } from 'lucide-react';
-import { Link, useBlocker } from 'react-router';
+import { Camera, CameraOff, RotateCcw, Save } from 'lucide-react';
+import { useBlocker } from 'react-router';
 import { workoutApi } from '../apis/workoutApi';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Alert } from '../components/Alert';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
-import { WorkoutHistory } from '../components/WorkoutHistory';
+import { Chip } from '../components/Chip';
+import { WorkoutCalendarCard, WorkoutHistoryCard } from '../components/WorkoutHistory';
+import { CameraControls, CameraTopBar, DepthMeter, RepBlock, RepToast, SetupPanel, WarningBanner } from '../components/workout/CameraOverlay';
+import { SetLog } from '../components/workout/SetLog';
+import { SetLogCard } from '../components/workout/SetLogCard';
+import { useWorkoutHistory } from '../hooks/useWorkoutHistory';
+import type { Attempt } from '../utils/workoutDisplay';
 import { getErrorMessage } from '../constants/errorMessages';
 import { EXERCISE_IDS, EXERCISES, type ExerciseId } from '../exercises';
 import { savedPoseModel, savePoseModel, usePoseLandmarker, type PoseModel } from '../hooks/usePoseLandmarker';
@@ -21,19 +27,14 @@ import {
   type SessionState,
 } from '../utils/pose/workoutSession';
 
-const PHASE_LABELS: Record<RepPhase, string> = {
-  WAITING: 'Vào tư thế bắt đầu',
-  UP: 'Lên',
-  DOWN: 'Xuống',
-};
-
 // Under this many frames per second after the first seconds, the full model is too slow for the
 // phone: a fast rep then has only 1-2 frames near the bottom. Switch to lite.
 const MIN_FPS = 12;
 const FPS_WARMUP_MS = 3000;
 
-const SKELETON_OK = '#ffffff';
-const SKELETON_BAD = '#f87171';
+const SKELETON_OK = '#e9eef8';
+const SKELETON_BAD = '#ff6b6b';
+const JOINT_DOT = '#2b6cf6'; // the accent, same in both themes (the camera is always dark)
 
 // What the screen shows; the full counter state lives in a ref and changes every frame
 interface View {
@@ -48,6 +49,7 @@ interface View {
   formUnknown: boolean; // the form lines are hidden (e.g. legs behind the shoulders)
   event: RepEvent | null;
   debug: string | null; // raw measurements, shown with "Hiện số đo" to tune the thresholds
+  startedAt: number | null; // wall clock ms when the set started counting (for the timer)
 }
 
 const INITIAL_VIEW: View = {
@@ -62,11 +64,13 @@ const INITIAL_VIEW: View = {
   formUnknown: false,
   event: null,
   debug: null,
+  startedAt: null,
 };
 
 const sameView = (a: View, b: View) =>
   a.stage === b.stage && a.setupMessage === b.setupMessage && a.hold === b.hold && a.reps === b.reps && a.phase === b.phase && a.angle === b.angle && a.seen === b.seen &&
-  a.formMessage === b.formMessage && a.formUnknown === b.formUnknown && a.event?.seq === b.event?.seq && a.debug === b.debug;
+  a.formMessage === b.formMessage && a.formUnknown === b.formUnknown && a.event?.seq === b.event?.seq && a.debug === b.debug &&
+  a.startedAt === b.startedAt;
 
 const round = (n: number | null | undefined) => (n == null ? '—' : String(Math.round(n)));
 
@@ -84,28 +88,28 @@ function debugLine(analysis: FrameAnalysis, session: SessionState, fps: number, 
   ].join(' · ');
 }
 
-// One line per attempt in the set log: what the lowest angle was and whether it counted
-interface Attempt {
-  seq: number;
-  rep: number | null; // rep number when it counted
-  low: number | null;
-  ok: boolean;
-  reason: string | null;
+// Why an attempt did not count: a full sentence for the camera, a short tag for the set log
+function whyNot(event: RepEvent, downBelow: number, upAbove: number): { reason: string; tag: string } | null {
+  switch (event.kind) {
+    case 'TOO_SHALLOW': return { reason: `chưa đủ sâu (cần dưới ${downBelow}°)`, tag: 'Chưa đủ sâu' };
+    case 'NOT_UP': return { reason: `chưa lên hết (cần trên ${upAbove}°)`, tag: 'Chưa lên hết' };
+    case 'TOO_FAST': return { reason: 'quá nhanh', tag: 'Quá nhanh' };
+    case 'BAD_FORM': return { reason: event.message ?? 'sai tư thế', tag: 'Sai tư thế' };
+    case 'COUNTED': return null;
+  }
 }
 
-function toAttempt(event: RepEvent, reps: number, downBelow: number): Attempt {
-  const reason =
-    event.kind === 'TOO_SHALLOW' ? `chưa đủ sâu (cần dưới ${downBelow}°)`
-      : event.kind === 'TOO_FAST' ? 'quá nhanh'
-        : event.kind === 'BAD_FORM' ? (event.message ?? 'sai tư thế')
-          : null;
-  return { seq: event.seq, rep: event.kind === 'COUNTED' ? reps : null, low: event.low, ok: event.kind === 'COUNTED', reason };
-}
-
-function attemptText(a: Attempt): string {
-  const head = a.ok ? `Rep ${a.rep}` : `Lần ${a.seq}`;
-  const low = a.low != null ? ` · xuống ${a.low}°` : '';
-  return a.ok ? `${head}${low} · đạt` : `${head}${low} · chưa đạt: ${a.reason}`;
+function toAttempt(event: RepEvent, reps: number, downBelow: number, upAbove: number): Attempt {
+  const why = whyNot(event, downBelow, upAbove);
+  return {
+    seq: event.seq,
+    rep: why ? null : reps,
+    low: event.low,
+    ok: !why,
+    reason: why?.reason ?? null,
+    tag: why?.tag ?? null,
+    high: event.high ?? null,
+  };
 }
 
 interface SetTiming {
@@ -143,7 +147,7 @@ export default function WorkoutPage() {
   const [view, setView] = useState<View>(INITIAL_VIEW);
   const [error, setError] = useState<string | null>(null);
   const [showDebug, setShowDebug] = useState(false);
-  const [attempts, setAttempts] = useState<Attempt[]>([]); // the set log, newest last
+  const [attempts, setAttempts] = useState<Attempt[]>([]); // the set log, newest last, every attempt of the set
 
   const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -156,8 +160,11 @@ export default function WorkoutPage() {
   const [saveNote, setSaveNote] = useState<{ ok: boolean; text: string } | null>(null);
   const [confirmStop, setConfirmStop] = useState(false); // "set not saved" dialog
   const [historyKey, setHistoryKey] = useState(0); // bumped after a save: the history below reloads
+  const [setNo, setSetNo] = useState(1); // sets saved on this page + 1, shown on the camera
+  const [now, setNow] = useState(() => Date.now()); // ticks every second while the camera is on (set timer)
 
   const exercise = EXERCISES[exerciseId];
+  const history = useWorkoutHistory(historyKey);
 
   function resetCounter() {
     sessionRef.current = INITIAL_SESSION;
@@ -185,6 +192,7 @@ export default function WorkoutPage() {
       });
       setSaveNote({ ok: true, text: `Đã lưu ${reps} rep ${exercise.label.toLowerCase()}.` });
       resetCounter();
+      setSetNo((n) => n + 1);
       setHistoryKey((k) => k + 1);
       return true;
     } catch (err) {
@@ -256,6 +264,7 @@ export default function WorkoutPage() {
     if (unsaved && !window.confirm(`Đổi bài sẽ bỏ set ${view.reps} rep chưa lưu. Đổi bài?`)) return;
     setExerciseId(id);
     resetCounter(); // reps of another exercise must not carry over
+    setSetNo(1);
   }
 
   // Moving to another page of the app (sidebar, tabs, Back) with a set not saved: ask first.
@@ -269,6 +278,13 @@ export default function WorkoutPage() {
     window.addEventListener('beforeunload', warn);
     return () => window.removeEventListener('beforeunload', warn);
   }, [unsaved]);
+
+  // The set timer on the camera: one re-render per second, only while the camera is on
+  useEffect(() => {
+    if (!running) return;
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [running]);
 
   // Leaving the page while the camera is on: release it
   useEffect(() => {
@@ -355,8 +371,8 @@ export default function WorkoutPage() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       if (image) {
         const color = state.formMessage ? SKELETON_BAD : SKELETON_OK;
-        drawer.drawConnectors(image, PoseLandmarker.POSE_CONNECTIONS, { color, lineWidth: 3 });
-        drawer.drawLandmarks(image, { color: '#dcf0b9', radius: 3 });
+        drawer.drawConnectors(image, PoseLandmarker.POSE_CONNECTIONS, { color, lineWidth: 4 });
+        drawer.drawLandmarks(image, { color: state.formMessage ? SKELETON_BAD : JOINT_DOT, radius: 4 });
       }
       if (analysis.joint && state.angle != null) {
         const size = Math.round(canvas.height / 16);
@@ -377,8 +393,8 @@ export default function WorkoutPage() {
       // A finished attempt (counted or not) goes into the set log once
       if (state.event && state.event.seq !== loggedSeq) {
         loggedSeq = state.event.seq;
-        const attempt = toAttempt(state.event, state.reps, current.downBelow);
-        setAttempts((list) => [...list.slice(-49), attempt]);
+        const attempt = toAttempt(state.event, state.reps, current.downBelow, current.upAbove);
+        setAttempts((list) => [...list, attempt]); // the whole set: a few numbers per attempt
       }
 
       // Re-render only when something on screen changes, not 30 times a second
@@ -394,6 +410,7 @@ export default function WorkoutPage() {
         formUnknown: current.formRules.length > 0 && analysis.form.kind === 'unknown',
         event: state.event,
         debug: showDebug ? debugLine(analysis, session, fps, pose.model) : null,
+        startedAt: set.startedAt,
       };
       if (!sameView(next, shown)) {
         shown = next;
@@ -412,83 +429,82 @@ export default function WorkoutPage() {
   const startButton = (
     <Button onClick={() => void startCamera()} disabled={pose.kind !== 'ready'}>
       <Camera aria-hidden="true" className="size-4" />
-      {pose.kind === 'loading' ? 'Đang tải bộ nhận diện…' : 'Bắt đầu'}
+      {pose.kind === 'loading' ? 'Đang tải bộ nhận diện…' : 'Bật camera'}
     </Button>
   );
 
-  // Bottom line on the camera: the most useful message right now
-  const liveMessage = !running || view.stage === 'SETUP'
+  const joint = exercise.jointLabel;
+  const seconds = running && view.startedAt != null ? Math.max(0, Math.floor((now - view.startedAt) / 1000)) : null;
+  const lastAttempt = attempts.at(-1);
+
+  // The persistent warning at the top: the most useful one right now
+  const warning = !running || view.stage === 'SETUP'
     ? null
     : !view.seen
-      ? { tone: 'bg-black/70', text: 'Chưa thấy rõ người: lùi ra xa để camera thấy cả người.' }
+      ? 'Chưa thấy rõ người: lùi ra xa để camera thấy cả người'
       : view.formMessage
-        ? { tone: 'bg-danger', text: view.formMessage }
+        ? view.formMessage
         : view.formUnknown
-          ? { tone: 'bg-black/70', text: 'Chưa thấy rõ chân: chưa kiểm tra được tư thế.' }
+          ? 'Chưa thấy rõ chân: chưa kiểm tra được tư thế'
           : null;
 
-  // Camera off with a set not saved: save it, drop it, or keep training.
-  // Rendered INSIDE the stage: in real fullscreen (Fullscreen API) the browser only shows the
-  // fullscreen element and its children, so a dialog outside it stayed invisible on the phone.
-  const unsavedDialog = confirmStop && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4" role="dialog"
-          aria-modal="true" aria-labelledby="unsaved-title">
-          <div className="grid w-full max-w-sm gap-4 rounded-card bg-surface p-6">
-            <p id="unsaved-title" className="text-lg font-semibold">Set chưa được lưu</p>
-            <p className="text-sm text-ink-soft">
-              Bạn đã tập {view.reps} rep {exercise.label.toLowerCase()} nhưng chưa lưu. Lưu trước khi tắt camera?
-            </p>
-            <div className="grid gap-2">
-              <Button disabled={saving} onClick={() => void saveSet().then((ok) => {
-                setConfirmStop(false);
-                if (ok) stopCamera();
-              })}>
-                <Save aria-hidden="true" className="size-4" /> {saving ? 'Đang lưu…' : 'Lưu rồi tắt'}
-              </Button>
-              <Button variant="secondary" disabled={saving} onClick={() => {
-                setConfirmStop(false);
-                resetCounter();
-                stopCamera();
-              }}>
-                Tắt, không lưu
-              </Button>
-              <Button variant="secondary" disabled={saving} onClick={() => setConfirmStop(false)}>Tiếp tục tập</Button>
-            </div>
-          </div>
-        </div>
+  // Set not saved: a bottom sheet on phones, a card in the middle from sm. Rendered INSIDE the stage:
+  // in real fullscreen (Fullscreen API) the browser only shows the fullscreen element and its children.
+  const sheet = (titleId: string, text: string, actions: ReactNode) => (
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center sm:p-4" role="dialog"
+      aria-modal="true" aria-labelledby={titleId}>
+      <div className="grid w-full gap-4 rounded-t-[28px] bg-[#1c1e24] p-6 pb-8 text-white sm:max-w-sm sm:rounded-[28px] sm:pb-6">
+        <span aria-hidden="true" className="mx-auto h-1 w-10 rounded-full bg-white/15 sm:hidden" />
+        <p id={titleId} className="font-display text-3xl font-semibold">Set chưa được lưu</p>
+        <p className="text-[#9ba1ae]">{text}</p>
+        <div className="grid gap-2">{actions}</div>
+      </div>
+    </div>
   );
+  const SHEET_PRIMARY = 'flex min-h-13 cursor-pointer items-center justify-center gap-2 rounded-full bg-accent font-bold text-white disabled:opacity-60';
+  const SHEET_SECONDARY = 'min-h-12 cursor-pointer rounded-full border border-white/15 font-semibold text-white disabled:opacity-60';
+  const SHEET_GHOST = 'min-h-11 cursor-pointer rounded-full font-semibold text-[#9ba1ae] disabled:opacity-60';
 
-  // Same choices as the dialog above, for leaving the page instead of turning the camera off
-  const leaveDialog = blocker.state === 'blocked' && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4" role="dialog"
-          aria-modal="true" aria-labelledby="leave-title">
-          <div className="grid w-full max-w-sm gap-4 rounded-card bg-surface p-6">
-            <p id="leave-title" className="text-lg font-semibold">Set chưa được lưu</p>
-            <p className="text-sm text-ink-soft">
-              Bạn đã tập {view.reps} rep {exercise.label.toLowerCase()} nhưng chưa lưu. Rời trang sẽ mất set này.
-            </p>
-            <div className="grid gap-2">
-              <Button disabled={saving} onClick={() => void saveSet().then((ok) => {
-                if (ok) blocker.proceed();
-                else blocker.reset(); // the error stays on the page
-              })}>
-                <Save aria-hidden="true" className="size-4" /> {saving ? 'Đang lưu…' : 'Lưu rồi đi'}
-              </Button>
-              <Button variant="secondary" disabled={saving} onClick={() => blocker.proceed()}>
-                Rời trang, không lưu
-              </Button>
-              <Button variant="secondary" disabled={saving} onClick={() => blocker.reset()}>Ở lại tập tiếp</Button>
-            </div>
-          </div>
-        </div>
-  );
+  // Camera off with a set not saved: save it, drop it, or keep training
+  const unsavedDialog = confirmStop && sheet('unsaved-title',
+    `Bạn đã tập ${view.reps} rep ${exercise.label.toLowerCase()} nhưng chưa lưu. Lưu trước khi tắt camera?`, (
+      <>
+        <button type="button" className={SHEET_PRIMARY} disabled={saving} onClick={() => void saveSet().then((ok) => {
+          setConfirmStop(false);
+          if (ok) stopCamera();
+        })}>
+          <Save aria-hidden="true" className="size-5" /> {saving ? 'Đang lưu…' : 'Lưu rồi tắt'}
+        </button>
+        <button type="button" className={SHEET_SECONDARY} disabled={saving} onClick={() => {
+          setConfirmStop(false);
+          resetCounter();
+          stopCamera();
+        }}>Tắt, không lưu</button>
+        <button type="button" className={SHEET_GHOST} disabled={saving} onClick={() => setConfirmStop(false)}>Tiếp tục tập</button>
+      </>
+    ));
+
+  // Same choices, for leaving the page instead of turning the camera off
+  const leaveDialog = blocker.state === 'blocked' && sheet('leave-title',
+    `Bạn đã tập ${view.reps} rep ${exercise.label.toLowerCase()} nhưng chưa lưu. Rời trang sẽ mất set này.`, (
+      <>
+        <button type="button" className={SHEET_PRIMARY} disabled={saving} onClick={() => void saveSet().then((ok) => {
+          if (ok) blocker.proceed();
+          else blocker.reset(); // the error stays on the page
+        })}>
+          <Save aria-hidden="true" className="size-5" /> {saving ? 'Đang lưu…' : 'Lưu rồi đi'}
+        </button>
+        <button type="button" className={SHEET_SECONDARY} disabled={saving} onClick={() => blocker.proceed()}>Rời trang, không lưu</button>
+        <button type="button" className={SHEET_GHOST} disabled={saving} onClick={() => blocker.reset()}>Ở lại tập tiếp</button>
+      </>
+    ));
 
   const stage = (
     <div
       ref={stageRef}
       className={focus
-        ? 'fixed inset-0 z-50 bg-black'
-        : 'relative aspect-[3/4] overflow-hidden rounded-2xl bg-ink sm:aspect-[4/3]'}
+        ? 'fixed inset-0 z-50 bg-[#0c0d10]'
+        : 'relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#0c0d10] sm:aspect-[4/3]'}
     >
       {/* Mirrored like a mirror (front camera); angles are not affected by mirroring */}
       <video ref={videoRef} playsInline muted className="absolute inset-0 size-full -scale-x-100 object-contain" />
@@ -497,188 +513,137 @@ export default function WorkoutPage() {
       {!running && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center text-white">
           <Camera aria-hidden="true" className="size-8" />
-          <p className="text-sm">Camera đang tắt</p>
-          {focus && startButton}
+          <p className="max-w-xs text-sm text-[#c9d2e6]">{exercise.cameraHint}</p>
+          {startButton}
         </div>
       )}
 
       {running && (
-        <div className="pointer-events-none absolute inset-0 text-white">
-          {/* Rep count + phase, top left */}
-          <div className="absolute top-3 left-3 rounded-2xl bg-black/55 px-4 py-2">
-            <p className="text-5xl leading-none font-bold tabular-nums sm:text-6xl" aria-live="polite">{view.reps}</p>
-            <p className="mt-1 text-sm">
-              {exercise.label} · {view.stage === 'SETUP' ? 'Chưa đếm' : PHASE_LABELS[view.phase]}
-              {view.angle != null && <span className="text-white/70"> · {view.angle}°</span>}
-            </p>
+        <>
+          <CameraTopBar focus={focus} onToggleFocus={focus ? exitFocus : enterFocus}
+            title={`${exercise.label}, set ${setNo}`} seconds={seconds}
+            debug={showDebug} onToggleDebug={() => setShowDebug(!showDebug)} />
+
+          {/* Top messages: a warning that stays, or the last attempt (counted or not) for a moment */}
+          <div className="pointer-events-none absolute inset-x-3 top-[4.5rem] flex flex-col items-center gap-2 sm:inset-x-4">
+            {warning ? (
+              <WarningBanner>{warning}</WarningBanner>
+            ) : lastAttempt && view.event?.seq === lastAttempt.seq && (
+              lastAttempt.ok
+                ? <RepToast key={lastAttempt.seq}>Rep {lastAttempt.rep} hợp lệ{lastAttempt.low != null && `, ${joint} ${lastAttempt.low}°`}</RepToast>
+                : <WarningBanner key={lastAttempt.seq} fading>Không tính rep: {lastAttempt.reason}</WarningBanner>
+            )}
+            {view.debug && (
+              <p className="max-w-full rounded-xl bg-black/70 px-3 py-2 font-mono text-xs text-white">{view.debug}</p>
+            )}
           </div>
 
-          {attempts.length > 0 && (
-            <ol className="absolute top-28 left-3 grid gap-1 text-xs sm:top-32" aria-label="Các lần gần nhất">
-              {attempts.slice(-4).map((a) => (
-                <li key={a.seq} className={`rounded-lg px-2 py-1 ${a.ok ? 'bg-lime-strong/80' : 'bg-black/60'}`}>
-                  {attemptText(a)}
-                </li>
-              ))}
-            </ol>
-          )}
-
-          {view.debug && (
-            <p className="absolute top-3 right-3 max-w-[60%] rounded-xl bg-black/70 px-3 py-2 text-right font-mono text-xs">
-              {view.debug}
-            </p>
-          )}
-
-          {/* Not counting yet (or paused): get into position and hold still */}
-          {view.stage === 'SETUP' && (
-            <div className="absolute inset-x-6 top-1/2 mx-auto max-w-sm -translate-y-1/2 rounded-2xl bg-black/70 p-4 text-center" role="status">
-              <p className="text-lg font-semibold">Vào vị trí</p>
-              <p className="mt-1 text-sm">{view.setupMessage ?? exercise.setupHint}</p>
-              <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/25" aria-hidden="true">
-                <div className="h-full rounded-full bg-lime transition-[width] duration-100" style={{ width: `${view.hold * 100}%` }} />
-              </div>
+          {/* Depth bar on the right while counting */}
+          {view.stage !== 'SETUP' && (
+            <div className="pointer-events-none absolute top-1/4 right-5 bottom-[38%] sm:right-6">
+              <DepthMeter angle={view.angle} downBelow={exercise.downBelow} bad={view.formMessage != null} />
             </div>
           )}
 
-          {/* A counted rep: a check mark that pops in the middle */}
-          {view.event?.kind === 'COUNTED' && (
-            <div key={view.event.seq} className="absolute inset-0 flex items-center justify-center">
-              <div className="flex size-24 animate-rep-pop items-center justify-center rounded-full bg-lime-strong opacity-0 shadow-lg">
-                <Check aria-hidden="true" className="size-14" strokeWidth={3} />
-              </div>
+          {/* Desktop fullscreen: the set log stays visible on the right */}
+          {focus && attempts.length > 0 && (
+            <div className="absolute top-20 right-6 hidden w-72 rounded-[22px] bg-black/72 p-4 text-white lg:block">
+              <p className="mb-3 font-semibold">Nhật ký set</p>
+              <SetLog attempts={attempts} joint={joint} onCamera max={6} />
             </div>
           )}
 
-          <div className="absolute inset-x-3 bottom-16 flex flex-col items-center gap-2 sm:bottom-20">
-            {/* A rep that did not count: says why, then fades out */}
-            {view.event && view.event.kind !== 'COUNTED' && (
-              <p key={view.event.seq} role="status"
-                className={`animate-toast rounded-xl px-3 py-2 text-center text-sm font-medium opacity-0 ${
-                  view.event.kind === 'BAD_FORM' ? 'bg-danger' : 'bg-peach-strong'}`}>
-                {view.event.kind === 'BAD_FORM' ? `Không tính rep: ${view.event.message}` : 'Chưa đủ sâu: xuống thấp hơn'}
-              </p>
+          <div className={`absolute inset-x-3 bottom-3 grid gap-4 sm:inset-x-4 sm:bottom-5 ${focus ? 'mx-auto max-w-xl' : ''}`}>
+            {view.stage === 'SETUP' ? (
+              <SetupPanel message={view.setupMessage ?? exercise.setupHint} hold={view.hold} />
+            ) : (
+              <div className="pointer-events-none">
+                <RepBlock reps={view.reps} stage={view.stage} phase={view.phase} big={focus} />
+              </div>
             )}
-            {liveMessage && (
-              <p className={`rounded-xl px-3 py-2 text-center text-sm ${liveMessage.tone}`}>{liveMessage.text}</p>
+            {focus && (
+              <CameraControls reps={view.reps} saving={saving} onReset={confirmReset}
+                onSave={() => void saveSet()} onStop={requestStop} />
             )}
           </div>
-        </div>
+        </>
       )}
 
       {unsavedDialog}
       {leaveDialog}
-
-      {/* Controls on the camera: always the fullscreen toggle; in focus mode, the others too */}
-      <div className="absolute inset-x-3 bottom-3 flex items-center justify-end gap-2">
-        {focus && running && (
-          <>
-            {unsaved && (
-              <button type="button" onClick={() => void saveSet()} disabled={saving}
-                className="flex h-10 cursor-pointer items-center gap-2 rounded-full bg-lime-strong px-4 text-sm text-white hover:bg-lime-strong/80">
-                <Save aria-hidden="true" className="size-4" /> Lưu
-              </button>
-            )}
-            <button type="button" onClick={confirmReset}
-              className="flex h-10 cursor-pointer items-center gap-2 rounded-full bg-black/55 px-4 text-sm text-white hover:bg-black/70">
-              <RotateCcw aria-hidden="true" className="size-4" /> Đếm lại
-            </button>
-            <button type="button" onClick={requestStop}
-              className="flex h-10 cursor-pointer items-center gap-2 rounded-full bg-black/55 px-4 text-sm text-white hover:bg-black/70">
-              <CameraOff aria-hidden="true" className="size-4" /> Tắt
-            </button>
-          </>
-        )}
-        <button type="button" onClick={() => setShowDebug(!showDebug)} aria-pressed={showDebug}
-          className={`flex size-10 cursor-pointer items-center justify-center rounded-full text-white hover:bg-black/70 ${
-            showDebug ? 'bg-sky-strong' : 'bg-black/55'}`}
-          aria-label="Hiện số đo" title="Hiện số đo">
-          <Gauge aria-hidden="true" className="size-5" />
-        </button>
-        <button type="button" onClick={focus ? exitFocus : enterFocus}
-          className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-black/55 text-white hover:bg-black/70"
-          aria-label={focus ? 'Thu nhỏ' : 'Toàn màn hình'} title={focus ? 'Thu nhỏ' : 'Toàn màn hình'}>
-          {focus ? <Minimize2 aria-hidden="true" className="size-5" /> : <Maximize2 aria-hidden="true" className="size-5" />}
-        </button>
-      </div>
     </div>
   );
 
+  // Phones: one column in reading order (exercise, camera, set log, history, calendar).
+  // lg: camera + history on the left, exercise + set log + calendar on the right. The column
+  // wrappers are display: contents on phones, so `order` places the cards in one list.
   return (
-    <div className="grid items-start gap-5 lg:grid-cols-3">
-      <div className="grid min-w-0 gap-5 lg:col-span-2">
-        <Card className="min-w-0 p-3 sm:p-6">
+    <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <div className="contents lg:grid lg:min-w-0 lg:gap-5">
+        <Card className="order-2 min-w-0 p-3 sm:p-4">
           {stage}
-          <p className="mt-3 text-xs text-muted">
-            Video chỉ được xử lý trên thiết bị của bạn, không gửi lên máy chủ.
-          </p>
-        </Card>
-
-        <Card title="Lịch sử tập luyện" className="min-w-0">
-          <WorkoutHistory refreshKey={historyKey} />
-        </Card>
-      </div>
-
-      <div className="grid min-w-0 gap-5">
-        {error && <Alert type="error">{error}</Alert>}
-        {pose.kind === 'error' && (
-          <Alert type="error">Không tải được bộ nhận diện tư thế. Hãy tải lại trang.</Alert>
-        )}
-
-        <Card title="Bài tập">
-          <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Chọn bài tập">
-            {EXERCISE_IDS.map((id) => (
-              <button key={id} type="button" role="radio" aria-checked={id === exerciseId}
-                onClick={() => chooseExercise(id)}
-                className={`cursor-pointer rounded-full px-4 py-2 text-sm font-medium ${
-                  id === exerciseId ? 'bg-ink text-white' : 'bg-bg text-ink hover:bg-line'}`}>
-                {EXERCISES[id].label}
-              </button>
-            ))}
-          </div>
-          <p className="mt-3 text-sm text-ink-soft">{exercise.cameraHint}</p>
-        </Card>
-
-        {/* Stays after the camera is off, so the result of the set is still visible */}
-        <Card tone="lime">
-          <p className="text-sm text-ink-soft">{exercise.label}: số rep</p>
-          <p className="text-6xl font-bold tabular-nums">{view.reps}</p>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            <Button onClick={() => void saveSet()} disabled={!unsaved || saving}>
-              <Save aria-hidden="true" className="size-4" /> {saving ? 'Đang lưu…' : 'Lưu set'}
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            {running ? (
+              <>
+                <Button onClick={() => void saveSet()} disabled={!unsaved || saving}>
+                  <Save aria-hidden="true" className="size-4" />
+                  {saving ? 'Đang lưu…' : unsaved ? `Lưu set ${view.reps} rep` : 'Lưu set'}
+                </Button>
+                <Button variant="secondary" onClick={requestStop}>
+                  <CameraOff aria-hidden="true" className="size-4" /> Tắt camera
+                </Button>
+              </>
+            ) : (
+              <>
+                {startButton}
+                {unsaved && (
+                  <Button variant="secondary" onClick={() => void saveSet()} disabled={saving}>
+                    <Save aria-hidden="true" className="size-4" /> {saving ? 'Đang lưu…' : `Lưu set ${view.reps} rep`}
+                  </Button>
+                )}
+              </>
+            )}
+            <Button variant="ghost" onClick={confirmReset} disabled={view.reps === 0}>
+              <RotateCcw aria-hidden="true" className="size-4" /> Đếm lại
             </Button>
-            <Link to="/workout/leaderboard" className="text-sm">Bảng xếp hạng</Link>
           </div>
           {saveNote && (
-            <p className={`mt-2 text-sm ${saveNote.ok ? 'text-success' : 'text-danger'}`} role="status">{saveNote.text}</p>
+            <p className={`mt-2 text-sm ${saveNote.ok ? 'text-good' : 'text-danger'}`} role="status">{saveNote.text}</p>
           )}
+          <p className="mt-2 text-xs text-muted">Video chỉ xử lý trên máy của bạn, không gửi lên máy chủ.</p>
         </Card>
 
-        {attempts.length > 0 && (
-          <Card title="Nhật ký set">
-            <ol className="grid max-h-64 gap-1 overflow-y-auto text-sm">
-              {[...attempts].reverse().map((a) => (
-                <li key={a.seq} className={a.ok ? 'text-success' : 'text-ink-soft'}>
-                  {a.ok ? '✓ ' : '✗ '}{attemptText(a)}
-                </li>
-              ))}
-            </ol>
-          </Card>
-        )}
-
-        <div className="flex flex-wrap gap-2">
-          {running ? (
-            <Button variant="secondary" onClick={requestStop}>
-              <CameraOff aria-hidden="true" className="size-4" /> Tắt camera
-            </Button>
-          ) : (
-            startButton
-          )}
-          <Button variant="secondary" onClick={confirmReset} disabled={view.reps === 0}>
-            <RotateCcw aria-hidden="true" className="size-4" /> Đếm lại
-          </Button>
+        <div className="order-4 min-w-0">
+          <WorkoutHistoryCard history={history} />
         </div>
       </div>
 
+      <div className="contents lg:grid lg:min-w-0 lg:gap-5">
+        {error && <div className="order-0"><Alert type="error">{error}</Alert></div>}
+        {pose.kind === 'error' && (
+          <div className="order-0"><Alert type="error">Không tải được bộ nhận diện tư thế. Hãy tải lại trang.</Alert></div>
+        )}
+
+        <Card title="Bài tập" className="order-1">
+          <div className="flex flex-wrap gap-2" role="group" aria-label="Chọn bài tập">
+            {EXERCISE_IDS.map((id) => (
+              <Chip key={id} selected={id === exerciseId} onClick={() => chooseExercise(id)}>
+                {EXERCISES[id].label}
+              </Chip>
+            ))}
+          </div>
+          <p className="mt-3 text-sm text-muted">{exercise.cameraHint}</p>
+        </Card>
+
+        <div className="order-3 min-w-0">
+          <SetLogCard attempts={attempts} reps={view.reps} joint={joint} downBelow={exercise.downBelow}
+            title={`${exercise.label}, set ${setNo}`} live={running && view.stage !== 'SETUP'} />
+        </div>
+
+        <div className="order-5 min-w-0">
+          <WorkoutCalendarCard history={history} />
+        </div>
+      </div>
     </div>
   );
 }

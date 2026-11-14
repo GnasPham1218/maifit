@@ -1,21 +1,15 @@
-import { ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-import { workoutApi } from '../apis/workoutApi';
-import { getErrorMessage } from '../constants/errorMessages';
-import { EXERCISE_IDS, EXERCISES } from '../exercises';
-import type { DailyWorkouts, MonthlyWorkoutSummary, Workout } from '../types/workout';
-import { addDays, formatDayLabel, monthOf, todayVn } from '../utils/date';
+import { Dumbbell, PersonStanding, Trash2, type LucideIcon } from 'lucide-react';
+import { useState } from 'react';
+import { EXERCISE_IDS, EXERCISES, type ExerciseId } from '../exercises';
+import type { WorkoutHistoryState } from '../hooks/useWorkoutHistory';
+import type { Workout } from '../types/workout';
 import { formatNumber } from '../utils/number';
 import { Button } from './Button';
+import { DaySwitch } from './meals/DaySwitch';
 import { MonthCalendar } from './MonthCalendar';
 
-interface Props {
-  refreshKey: number; // bumped by the page after a set is saved, so the history reloads
-}
-
 const ZONE = 'Asia/Ho_Chi_Minh';
-const NAV_BUTTON =
-  'flex size-9 cursor-pointer items-center justify-center rounded-full hover:bg-bg disabled:cursor-not-allowed disabled:opacity-40';
+const ICONS: Record<ExerciseId, LucideIcon> = { SQUAT: PersonStanding, PUSH_UP: Dumbbell };
 
 function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', timeZone: ZONE });
@@ -24,7 +18,7 @@ function formatTime(iso: string): string {
 function formatDuration(sec: number): string {
   const m = Math.floor(sec / 60);
   const s = sec % 60;
-  return m > 0 ? `${m} phút ${s > 0 ? `${s} giây` : ''}`.trim() : `${s} giây`;
+  return m > 0 ? `${m} phút ${s > 0 ? `${String(s).padStart(2, '0')} giây` : ''}`.trim() : `${s} giây`;
 }
 
 // Reps per minute, the same "pace" the server checks against
@@ -32,158 +26,116 @@ function pace(w: Workout): string {
   return formatNumber(Math.round((w.reps / w.durationSec) * 60 * 10) / 10);
 }
 
-// Workout history under the camera: month calendar (reps per day) + the sets of the chosen day.
-// The server is the source of truth: after a delete, day and month are fetched again.
-export function WorkoutHistory({ refreshKey }: Props) {
-  const today = todayVn();
-  const [date, setDate] = useState(today);
-  const [viewMonth, setViewMonth] = useState(monthOf(today));
-  const [day, setDay] = useState<DailyWorkouts | null>(null);
-  const [summary, setSummary] = useState<MonthlyWorkoutSummary | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [confirmId, setConfirmId] = useState<number | null>(null); // set waiting for "Xóa?" confirmation
+// "Lịch sử tập": the sets of the chosen day, totals, delete with a confirmation
+export function WorkoutHistoryCard({ history }: { history: WorkoutHistoryState }) {
+  const { today, date, selectDate, sessions, error, remove, streakDays } = history;
+  const [confirmId, setConfirmId] = useState<number | null>(null); // set waiting for "Xoá?" confirmation
   const [deleting, setDeleting] = useState(false);
-  const [reloadKey, setReloadKey] = useState(0); // bumped after a delete
 
-  // setState only inside .then(): the effects re-run when the day, month, or a refresh key changes
-  useEffect(() => {
-    let ignore = false;
-    workoutApi
-      .listDay(date)
-      .then((data) => {
-        if (!ignore) setDay(data);
-      })
-      .catch((err: unknown) => {
-        if (!ignore) setError(getErrorMessage(err));
-      });
-    return () => {
-      ignore = true;
-    };
-  }, [date, refreshKey, reloadKey]);
-
-  useEffect(() => {
-    let ignore = false;
-    workoutApi
-      .monthSummary(viewMonth)
-      .then((data) => {
-        if (!ignore) setSummary(data);
-      })
-      .catch((err: unknown) => {
-        if (!ignore) setError(getErrorMessage(err));
-      });
-    return () => {
-      ignore = true;
-    };
-  }, [viewMonth, refreshKey, reloadKey]);
-
-  // Calendar shows total reps of all exercises per day
-  const repsByDate = useMemo(() => {
-    const map = new Map<string, number>();
-    if (summary?.month === viewMonth) {
-      for (const d of summary.days) map.set(d.date, (map.get(d.date) ?? 0) + d.reps);
-    }
-    return map;
-  }, [summary, viewMonth]);
-
-  const sessions = day?.date === date ? day.sessions : null;
+  const total = (sessions ?? []).reduce((sum, s) => sum + s.reps, 0);
   const totals = EXERCISE_IDS.map((id) => ({
     id,
     reps: (sessions ?? []).filter((s) => s.exercise === id).reduce((sum, s) => sum + s.reps, 0),
   })).filter((t) => t.reps > 0);
 
-  function selectDate(newDate: string) {
-    setDate(newDate);
-    setViewMonth(monthOf(newDate));
+  function changeDate(newDate: string) {
     setConfirmId(null);
-    setError(null);
+    selectDate(newDate);
   }
 
-  async function remove(id: number) {
+  async function confirmRemove(id: number) {
     setDeleting(true);
-    setError(null);
-    try {
-      await workoutApi.remove(id);
-      setConfirmId(null);
-      setReloadKey((k) => k + 1);
-    } catch (err) {
-      setError(getErrorMessage(err));
-    } finally {
-      setDeleting(false);
-    }
+    if (await remove(id)) setConfirmId(null);
+    setDeleting(false);
   }
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <MonthCalendar month={viewMonth} valueByDate={repsByDate} unit="rep" emptyLabel="chưa tập"
-        selectedDate={date} today={today} onSelectDate={selectDate} onChangeMonth={setViewMonth} />
+    <section className="min-w-0 rounded-card bg-surface p-5 text-ink sm:p-6" aria-labelledby="history-title">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h3 id="history-title" className="text-lg font-semibold">Lịch sử tập</h3>
+        <DaySwitch date={date} today={today} onChange={changeDate} />
+      </div>
 
-      <div className="min-w-0">
-        <div className="mb-3 flex items-center justify-between">
-          <button type="button" className={NAV_BUTTON} onClick={() => selectDate(addDays(date, -1))} aria-label="Ngày trước">
-            <ChevronLeft aria-hidden="true" className="size-4" />
-          </button>
-          <p className="font-semibold first-letter:uppercase">{formatDayLabel(date)}</p>
-          <button type="button" className={NAV_BUTTON} onClick={() => selectDate(addDays(date, 1))}
-            disabled={date >= today} aria-label="Ngày sau">
-            <ChevronRight aria-hidden="true" className="size-4" />
-          </button>
+      {error && <p className="mt-3 text-sm text-danger" role="alert">{error}</p>}
+
+      {sessions === null ? (
+        <p className="mt-4 text-sm text-muted">Đang tải…</p>
+      ) : sessions.length === 0 ? (
+        <div className="grid justify-items-start gap-2 pt-5 pb-1">
+          <p className="font-semibold">Chưa có set nào trong ngày này</p>
+          <p className="text-sm text-muted">Bật camera và lưu một set: số rep sẽ vào đây và vào bảng xếp hạng.</p>
         </div>
-
-        {error && <p className="mb-2 text-sm text-danger" role="alert">{error}</p>}
-
-        {sessions === null ? (
-          <p className="text-sm text-muted">Đang tải…</p>
-        ) : sessions.length === 0 ? (
-          <p className="text-sm text-muted">Chưa có set nào trong ngày này.</p>
-        ) : (
-          <>
-            <div className="mb-3 flex flex-wrap gap-2">
+      ) : (
+        <>
+          <div className="mt-4 mb-1.5 flex flex-wrap items-end justify-between gap-3">
+            <p className="flex items-baseline gap-2.5">
+              <span className="font-display text-5xl leading-none font-semibold tabular-nums">{formatNumber(total)}</span>
+              <span className="text-muted">rep · {sessions.length} set</span>
+            </p>
+            <div className="flex flex-wrap gap-2">
               {totals.map((t) => (
-                <span key={t.id} className="rounded-full bg-lime px-3 py-1 text-sm font-medium">
-                  {EXERCISES[t.id].label}: {formatNumber(t.reps)} rep
+                <span key={t.id} className="rounded-full bg-soft px-3 py-1 text-sm font-semibold text-link">
+                  {EXERCISES[t.id].label} {formatNumber(t.reps)} rep
                 </span>
               ))}
             </div>
-            <ul className="grid max-h-80 gap-2 overflow-y-auto">
-              {[...sessions].reverse().map((w) => (
-                <li key={w.id} className="rounded-2xl bg-bg px-3 py-2 text-sm">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="min-w-0">
-                      <p className="font-medium">
-                        {formatTime(w.startedAt)} · {EXERCISES[w.exercise].label} · {w.reps} rep
-                      </p>
-                      <p className="text-xs text-muted">
-                        {formatDuration(w.durationSec)} · {pace(w)} rep/phút
-                      </p>
-                    </div>
-                    {confirmId !== w.id && (
+          </div>
+
+          <ol className="mt-2">
+            {[...sessions].reverse().map((w) => {
+              const Icon = ICONS[w.exercise];
+              const time = formatTime(w.startedAt);
+              const confirming = confirmId === w.id;
+              return (
+                <li key={w.id} className="border-t border-line py-3.5">
+                  <div className="flex items-center gap-3.5">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-soft text-link">
+                      <Icon aria-hidden="true" className="size-5" />
+                    </span>
+                    <span className="grid min-w-0 flex-1 gap-0.5">
+                      <span className="font-semibold">{EXERCISES[w.exercise].label}</span>
+                      <span className="text-sm text-muted">{time} · {formatDuration(w.durationSec)} · {pace(w)} rep/phút</span>
+                    </span>
+                    <span className="flex items-baseline gap-1">
+                      <span className="font-display text-3xl leading-none font-semibold tabular-nums">{w.reps}</span>
+                      <span className="text-xs text-muted">rep</span>
+                    </span>
+                    {!confirming && (
                       <button type="button" onClick={() => setConfirmId(w.id)}
-                        className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted hover:bg-line hover:text-danger"
-                        aria-label={`Xóa set ${w.reps} rep lúc ${formatTime(w.startedAt)}`}>
-                        <Trash2 aria-hidden="true" className="size-4" />
+                        className="flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted hover:bg-soft hover:text-danger"
+                        aria-label={`Xoá set ${w.reps} rep lúc ${time}`}>
+                        <Trash2 aria-hidden="true" className="size-[18px]" />
                       </button>
                     )}
                   </div>
-                  {confirmId === w.id && (
-                    <div className="mt-2 flex flex-wrap items-center gap-2">
-                      <span className="text-danger">Xóa set này? Bảng xếp hạng cũng bị trừ.</span>
-                      <Button size="sm" disabled={deleting} onClick={() => void remove(w.id)}>
-                        {deleting ? 'Đang xóa…' : 'Xóa'}
+                  {confirming && (
+                    <div className="mt-3 flex flex-wrap items-center gap-2.5 rounded-[14px] bg-danger-bg px-3.5 py-3">
+                      <span className="flex-[1_1_200px] text-sm text-danger">Xoá set này? Bảng xếp hạng cũng bị trừ {w.reps} rep.</span>
+                      <Button size="sm" variant="secondary" className="text-danger" disabled={deleting} onClick={() => void confirmRemove(w.id)}>
+                        <Trash2 aria-hidden="true" className="size-4" /> {deleting ? 'Đang xoá…' : 'Xoá'}
                       </Button>
-                      <Button size="sm" variant="secondary" disabled={deleting} onClick={() => setConfirmId(null)}>
-                        Hủy
-                      </Button>
+                      <Button size="sm" variant="secondary" disabled={deleting} onClick={() => setConfirmId(null)}>Huỷ</Button>
                     </div>
                   )}
                 </li>
-              ))}
-            </ul>
-          </>
-        )}
-        {day && day.streakDays > 0 && (
-          <p className="mt-3 text-xs text-muted">Chuỗi ngày tập: {day.streakDays} ngày</p>
-        )}
-      </div>
+              );
+            })}
+          </ol>
+        </>
+      )}
+      {streakDays > 0 && <p className="mt-3 text-xs text-muted">Chuỗi ngày tập: {streakDays} ngày</p>}
+    </section>
+  );
+}
+
+// Month calendar in the side column, like the meals page: a day with reps can be opened
+export function WorkoutCalendarCard({ history }: { history: WorkoutHistoryState }) {
+  const { today, date, viewMonth, setViewMonth, selectDate, repsByDate } = history;
+  return (
+    <div className="min-w-0 rounded-card bg-surface p-5 text-ink sm:p-6">
+      <MonthCalendar month={viewMonth} valueByDate={repsByDate} unit="rep" emptyLabel="chưa tập"
+        footnote="Ngày có số là ngày có tập, bấm để xem các set." selectedDate={date} today={today}
+        onSelectDate={selectDate} onChangeMonth={setViewMonth} />
     </div>
   );
 }
