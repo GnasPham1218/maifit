@@ -8,6 +8,7 @@ import { isRouteHandle } from '../types/route';
 
 interface NavItem {
   to: string;
+  also?: string[]; // other sections shown as this item (the food library and food pages under Ăn uống)
   label: string;
   icon: LucideIcon;
 }
@@ -15,7 +16,7 @@ interface NavItem {
 // Five sections. The leaderboard is a tab of /workout; Premium lives in the profile (step 9).
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Trang chủ', icon: House },
-  { to: '/meals', label: 'Ăn uống', icon: Utensils },
+  { to: '/meals', label: 'Ăn uống', icon: Utensils, also: ['/foods'] },
   { to: '/workout', label: 'Tập luyện', icon: Activity },
   { to: '/chat', label: 'MBotFit', icon: Bot },
   { to: '/profile', label: 'Hồ sơ', icon: UserRound },
@@ -43,9 +44,16 @@ function todayLabel(): string {
   });
 }
 
-// "/workout/leaderboard" -> "/workout": tabs and conversations inside one section do not replay the page entrance
+// "/foods/12" is in the "/foods" section; "/foodsx" is not
+function inSection(pathname: string, prefixes: string[] | undefined): boolean {
+  return (prefixes ?? []).some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
+
+// "/workout/leaderboard" -> "/workout", "/foods/12" -> "/meals": moving inside one sidebar item
+// (tabs, conversations, a food page) does not replay the page entrance
 function sectionOf(pathname: string): string {
-  return '/' + (pathname.split('/')[1] ?? '');
+  const item = NAV_ITEMS.find((n) => n.to !== '/' && inSection(pathname, [n.to, ...(n.also ?? [])]));
+  return item?.to ?? '/' + (pathname.split('/')[1] ?? '');
 }
 
 export default function MainLayout() {
@@ -76,8 +84,9 @@ export default function MainLayout() {
         </Link>
 
         <nav aria-label="Điều hướng chính" className="grid gap-1">
-          {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
-            <NavLink key={to} to={to} end={to === '/'} className={sideClass} title={label}>
+          {NAV_ITEMS.map(({ to, label, icon: Icon, also }) => (
+            <NavLink key={to} to={to} end={to === '/'} title={label}
+              className={({ isActive }) => sideClass({ isActive: isActive || inSection(pathname, also) })}>
               <Icon aria-hidden="true" className="size-5 shrink-0" />
               <span className="sr-only lg:not-sr-only">{label}</span>
             </NavLink>
@@ -106,17 +115,20 @@ export default function MainLayout() {
 
       {/* Phone bottom bar; logout is on the profile page */}
       <nav aria-label="Điều hướng chính" className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-surface px-2 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:hidden">
-        {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
-          <NavLink key={to} to={to} end={to === '/'} className={bottomClass}>
-            {({ isActive }) => (
-              <>
-                <span className={`flex h-8 w-14 items-center justify-center rounded-full transition-colors ${
-                  isActive ? 'bg-accent text-on-accent' : 'group-hover:bg-line'}`}>
-                  <Icon aria-hidden="true" className="size-5" />
-                </span>
-                {label}
-              </>
-            )}
+        {NAV_ITEMS.map(({ to, label, icon: Icon, also }) => (
+          <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => bottomClass({ isActive: isActive || inSection(pathname, also) })}>
+            {({ isActive: own }) => {
+              const isActive = own || inSection(pathname, also);
+              return (
+                <>
+                  <span className={`flex h-8 w-14 items-center justify-center rounded-full transition-colors ${
+                    isActive ? 'bg-accent text-on-accent' : 'group-hover:bg-line'}`}>
+                    <Icon aria-hidden="true" className="size-5" />
+                  </span>
+                  {label}
+                </>
+              );
+            }}
           </NavLink>
         ))}
       </nav>

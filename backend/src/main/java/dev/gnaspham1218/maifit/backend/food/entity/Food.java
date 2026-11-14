@@ -53,8 +53,24 @@ public class Food {
     @Column(name = "fiber_g", precision = 5, scale = 2)
     private BigDecimal fiberG; // null = not measured by the source, NOT zero
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    private FoodCategory category;
+
+    // The dataset the numbers come from (V18); sourceRef is the item id there, e.g. the FDC id
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "source_id", nullable = false)
+    private FoodSource source;
+
+    @Column(name = "source_ref", length = 40)
+    private String sourceRef; // null only for an estimate
+
+    // Computed from other measured rows (ƯỚC TÍNH); sourceNote says how
     @Column(nullable = false)
-    private String source;
+    private boolean estimated;
+
+    @Column(name = "source_note")
+    private String sourceNote;
 
     // The source's own name for the item ("Rice, white, long-grain, regular, enriched, cooked"), V17.
     // Null for estimated rows, which combine two items.
@@ -72,8 +88,13 @@ public class Food {
     @JoinColumn(name = "lean_version_id")
     private Food leanVersion;
 
-    // For FoodMapper (MapStruct maps FoodResponse.leanVersionId from this getter)
+    // For FoodMapper
     public Long getLeanVersionId() {
         return leanVersion == null ? null : leanVersion.getId();
+    }
+
+    // The page of this item at its source; null for an estimate (no single item behind it)
+    public String getSourceUrl() {
+        return estimated ? null : FoodSource.itemUrl(source.getItemUrlTemplate(), sourceRef);
     }
 }

@@ -140,7 +140,7 @@ export function FoodPicker({ mealType, foods, onAdd, initialFood = null, onMealT
               Chỉ thêm dầu khi món xào/chiên được ghi bằng nguyên liệu sống (vd. rau muống xào = rau muống sống + dầu).
             </p>
           )}
-          {food && <p className="text-xs text-muted">Nguồn số liệu: {food.source}</p>}
+          {food && <p className="text-xs text-muted">Nguồn số liệu: {food.sourceName}</p>}
           {error && <p className="text-sm text-danger" role="alert">{error}</p>}
         </>
       )}

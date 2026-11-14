@@ -2,6 +2,7 @@ package dev.gnaspham1218.maifit.backend.food.controller;
 
 import dev.gnaspham1218.maifit.backend.common.response.ApiResponse;
 import dev.gnaspham1218.maifit.backend.food.dto.FoodDetailsResponse;
+import dev.gnaspham1218.maifit.backend.food.dto.FoodMetaResponse;
 import dev.gnaspham1218.maifit.backend.food.dto.FoodResponse;
 import dev.gnaspham1218.maifit.backend.food.dto.FoodSuggestion;
 import dev.gnaspham1218.maifit.backend.food.service.FoodDetailsService;
@@ -29,6 +30,14 @@ public class FoodController {
     @GetMapping
     public ApiResponse<List<FoodResponse>> list() {
         return ApiResponse.ok(service.listAll());
+    }
+
+    // GET /api/foods/meta -> groups and sources for the library filters. Changes only with a migration.
+    @GetMapping("/meta")
+    public ResponseEntity<ApiResponse<FoodMetaResponse>> meta() {
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(Duration.ofHours(1)).cachePrivate())
+                .body(ApiResponse.ok(service.meta()));
     }
 
     // GET /api/foods/search?q=bún mọc -> close food names, for when the local search finds nothing.

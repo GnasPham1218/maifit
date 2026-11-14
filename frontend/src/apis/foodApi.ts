@@ -1,4 +1,4 @@
-import type { FoodDetails } from '../types/food';
+import type { FoodDetails, FoodMeta } from '../types/food';
 import type { Food, FoodRequestResponse, FoodSuggestion } from '../types/meal';
 import { api } from './client';
 
@@ -10,6 +10,7 @@ let cache: Promise<Food[]> | null = null;
 // Details per food id. One answer holds every preparation, so it is stored under each of their ids:
 // switching tabs on the detail page never asks again. Same rule: a failure is not kept.
 const detailsCache = new Map<number, Promise<FoodDetails>>();
+let metaCache: Promise<FoodMeta> | null = null;
 
 export const foodApi = {
   listAll: (): Promise<Food[]> => {
@@ -20,6 +21,17 @@ export const foodApi = {
       });
     }
     return cache;
+  },
+
+  // Groups and sources for the library filters (change only with a deploy)
+  meta: (): Promise<FoodMeta> => {
+    if (!metaCache) {
+      metaCache = api<FoodMeta>('/foods/meta').catch((err: unknown) => {
+        metaCache = null;
+        throw err;
+      });
+    }
+    return metaCache;
   },
 
   details: (id: number): Promise<FoodDetails> => {

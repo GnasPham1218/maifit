@@ -9,6 +9,7 @@ import { energySplit } from '../../utils/energySplit';
 import { formatNumber } from '../../utils/number';
 import { BigNumber } from '../BigNumber';
 import { SegmentedTabs } from '../SegmentedTabs';
+import { FoodGallery } from './FoodGallery';
 
 interface FoodDetailsViewProps {
   id: number; // the preparation shown; its siblings come along in the same answer
@@ -53,6 +54,17 @@ export function FoodDetailsView({ id, onSelect, actions, wide = false, titleAs: 
     { key: 'fiber', grams: variant.fiberG },
   ];
   const several = details.variants.length > 1;
+  const prepLabel = PREPARATION_LABELS[variant.preparation].toLowerCase();
+
+  // This preparation's photos; without any, the raw one's (said so under the photo); without any, none
+  const raw = details.variants[0];
+  const ownPhotos = variant.images.length > 0;
+  const photos = ownPhotos ? variant.images : raw.images;
+  const gallery = photos.length > 0 && (
+    <FoodGallery key={variant.id} images={photos}
+      label={`Ảnh ${details.name.toLowerCase()} ${ownPhotos ? prepLabel : PREPARATION_LABELS[raw.preparation].toLowerCase()}`}
+      note={ownPhotos ? undefined : `Chưa có ảnh ${details.name.toLowerCase()} ${prepLabel}, đây là ảnh dạng ${PREPARATION_LABELS[raw.preparation].toLowerCase()}.`} />
+  );
 
   const hero = (
     <section aria-label={`Dinh dưỡng ${details.name} ${PREPARATION_LABELS[variant.preparation].toLowerCase()}`}
@@ -124,7 +136,11 @@ export function FoodDetailsView({ id, onSelect, actions, wide = false, titleAs: 
       <h2 id="source-title" className="text-lg font-semibold">Nguồn số liệu</h2>
       <dl className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 text-sm">
         <dt className="text-muted">Nguồn</dt>
-        <dd className="break-words">{variant.source}</dd>
+        <dd className="break-words">
+          {variant.source.name}{variant.sourceRef && <span className="text-muted">, mã {variant.sourceRef}</span>}
+        </dd>
+        <dt className="text-muted">Giấy phép</dt>
+        <dd>{variant.source.license}</dd>
         {variant.sourceDescription && (
           <>
             <dt className="text-muted">Tên gốc</dt>
@@ -142,7 +158,7 @@ export function FoodDetailsView({ id, onSelect, actions, wide = false, titleAs: 
       {variant.sourceUrl && (
         <a href={variant.sourceUrl} target="_blank" rel="noopener noreferrer"
           className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold">
-          <BookOpen aria-hidden="true" className="size-4" /> Xem trên USDA FoodData Central
+          <BookOpen aria-hidden="true" className="size-4" /> Xem món này trên {variant.source.name.split(' – ')[0]}
           <ExternalLink aria-hidden="true" className="size-3.5" />
           <span className="sr-only">(mở tab mới)</span>
         </a>
@@ -158,7 +174,7 @@ export function FoodDetailsView({ id, onSelect, actions, wide = false, titleAs: 
       </Title>
       {details.aliases.length > 0 && (
         <p className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="text-muted">Còn gọi:</span>
+          <span className="text-muted">{details.category.name} · Còn gọi:</span>
           {details.aliases.map((a) => (
             <span key={a} className="rounded-full bg-soft px-2.5 py-0.5 text-link">{a}</span>
           ))}
@@ -169,13 +185,19 @@ export function FoodDetailsView({ id, onSelect, actions, wide = false, titleAs: 
           items={details.variants.map((v) => ({ id: String(v.id), label: PREPARATION_LABELS[v.preparation] }))}
           onChange={(v) => onSelect(Number(v))} />
       )}
+      {details.aliases.length === 0 && <p className="text-sm text-muted">{details.category.name}</p>}
       {wide ? (
-        <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-          <div className="grid gap-5">{hero}{actions?.(variant, details)}{compare}</div>
-          {source}
-        </div>
+        <>
+          {/* Phones: photos right under the tabs, source at the end. From lg: numbers left, photos and source right.
+              The gallery is in both places and CSS shows one (hidden = display: none, not read out twice). */}
+          {gallery && <div className="lg:hidden">{gallery}</div>}
+          <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+            <div className="grid gap-5">{hero}{actions?.(variant, details)}{compare}</div>
+            <div className="grid gap-5">{gallery && <div className="hidden lg:block">{gallery}</div>}{source}</div>
+          </div>
+        </>
       ) : (
-        <>{hero}{actions?.(variant, details)}{compare}{source}</>
+        <>{gallery}{hero}{actions?.(variant, details)}{compare}{source}</>
       )}
     </div>
   );

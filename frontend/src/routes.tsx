@@ -3,9 +3,11 @@ import { GuestRoute } from './components/GuestRoute';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
+import MealsLayout from './layouts/MealsLayout';
 import WorkoutLayout from './layouts/WorkoutLayout';
 import ChatPage from './pages/ChatPage';
 import FoodDetailsPage from './pages/FoodDetailsPage';
+import FoodLibraryPage from './pages/FoodLibraryPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomePage from './pages/HomePage';
 import LeaderboardPage from './pages/LeaderboardPage';
@@ -33,7 +35,15 @@ export const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
           { path: '/', element: <HomePage />, handle: { title: 'Trang chủ', greeting: true } },
-          { path: '/meals', element: <MealsPage />, handle: { title: 'Ăn uống' } },
+          {
+            // Two tabs that are routes: the day's log and the food library
+            element: <MealsLayout />,
+            handle: { title: 'Ăn uống' },
+            children: [
+              { path: '/meals', element: <MealsPage /> },
+              { path: '/foods', element: <FoodLibraryPage /> },
+            ],
+          },
           { path: '/foods/:id', element: <FoodDetailsPage />, handle: { title: 'Chi tiết món', ownHeading: true } },
           {
             path: '/workout',

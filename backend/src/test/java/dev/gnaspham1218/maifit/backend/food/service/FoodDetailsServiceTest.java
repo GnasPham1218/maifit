@@ -5,7 +5,12 @@ import dev.gnaspham1218.maifit.backend.common.exception.ErrorCode;
 import dev.gnaspham1218.maifit.backend.food.dto.FoodDetailsResponse;
 import dev.gnaspham1218.maifit.backend.food.dto.FoodVariantResponse;
 import dev.gnaspham1218.maifit.backend.food.entity.Food;
+import dev.gnaspham1218.maifit.backend.food.entity.FoodCategory;
+import dev.gnaspham1218.maifit.backend.food.entity.FoodImage;
+import dev.gnaspham1218.maifit.backend.food.entity.FoodSource;
 import dev.gnaspham1218.maifit.backend.food.entity.Preparation;
+import dev.gnaspham1218.maifit.backend.food.mapper.FoodMapper;
+import dev.gnaspham1218.maifit.backend.food.repository.FoodImageRepository;
 import dev.gnaspham1218.maifit.backend.food.repository.FoodRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,36 +21,59 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class FoodDetailsServiceTest {
 
-    private FoodRepository repository;
-    private FoodDetailsService service;
+    private static final String FDC_TEMPLATE = "https://fdc.nal.usda.gov/food-details/{ref}/nutrients";
 
-    private static Food food(long id, String name, Preparation preparation, String source) {
+    private FoodRepository repository;
+    private FoodImageRepository images;
+    private FoodDetailsService service;
+    private FoodSource usda;
+    private FoodCategory meat;
+
+    private Food food(long id, String name, Preparation preparation, String ref, boolean estimated) {
         Food food = mock(Food.class); // read-only entity without a public constructor
         when(food.getId()).thenReturn(id);
         when(food.getName()).thenReturn(name);
         when(food.getPreparation()).thenReturn(preparation);
         when(food.getKcal()).thenReturn(new BigDecimal("100"));
-        when(food.getSource()).thenReturn(source);
+        when(food.getSource()).thenReturn(usda);
+        when(food.getCategory()).thenReturn(meat);
+        when(food.getSourceRef()).thenReturn(ref);
+        when(food.isEstimated()).thenReturn(estimated);
+        when(food.getSourceUrl()).thenReturn(estimated ? null : FoodSource.itemUrl(FDC_TEMPLATE, ref));
         return food;
+    }
+
+    private static FoodImage image(long foodId, String path) {
+        FoodImage image = mock(FoodImage.class);
+        when(image.getFoodId()).thenReturn(foodId);
+        when(image.getPath()).thenReturn(path);
+        return image;
     }
 
     @BeforeEach
     void setUp() {
         repository = mock(FoodRepository.class);
-        service = new FoodDetailsService(repository);
+        images = mock(FoodImageRepository.class);
+        service = new FoodDetailsService(repository, images, new FoodMapper());
+        usda = mock(FoodSource.class);
+        when(usda.getName()).thenReturn("USDA FoodData Central – SR Legacy");
+        meat = mock(FoodCategory.class);
+        when(meat.getName()).thenReturn("Thịt");
+        when(images.findByFoodIdInOrderByFoodIdAscSortOrderAsc(anyCollection())).thenReturn(List.of());
     }
 
     @Test
     void groupsEveryPreparationOfTheNameInTheUsualOrder() {
         // Mocks first: stubbing a mock inside another when(...) is an unfinished stubbing
-        Food fried = food(3, "Ức gà", Preparation.FRIED, "USDA FDC 171078 (SR Legacy)");
-        Food raw = food(1, "Ức gà", Preparation.RAW, "USDA FDC 171077 (SR Legacy)");
-        Food boiled = food(2, "Ức gà", Preparation.BOILED, "USDA FDC 171478 (SR Legacy)");
+        Food fried = food(3, "Ức gà", Preparation.FRIED, "171078", false);
+        Food raw = food(1, "Ức gà", Preparation.RAW, "171077", false);
+        Food boiled = food(2, "Ức gà", Preparation.BOILED, "171478", false);
         when(repository.findById(2L)).thenReturn(Optional.of(boiled));
         when(repository.findByNameOrderById("Ức gà")).thenReturn(List.of(fried, raw, boiled));
         when(repository.findAliasesByFoodName("Ức gà")).thenReturn(List.of("Thịt ức gà", "ức gà"));
@@ -53,22 +81,34 @@ class FoodDetailsServiceTest {
         FoodDetailsResponse details = service.details(2L);
 
         assertThat(details.selectedId()).isEqualTo(2L);
+        assertThat(details.category().name()).isEqualTo("Thịt");
         assertThat(details.variants()).extracting(FoodVariantResponse::preparation)
                 .containsExactly(Preparation.RAW, Preparation.BOILED, Preparation.FRIED);
         assertThat(details.aliases()).containsExactly("Thịt ức gà"); // the name itself is not an "other name"
     }
 
     @Test
-    void linksOnlyRowsBackedByOneUsdaItem() {
-        assertThat(FoodDetailsService.sourceUrl("USDA FDC 168878 (SR Legacy)"))
-                .isEqualTo("https://fdc.nal.usda.gov/food-details/168878/nutrients");
-        assertThat(FoodDetailsService.sourceUrl("ƯỚC TÍNH: USDA FDC 167812 x tỉ lệ của FDC 167853/167854")).isNull();
-        assertThat(FoodDetailsService.sourceUrl("Viện Dinh dưỡng – BTPTP VN, mã 1001")).isNull();
+    void eachPreparationGetsItsOwnPhotos() {
+        Food raw = food(1, "Gạo tẻ", Preparation.RAW, "168877", false);
+        Food boiled = food(2, "Gạo tẻ", Preparation.BOILED, "168878", false);
+        FoodImage grains = image(1, "foods/gao-te-raw-1.webp");
+        FoodImage bowl = image(2, "foods/gao-te-boiled-1.webp");
+        FoodImage plate = image(2, "foods/gao-te-boiled-2.webp");
+        when(repository.findById(2L)).thenReturn(Optional.of(boiled));
+        when(repository.findByNameOrderById("Gạo tẻ")).thenReturn(List.of(raw, boiled));
+        when(repository.findAliasesByFoodName("Gạo tẻ")).thenReturn(List.of());
+        when(images.findByFoodIdInOrderByFoodIdAscSortOrderAsc(anyCollection())).thenReturn(List.of(grains, bowl, plate));
+
+        List<FoodVariantResponse> variants = service.details(2L).variants();
+
+        assertThat(variants.get(0).images()).extracting(i -> i.path()).containsExactly("foods/gao-te-raw-1.webp");
+        assertThat(variants.get(1).images()).extracting(i -> i.path())
+                .containsExactly("foods/gao-te-boiled-1.webp", "foods/gao-te-boiled-2.webp");
     }
 
     @Test
-    void marksEstimatedRows() {
-        Food braised = food(9, "Thịt ba chỉ", Preparation.BRAISED, "ƯỚC TÍNH: USDA FDC 167812 x tỉ lệ sống->kho");
+    void anEstimateHasNoLinkAndNoRef() {
+        Food braised = food(9, "Thịt ba chỉ", Preparation.BRAISED, null, true);
         when(repository.findById(9L)).thenReturn(Optional.of(braised));
         when(repository.findByNameOrderById("Thịt ba chỉ")).thenReturn(List.of(braised));
         when(repository.findAliasesByFoodName("Thịt ba chỉ")).thenReturn(List.of());
@@ -77,6 +117,14 @@ class FoodDetailsServiceTest {
 
         assertThat(variant.estimated()).isTrue();
         assertThat(variant.sourceUrl()).isNull();
+    }
+
+    @Test
+    void buildsTheItemLinkFromTheSourceTemplate() {
+        assertThat(FoodSource.itemUrl(FDC_TEMPLATE, "168878"))
+                .isEqualTo("https://fdc.nal.usda.gov/food-details/168878/nutrients");
+        assertThat(FoodSource.itemUrl(null, "1001")).isNull(); // a source without item pages
+        assertThat(FoodSource.itemUrl(FDC_TEMPLATE, null)).isNull();
     }
 
     @Test

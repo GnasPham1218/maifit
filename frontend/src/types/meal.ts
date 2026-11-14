@@ -2,6 +2,8 @@
 export type Preparation = 'RAW' | 'BOILED' | 'STEAMED' | 'FRIED' | 'BRAISED' | 'GRILLED';
 export type MealType = 'BREAKFAST' | 'LUNCH' | 'DINNER' | 'SNACK';
 
+import type { FoodImage } from './food';
+
 // Values per 100 g. null = the source has no data (not zero)
 export interface Food {
   id: number;
@@ -12,7 +14,12 @@ export interface Food {
   carbG: number | null;
   fatG: number | null;
   fiberG: number | null;
-  source: string;
+  categoryId: number;
+  sourceId: number;
+  sourceName: string; // e.g. "USDA FoodData Central – SR Legacy"
+  sourceRef: string | null; // the item id at the source; null for an estimate
+  estimated: boolean;
+  image: FoodImage | null; // the main photo
   leanVersionId: number | null; // non-null -> this food can be logged with a 0-100 fat-trim slider
 }
 
