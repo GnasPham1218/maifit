@@ -100,11 +100,21 @@ public class MealService {
         return mapper.toResponse(mealRepository.saveAndFlush(meal));
     }
 
+    // Grams, fat trim, and optionally the preparation ("Gạo tẻ" raw -> boiled). Calories follow at read time.
     @Transactional
-    public MealResponse updateItemGrams(Long userId, Long mealId, Long itemId, UpdateMealItemRequest req) {
+    public MealResponse updateItem(Long userId, Long mealId, Long itemId, UpdateMealItemRequest req) {
         MealLog meal = findOwned(userId, mealId);
         MealItem item = findItem(meal, itemId);
-        checkFatPercent(item.getFood(), req.fatPercent());
+        Food food = item.getFood();
+        if (req.foodId() != null && !req.foodId().equals(food.getId())) {
+            food = foodRepository.findById(req.foodId())
+                    .orElseThrow(() -> new AppException(ErrorCode.FOOD_NOT_FOUND));
+            if (!food.getName().equals(item.getFood().getName())) {
+                throw new AppException(ErrorCode.FOOD_CHANGE_NOT_ALLOWED);
+            }
+            item.changeFood(food);
+        }
+        checkFatPercent(food, req.fatPercent()); // against the food the item ends up with
         item.changeGrams(req.grams());
         item.changeFatPercent(req.fatPercent()); // saved by dirty checking at commit
         return mapper.toResponse(meal);

@@ -1,5 +1,6 @@
 package dev.gnaspham1218.maifit.backend.chat.service;
 
+import dev.gnaspham1218.maifit.backend.ai.dto.TokenUsage;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatCalculation;
 import dev.gnaspham1218.maifit.backend.chat.entity.ChatMessage;
 import dev.gnaspham1218.maifit.backend.chat.entity.ChatOutcome;
@@ -31,6 +32,10 @@ public class ChatEngine {
 
         /** Called when the model call failed, so it is not charged. */
         void refund();
+
+        /** Called after a successful call with the tokens it was billed (measuring the real cost). */
+        default void recordTokens(TokenUsage usage) {
+        }
     }
 
     /** For the evaluation: model calls are not counted. */
@@ -85,15 +90,23 @@ public class ChatEngine {
 
         // 4. Ask the model (bounded by app.chat.model-timeout); a failed or timed-out call is refunded
         started = System.nanoTime();
-        ModelAnswer raw;
+        ModelReply reply;
         try {
-            raw = answerer.answer(promptBuilder.systemPrompt(), promptBuilder.userPrompt(history, chunks, question));
+            reply = answerer.answer(promptBuilder.systemPrompt(), promptBuilder.userPrompt(history, chunks, question));
         } catch (RuntimeException e) {
             quota.refund();
             log.error("Chat model call failed for {} after {} ms", caller, millisSince(started), e);
             throw new AppException(ErrorCode.AI_UNAVAILABLE);
         }
         long modelMs = millisSince(started);
+        ModelAnswer raw = reply.answer();
+        TokenUsage usage = reply.usage() == null ? TokenUsage.NONE : reply.usage();
+        log.info("AI tokens feature=CHAT {} input={} output={}", caller, usage.input(), usage.output());
+        try {
+            quota.recordTokens(usage); // best effort: the answer matters more than the measurement
+        } catch (RuntimeException e) {
+            log.warn("Could not record token usage for {}", caller, e);
+        }
 
         // 5. Code decides what is shown (outside the try: a bug here must not refund nor hide as "AI unavailable")
         ValidatedAnswer validated = validator.validate(raw, chunks);

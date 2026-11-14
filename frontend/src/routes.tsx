@@ -3,15 +3,17 @@ import { GuestRoute } from './components/GuestRoute';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
+import MealsLayout from './layouts/MealsLayout';
 import WorkoutLayout from './layouts/WorkoutLayout';
 import ChatPage from './pages/ChatPage';
+import FoodDetailsPage from './pages/FoodDetailsPage';
+import FoodLibraryPage from './pages/FoodLibraryPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomePage from './pages/HomePage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import LoginPage from './pages/LoginPage';
 import MealsPage from './pages/MealsPage';
 import NotFoundPage from './pages/NotFoundPage';
-import PremiumPage from './pages/PremiumPage';
 import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
@@ -19,6 +21,11 @@ import VerifyEmailPage from './pages/VerifyEmailPage';
 import WorkoutPage from './pages/WorkoutPage';
 
 export const router = createBrowserRouter([
+  // Component gallery, development only: import.meta.env.DEV is false in a production build, so this
+  // route and its lazily imported page are dropped from the bundle
+  ...(import.meta.env.DEV
+    ? [{ path: '/dev/ui', lazy: async () => ({ Component: (await import('./pages/DevUiPage')).default }) }]
+    : []),
   {
     // Logged-in area
     element: <ProtectedRoute />,
@@ -26,11 +33,21 @@ export const router = createBrowserRouter([
       {
         element: <MainLayout />,
         children: [
-          { path: '/', element: <HomePage /> },
-          { path: '/meals', element: <MealsPage /> },
+          { path: '/', element: <HomePage />, handle: { title: 'Trang chủ', greeting: true } },
+          {
+            // Two tabs that are routes: the day's log and the food library
+            element: <MealsLayout />,
+            handle: { title: 'Ăn uống' },
+            children: [
+              { path: '/meals', element: <MealsPage /> },
+              { path: '/foods', element: <FoodLibraryPage /> },
+            ],
+          },
+          { path: '/foods/:id', element: <FoodDetailsPage />, handle: { title: 'Chi tiết món', ownHeading: true } },
           {
             path: '/workout',
             element: <WorkoutLayout />,
+            handle: { title: 'Tập luyện' },
             children: [
               { index: true, element: <WorkoutPage /> },
               { path: 'leaderboard', element: <LeaderboardPage /> },
@@ -38,10 +55,12 @@ export const router = createBrowserRouter([
           },
           // Old address (bookmarks, shared links) -> the leaderboard tab
           { path: '/leaderboard', element: <Navigate to="/workout/leaderboard" replace /> },
-          { path: '/chat', element: <ChatPage /> },
-          { path: '/chat/:conversationId', element: <ChatPage /> },
-          { path: '/premium', element: <PremiumPage /> },
-          { path: '/profile', element: <ProfilePage /> },
+          // The chat page draws its own heading (bot picture, back button on phones)
+          { path: '/chat', element: <ChatPage />, handle: { title: 'MBotFit', ownHeading: true } },
+          { path: '/chat/:conversationId', element: <ChatPage />, handle: { title: 'MBotFit', ownHeading: true } },
+          // Premium is bought from the profile now; old links open the payment there
+          { path: '/premium', element: <Navigate to="/profile" replace state={{ openPay: true }} /> },
+          { path: '/profile', element: <ProfilePage />, handle: { title: 'Hồ sơ' } },
         ],
       },
     ],

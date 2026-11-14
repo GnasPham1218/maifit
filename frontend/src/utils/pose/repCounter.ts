@@ -3,17 +3,20 @@ import type { Check } from './analyzeFrame';
 
 // WAITING: not sure where the person is yet (start, or came back into the frame).
 //          A rep can only start from a clear top position, so stepping in half-bent counts nothing.
-// UP / DOWN: top or bottom of the movement. A rep = UP -> DOWN -> UP, counted on the way back up.
+// UP / DOWN: top or bottom of the movement. A rep = UP -> DOWN -> UP, counted on the way back up:
+//          the joint must go under downBelow AND come back over upAbove.
 export type RepPhase = 'WAITING' | 'UP' | 'DOWN';
 
 // What just happened, for the on-screen feedback. seq grows on every event so the UI can replay
 // an animation even when the same kind happens twice in a row.
-export type RepEventKind = 'COUNTED' | 'TOO_SHALLOW' | 'BAD_FORM' | 'TOO_FAST';
+// NOT_UP: went down, rose part of the way (not to the top) and went down again.
+export type RepEventKind = 'COUNTED' | 'TOO_SHALLOW' | 'NOT_UP' | 'BAD_FORM' | 'TOO_FAST';
 export interface RepEvent {
   kind: RepEventKind;
   seq: number; // attempt number in the set (every attempt, counted or not)
   low: number | null; // lowest angle reached in this attempt (for the set log)
   message?: string; // BAD_FORM: which rule was broken
+  high?: number; // NOT_UP: highest angle reached on the way up
 }
 
 export interface RepCounterState {
@@ -23,6 +26,7 @@ export interface RepCounterState {
   missingSince: number | null; // time of the first frame in a row without a usable angle
   lastRepAt: number | null;
   repMin: number | null; // lowest angle since the last top (half-rep check and the set log)
+  repMax: number | null; // DOWN: highest angle since reaching the bottom (catches a rise that stops short of the top)
   topHeight: number | null; // body height (m) at the top of the current rep
   lowHeight: number | null; // lowest body height (m) during the current rep
   limb: number | null; // latest limb length (m) the drop is compared to
@@ -37,7 +41,8 @@ export interface RepCounterOptions {
   maxGapMs: number; // body lost longer than this -> back to WAITING
   minRepMs: number; // two reps closer than this = jitter, the second is not counted
   badFormFrames: number; // bad form must last this many frames in a row (one noisy frame is ignored)
-  shallowMargin: number; // went this many degrees below the top but not to the bottom = half rep
+  shallowMargin: number; // went this many degrees below the top but not to the bottom = half rep;
+  // also: rose this many degrees above the bottom line then went down again = did not come up
 }
 
 // smoothing 0.8: removes landmark shake but keeps the bottom of a fast rep. On a phone the model
@@ -57,6 +62,7 @@ export const INITIAL_REP_STATE: RepCounterState = {
   missingSince: null,
   lastRepAt: null,
   repMin: null,
+  repMax: null,
   topHeight: null,
   lowHeight: null,
   limb: null,
@@ -76,15 +82,22 @@ export interface FrameInput {
 type Thresholds = Pick<Exercise, 'downBelow' | 'upAbove'> &
   Partial<Pick<Exercise, 'minDropRatio' | 'dropMessage'>>;
 
-const nextEvent = (state: RepCounterState, kind: RepEventKind, low: number | null, message?: string): RepEvent => ({
+const nextEvent = (
+  state: RepCounterState,
+  kind: RepEventKind,
+  low: number | null,
+  extra: { message?: string; high?: number } = {},
+): RepEvent => ({
   kind,
   seq: (state.event?.seq ?? 0) + 1,
   low: low == null ? null : Math.round(low),
-  ...(message ? { message } : {}),
+  ...(extra.message ? { message: extra.message } : {}),
+  // Rounded down: 149.6 must not read as "150" when the top is "above 150"
+  ...(extra.high != null ? { high: Math.floor(extra.high) } : {}),
 });
 
 // A new rep starts from a clean slate
-const atTop = { repMin: null, repBadForm: null, lowHeight: null } as const;
+const atTop = { repMin: null, repMax: null, repBadForm: null, lowHeight: null } as const;
 
 // One camera frame in, the next state out. Pure (no camera, no clock inside):
 // the whole counting logic is unit tested by feeding it a list of frames. now: frame time in ms.
@@ -128,7 +141,9 @@ export function stepRepCounter(
       return atTopNow ? { ...next, ...atTop, phase: 'UP' } : next;
 
     case 'UP': {
-      if (angle < thresholds.downBelow) return { ...next, phase: 'DOWN', repMin: Math.min(state.repMin ?? angle, angle) };
+      if (angle < thresholds.downBelow) {
+        return { ...next, phase: 'DOWN', repMin: Math.min(state.repMin ?? angle, angle), repMax: angle };
+      }
       if (!atTopNow) return { ...next, repMin: Math.min(state.repMin ?? angle, angle) };
       // Back at the top without reaching the bottom: a half rep if it went down noticeably
       const halfRep = state.repMin != null && state.repMin < thresholds.upAbove - options.shallowMargin;
@@ -136,15 +151,31 @@ export function stepRepCounter(
     }
 
     case 'DOWN': {
-      if (!atTopNow) return { ...next, repMin: Math.min(state.repMin ?? angle, angle) };
+      if (!atTopNow) {
+        const repMax = Math.max(state.repMax ?? angle, angle);
+        // Rose clearly above the bottom line (the margin ignores shake at the bottom), never reached
+        // the top, and is going down again: this attempt ends here without a rep, a new one starts now
+        const roseShort = repMax > thresholds.downBelow + options.shallowMargin;
+        if (roseShort && angle < thresholds.downBelow) {
+          return {
+            ...next,
+            repMin: angle,
+            repMax: angle,
+            repBadForm: formMessage,
+            lowHeight: height,
+            event: nextEvent(state, 'NOT_UP', state.repMin, { high: repMax }),
+          };
+        }
+        return { ...next, repMin: Math.min(state.repMin ?? angle, angle), repMax };
+      }
       const low = state.repMin;
       const up = { ...next, ...atTop, phase: 'UP' as const };
-      if (repBadForm) return { ...up, event: nextEvent(state, 'BAD_FORM', low, repBadForm) };
+      if (repBadForm) return { ...up, event: nextEvent(state, 'BAD_FORM', low, { message: repBadForm }) };
       // The joint bent, but did the body really go down? (only judged when the heights were seen)
       if (thresholds.minDropRatio && state.topHeight != null && lowHeight != null && limb) {
         const drop = state.topHeight - lowHeight;
         if (drop < thresholds.minDropRatio * limb) {
-          return { ...up, event: nextEvent(state, 'BAD_FORM', low, thresholds.dropMessage ?? 'Hạ người xuống thấp hơn') };
+          return { ...up, event: nextEvent(state, 'BAD_FORM', low, { message: thresholds.dropMessage ?? 'Hạ người xuống thấp hơn' }) };
         }
       }
       const tooFast = state.lastRepAt != null && now - state.lastRepAt < options.minRepMs;

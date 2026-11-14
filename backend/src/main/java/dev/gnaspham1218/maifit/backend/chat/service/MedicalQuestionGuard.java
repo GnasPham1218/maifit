@@ -26,13 +26,17 @@ public class MedicalQuestionGuard {
             "ung thư", "suy thận", "sỏi thận", "chức năng thận", "gan nhiễm mỡ", "men gan",
             "tim mạch", "đột quỵ", "tiền sử", "triệu chứng", "chẩn đoán", "điều trị", "kê đơn",
             "dị ứng", "hen suyễn", "trầm cảm", "rối loạn", "viêm", "nhiễm trùng",
+            // Cancer treatment, in both accent styles: "hoá" (old style) and "hóa" are different letters, not
+            // unified by NFC. "hoá trị" reached the model and timed out in the chat-eval (2026-11-14)
+            "hóa trị", "hoá trị", "xạ trị", "phẫu thuật",
             // Vietnamese typed without diacritics: only phrases that cannot be another common word
             // ("thuoc" is left out: it is also "thuộc")
             "benh", "tieu duong", "dai thao duong", "huyet ap", "mo mau", "mang thai", "co thai",
             "ung thu", "suy than", "soi than", "trieu chung", "chan doan", "dieu tri", "di ung", "tram cam",
+            "hoa tri", "xa tri", "phau thuat",
             // English
             "disease", "diabetes", "diabetic", "pregnant", "pregnancy", "cancer", "medication",
-            "medicine", "blood pressure", "cholesterol", "gout");
+            "medicine", "blood pressure", "cholesterol", "gout", "chemotherapy", "chemo");
 
     private final Pattern pattern;
 

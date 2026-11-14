@@ -3,6 +3,7 @@ package dev.gnaspham1218.maifit.backend.payment.controller;
 import dev.gnaspham1218.maifit.backend.common.response.ApiResponse;
 import dev.gnaspham1218.maifit.backend.payment.dto.PaymentOrderResponse;
 import dev.gnaspham1218.maifit.backend.payment.dto.PremiumPlanResponse;
+import dev.gnaspham1218.maifit.backend.payment.dto.PricingResponse;
 import dev.gnaspham1218.maifit.backend.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class PaymentController {
 
     private final PaymentService service;
+
+    // GET /api/payments/pricing: public (landing page), price and daily limits only
+    @GetMapping("/pricing")
+    public ApiResponse<PricingResponse> pricing() {
+        return ApiResponse.ok(service.pricing());
+    }
 
     // Premium state of the caller, the price, and an order still waiting for payment (if any)
     @GetMapping("/plan")

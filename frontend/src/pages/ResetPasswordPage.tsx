@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AuthHeading } from '../components/AuthHeading';
 import { Link, useSearchParams } from 'react-router';
 import { authApi } from '../apis/authApi';
 import { Alert } from '../components/Alert';
@@ -42,7 +43,7 @@ export default function ResetPasswordPage() {
   if (!token) {
     return (
       <>
-        <h2 className="mb-5 text-lg font-semibold">Đặt lại mật khẩu</h2>
+        <AuthHeading title="Đặt lại mật khẩu" />
         <Alert type="error">Liên kết không hợp lệ.</Alert>
         <div className="mt-4.5 flex flex-wrap justify-between gap-2 text-sm">
           <Link to="/forgot-password">Gửi lại liên kết</Link>
@@ -54,7 +55,7 @@ export default function ResetPasswordPage() {
   if (done) {
     return (
       <>
-        <h2 className="mb-5 text-lg font-semibold">Đặt lại mật khẩu</h2>
+        <AuthHeading title="Đặt lại mật khẩu" />
         <Alert type="success">
           Đã đặt mật khẩu mới. Mọi thiết bị đã bị đăng xuất, hãy đăng nhập lại.
         </Alert>
@@ -67,7 +68,7 @@ export default function ResetPasswordPage() {
 
   return (
     <>
-      <h2 className="mb-5 text-lg font-semibold">Đặt mật khẩu mới</h2>
+      <AuthHeading title="Đặt mật khẩu mới">Liên kết chỉ dùng được một lần.</AuthHeading>
       {error && <Alert type="error">{error}</Alert>}
       <form
         className="grid gap-3.5"

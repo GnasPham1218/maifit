@@ -16,6 +16,7 @@ const HANDS_BELOW_SHOULDERS = 0.1;
 export const PUSH_UP: Exercise = {
   id: 'PUSH_UP',
   label: 'Hít đất',
+  jointLabel: 'khuỷu',
   sides: [
     [11, 13, 15], // shoulder - elbow - wrist
     [12, 14, 16],

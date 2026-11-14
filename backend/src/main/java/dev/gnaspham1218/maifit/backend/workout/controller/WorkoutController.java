@@ -5,6 +5,7 @@ import dev.gnaspham1218.maifit.backend.workout.dto.CreateWorkoutRequest;
 import dev.gnaspham1218.maifit.backend.workout.dto.DailyWorkoutsResponse;
 import dev.gnaspham1218.maifit.backend.workout.dto.MonthlyWorkoutSummary;
 import dev.gnaspham1218.maifit.backend.workout.dto.WorkoutResponse;
+import dev.gnaspham1218.maifit.backend.workout.dto.WorkoutTimeSummary;
 import dev.gnaspham1218.maifit.backend.workout.service.WorkoutService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,12 @@ public class WorkoutController {
             @AuthenticationPrincipal Jwt jwt,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth month) {
         return ApiResponse.ok(service.monthlySummary(userId(jwt), month));
+    }
+
+    // GET /api/workouts/time-summary: training time for the profile (today, this week, this month + bars)
+    @GetMapping("/time-summary")
+    public ApiResponse<WorkoutTimeSummary> timeSummary(@AuthenticationPrincipal Jwt jwt) {
+        return ApiResponse.ok(service.timeSummary(userId(jwt)));
     }
 
     // Only the owner's sets can be deleted (others answer 404)

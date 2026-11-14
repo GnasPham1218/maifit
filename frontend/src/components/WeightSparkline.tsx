@@ -36,7 +36,7 @@ export function WeightSparkline({ checkins }: Props) {
       <svg
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         preserveAspectRatio="none"
-        className="h-32 w-full text-sky-strong"
+        className="h-32 w-full text-accent"
         role="img"
         aria-label={`Cân nặng từ ${formatNumber(weights[0])} kg đến ${formatNumber(weights[weights.length - 1])} kg`}
       >

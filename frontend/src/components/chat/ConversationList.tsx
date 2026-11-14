@@ -1,4 +1,4 @@
-import { MessageSquarePlus, Trash2 } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router';
 import type { ChatConversation } from '../../types/chat';
@@ -20,8 +20,10 @@ function shortDate(iso: string): string {
   });
 }
 
+// The delete button sits over the right end of the row; the title makes room for it only when it shows
 const rowClass = ({ isActive }: { isActive: boolean }) =>
-  `block min-w-0 flex-1 rounded-2xl px-3 py-2.5 ${isActive ? 'bg-ink text-white' : 'hover:bg-bg'}`;
+  `flex min-w-0 flex-1 flex-col gap-0.5 rounded-[14px] px-3 py-2.5 pr-11 transition-colors pointer-fine:pr-3
+  pointer-fine:group-hover:pr-11 pointer-fine:group-focus-within:pr-11 ${isActive ? 'bg-accent text-on-accent hover:text-on-accent' : 'text-ink hover:bg-soft hover:text-ink'}`;
 
 export function ConversationList({ conversations, onDelete }: ConversationListProps) {
   // Delete asks for a confirmation inside the row (no browser dialog)
@@ -39,25 +41,26 @@ export function ConversationList({ conversations, onDelete }: ConversationListPr
   }
 
   return (
-    <nav aria-label="Các cuộc trò chuyện" className="flex min-h-0 flex-col gap-3">
+    <nav aria-label="Các cuộc trò chuyện" className="flex min-h-0 flex-1 flex-col gap-3">
       <NavLink
         to="/chat/new"
         className={({ isActive }) =>
-          `inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-medium ${
-            isActive ? 'bg-ink text-white' : 'border border-line bg-surface hover:bg-bg'
+          `flex min-h-12 w-full shrink-0 items-center justify-center gap-2 rounded-full px-5 font-semibold transition-colors ${
+            isActive ? 'bg-accent text-on-accent' : 'border border-line bg-surface hover:bg-soft'
           }`
         }
       >
-        <MessageSquarePlus aria-hidden="true" className="size-4" />
+        <Plus aria-hidden="true" className="size-4" />
         Hỏi mới
       </NavLink>
 
       {conversations === null && <p className="px-3 text-sm text-muted">Đang tải…</p>}
       {conversations?.length === 0 && <p className="px-3 text-sm text-muted">Chưa có cuộc trò chuyện nào.</p>}
 
-      <ul className="grid min-h-0 gap-1 overflow-y-auto">
+      {/* Many conversations: only the list scrolls, "Hỏi mới" stays on top */}
+      <ul className="scroll-soft scroll-fade -mr-2 grid min-h-0 grid-cols-[minmax(0,1fr)] content-start gap-1 overflow-x-hidden overflow-y-auto pr-2">
         {conversations?.map((c) => (
-          <li key={c.id} className="flex items-center gap-1">
+          <li key={c.id} className="group relative flex min-w-0 items-center">
             {confirmingId === c.id ? (
               <div className="flex min-w-0 flex-1 items-center gap-2 rounded-2xl bg-danger-bg px-3 py-2 text-sm">
                 <span className="min-w-0 flex-1 truncate text-danger">Xóa “{c.title}”?</span>
@@ -71,7 +74,7 @@ export function ConversationList({ conversations, onDelete }: ConversationListPr
                 </button>
                 <button
                   type="button"
-                  className="cursor-pointer text-ink-soft"
+                  className="cursor-pointer text-muted"
                   onClick={() => setConfirmingId(null)}
                   disabled={deletingId === c.id}
                 >
@@ -81,12 +84,19 @@ export function ConversationList({ conversations, onDelete }: ConversationListPr
             ) : (
               <>
                 <NavLink to={`/chat/${c.id}`} className={rowClass} title={c.title}>
-                  <span className="block truncate">{c.title}</span>
-                  <span className="block text-xs opacity-70">{shortDate(c.updatedAt)}</span>
+                  {({ isActive }) => (
+                    <>
+                      <span className="truncate font-medium">{c.title}</span>
+                      <span className={`text-xs ${isActive ? 'opacity-75' : 'text-muted'}`}>{shortDate(c.updatedAt)}</span>
+                    </>
+                  )}
                 </NavLink>
+                {/* Mouse: shows on hover or keyboard focus. Touch: always there (no hover). */}
                 <button
                   type="button"
-                  className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted hover:bg-bg hover:text-danger"
+                  className="absolute right-1.5 flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted
+                    hover:bg-surface hover:text-danger focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-accent
+                    pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 pointer-fine:group-focus-within:opacity-100"
                   onClick={() => setConfirmingId(c.id)}
                   aria-label={`Xóa cuộc trò chuyện ${c.title}`}
                   title="Xóa"

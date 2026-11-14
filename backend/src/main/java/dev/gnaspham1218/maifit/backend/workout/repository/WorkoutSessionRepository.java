@@ -30,6 +30,20 @@ public interface WorkoutSessionRepository extends JpaRepository<WorkoutSession, 
                                  @Param("to") Instant to,
                                  @Param("zone") String zone);
 
+    // Training time per calendar day (Vietnam time), for the profile's time card, in ONE query.
+    // Columns: [0] day (date), [1] seconds (bigint), [2] sets (bigint)
+    @Query(value = """
+            select cast(w.started_at at time zone :zone as date) as day, sum(w.duration_sec) as seconds, count(*) as sets
+            from workout_sessions w
+            where w.user_id = :userId and w.started_at >= :from and w.started_at < :to
+            group by day
+            order by day
+            """, nativeQuery = true)
+    List<Object[]> sumTimePerDay(@Param("userId") Long userId,
+                                 @Param("from") Instant from,
+                                 @Param("to") Instant to,
+                                 @Param("zone") String zone);
+
     // A retry of a set already saved (same client_id) returns that set instead of a duplicate
     Optional<WorkoutSession> findByUserIdAndClientId(Long userId, UUID clientId);
 

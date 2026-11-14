@@ -1,5 +1,6 @@
 package dev.gnaspham1218.maifit.backend.chat.ingest;
 
+import dev.gnaspham1218.maifit.backend.food.entity.FoodSource;
 import org.springframework.ai.document.Document;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -11,8 +12,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Turns the foods table into chunks: one chunk per food NAME, with every preparation and every alias.
@@ -31,14 +30,23 @@ public class RagFoodChunker {
 
     private static final String TITLE = "Bảng thực phẩm MAIFit (USDA FoodData Central)";
     private static final String LICENSE = "Public domain (USDA FoodData Central)";
-    private static final Pattern FDC_ID = Pattern.compile("USDA FDC (\\d+)");
     // Same words as the meal page (frontend constants/meal.ts)
     private static final Map<String, String> PREPARATION_LABELS = Map.of(
             "RAW", "Sống", "BOILED", "Luộc", "STEAMED", "Hấp",
             "FRIED", "Chiên", "BRAISED", "Kho", "GRILLED", "Nướng");
 
     private record FoodRow(String name, String preparation, BigDecimal kcal, BigDecimal proteinG,
-                           BigDecimal carbG, BigDecimal fatG, BigDecimal fiberG, String source) {
+                           BigDecimal carbG, BigDecimal fatG, BigDecimal fiberG,
+                           String sourceName, String sourceRef, boolean estimated, String itemUrlTemplate) {
+
+        // What the chat quotes as the source of this row
+        String sourceText() {
+            return estimated ? "ước tính từ " + sourceName : sourceName + " (mã " + sourceRef + ")";
+        }
+
+        String url() {
+            return estimated ? null : FoodSource.itemUrl(itemUrlTemplate, sourceRef);
+        }
     }
 
     private record AliasRow(String name, String preparation, String alias, boolean locksPreparation) {
@@ -52,11 +60,14 @@ public class RagFoodChunker {
 
     public List<Document> chunk() {
         List<FoodRow> rows = jdbc.sql("""
-                        SELECT name, preparation, kcal, protein_g, carb_g, fat_g, fiber_g, source
-                        FROM foods ORDER BY name, id""")
+                        SELECT f.name, f.preparation, f.kcal, f.protein_g, f.carb_g, f.fat_g, f.fiber_g,
+                               s.name AS source_name, f.source_ref, f.estimated, s.item_url_template
+                        FROM foods f JOIN food_sources s ON s.id = f.source_id
+                        ORDER BY f.name, f.id""")
                 .query((rs, i) -> new FoodRow(rs.getString("name"), rs.getString("preparation"),
                         rs.getBigDecimal("kcal"), rs.getBigDecimal("protein_g"), rs.getBigDecimal("carb_g"),
-                        rs.getBigDecimal("fat_g"), rs.getBigDecimal("fiber_g"), rs.getString("source")))
+                        rs.getBigDecimal("fat_g"), rs.getBigDecimal("fiber_g"), rs.getString("source_name"),
+                        rs.getString("source_ref"), rs.getBoolean("estimated"), rs.getString("item_url_template")))
                 .list();
         List<AliasRow> aliases = jdbc.sql("""
                         SELECT f.name, f.preparation, a.alias, a.locks_preparation
@@ -93,7 +104,7 @@ public class RagFoodChunker {
                     .append("tinh bột ").append(grams(row.carbG())).append("; ")
                     .append("chất béo ").append(grams(row.fatG())).append("; ")
                     .append("chất xơ ").append(grams(row.fiberG())).append(". ")
-                    .append("Nguồn: ").append(row.source()).append('\n');
+                    .append("Nguồn: ").append(row.sourceText()).append('\n');
         }
 
         Map<String, Object> metadata = new LinkedHashMap<>();
@@ -101,7 +112,7 @@ public class RagFoodChunker {
         metadata.put(RagChunker.SOURCE, SOURCE_FOODS);
         metadata.put(RagChunker.TITLE, TITLE);
         metadata.put(RagChunker.SECTION, name);
-        metadata.put(RagChunker.URL, fdcUrl(variants.getFirst().source()));
+        metadata.put(RagChunker.URL, firstUrl(variants));
         metadata.put(RagChunker.LICENSE, LICENSE);
         metadata.put(FOOD, name);
         return Document.builder().text(text.toString().strip()).metadata(metadata).build();
@@ -121,9 +132,8 @@ public class RagFoodChunker {
         return value.stripTrailingZeros().toPlainString().replace('.', ',');
     }
 
-    /** The USDA page of the first row, or "" when its source has no FDC id (Document metadata rejects null). */
-    private static String fdcUrl(String source) {
-        Matcher id = FDC_ID.matcher(source);
-        return id.find() ? "https://fdc.nal.usda.gov/food-details/" + id.group(1) + "/nutrients" : "";
+    /** The source page of the first row that has one, or "" (Document metadata rejects null). */
+    private static String firstUrl(List<FoodRow> variants) {
+        return variants.stream().map(FoodRow::url).filter(u -> u != null).findFirst().orElse("");
     }
 }

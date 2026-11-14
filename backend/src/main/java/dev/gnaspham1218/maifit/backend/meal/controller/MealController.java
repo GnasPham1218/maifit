@@ -72,7 +72,7 @@ public class MealController {
                                                 @PathVariable Long mealId,
                                                 @PathVariable Long itemId,
                                                 @Valid @RequestBody UpdateMealItemRequest request) {
-        return ApiResponse.ok(service.updateItemGrams(userId(jwt), mealId, itemId, request));
+        return ApiResponse.ok(service.updateItem(userId(jwt), mealId, itemId, request));
     }
 
     // Removing the last item deletes the meal too

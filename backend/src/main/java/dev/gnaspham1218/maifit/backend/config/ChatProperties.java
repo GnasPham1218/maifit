@@ -15,6 +15,8 @@ public record ChatProperties(
         double foodSimilarityThreshold,  // the same gate for food chunks (they are short and score differently)
         int historyMessages,         // previous messages of the conversation sent back as context
         Duration modelTimeout,       // a model call slower than this is abandoned and refunded
-        GoogleGenAiThinkingLevel thinkingLevel   // how long Gemini 3 may "think" before answering a chat question
+        GoogleGenAiThinkingLevel thinkingLevel,  // how long Gemini 3 may "think" before answering a chat question
+        int maxOutputTokens,         // ceiling on generated tokens per call (thinking included): caps the cost of one call
+        String model                 // Gemini model for chat only; photo recognition keeps spring.ai.google.genai.chat.options.model
 ) {
 }

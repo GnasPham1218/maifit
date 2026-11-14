@@ -35,6 +35,16 @@ export function eatenAtFor(date: string, mealType: MealType): string | undefined
   return new Date(`${date}T${hour}:00:00+07:00`).toISOString();
 }
 
+// The meal that fits a moment in Vietnam time: before 10:00 breakfast, before 14:00 lunch,
+// before 17:00 snack, then dinner. Only a starting choice: the user can switch it.
+export function mealTypeAt(moment: Date = new Date()): MealType {
+  const hour = Number(new Intl.DateTimeFormat('en-GB', { hour: '2-digit', hourCycle: 'h23', timeZone: ZONE }).format(moment));
+  if (hour < 10) return 'BREAKFAST';
+  if (hour < 14) return 'LUNCH';
+  if (hour < 17) return 'SNACK';
+  return 'DINNER';
+}
+
 // ---- Months (yyyy-MM) ----
 
 export function monthOf(date: string): string {

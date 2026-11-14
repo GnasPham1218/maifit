@@ -16,12 +16,12 @@ export function SourceChips({ sources }: { sources: ChatSource[] }) {
             <span className="truncate">{label}</span>
           </>
         );
-        const className = 'inline-flex max-w-full items-center gap-1.5 rounded-full bg-sky px-3 py-1 text-xs text-ink';
+        const className = 'inline-flex max-w-full items-center gap-1.5 rounded-full bg-soft px-3 py-1 text-xs text-link';
         return (
           <li key={`${i}-${label}`} className="min-w-0 max-w-full">
             {href ? (
               <a href={href} target="_blank" rel="noopener noreferrer" title={label}
-                className={`${className} hover:bg-sky-strong hover:text-white`}>
+                className={`${className} transition-colors hover:bg-accent hover:text-on-accent`}>
                 {chip}
               </a>
             ) : (

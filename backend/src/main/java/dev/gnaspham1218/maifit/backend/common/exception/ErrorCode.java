@@ -36,6 +36,7 @@ public enum ErrorCode {
     MEAL_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "At most 10 meals can be logged per day"),
     FOOD_REQUEST_DAILY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "Daily limit for reporting missing foods reached"),
     FAT_PERCENT_NOT_APPLICABLE(HttpStatus.BAD_REQUEST, "This food has no lean/fat trim option"),
+    FOOD_CHANGE_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "Only another preparation of the same food can be chosen"),
 
     // ---- Workouts ----
     WORKOUT_TIME_INVALID(HttpStatus.BAD_REQUEST, "A set must be saved within 24 hours and cannot be in the future"),

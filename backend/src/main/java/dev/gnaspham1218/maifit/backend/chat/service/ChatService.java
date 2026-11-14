@@ -1,5 +1,6 @@
 package dev.gnaspham1218.maifit.backend.chat.service;
 
+import dev.gnaspham1218.maifit.backend.ai.dto.TokenUsage;
 import dev.gnaspham1218.maifit.backend.ai.entity.AiFeature;
 import dev.gnaspham1218.maifit.backend.ai.service.AiUsageService;
 import dev.gnaspham1218.maifit.backend.chat.dto.ChatReplyResponse;
@@ -69,6 +70,11 @@ public class ChatService {
             @Override
             public Integer acquire() {
                 return aiUsageService.acquire(userId, AiFeature.CHAT);
+            }
+
+            @Override
+            public void recordTokens(TokenUsage usage) {
+                aiUsageService.recordTokens(userId, AiFeature.CHAT, usage);
             }
 
             @Override

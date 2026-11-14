@@ -77,6 +77,10 @@ app:
     chunk-size: 350        # target tokens per chunk
     min-chunk-chars: 200   # never cut a chunk shorter than this
   chat:
+    # Chat runs on a cheaper model than photo recognition (2026-11-14): 3.1 Flash-Lite is $0.25/$1.50 per 1M
+    # tokens vs $0.30/$2.50 for 3.5, about 30% less per question at the same tokens. Google's earliest
+    # shutdown date for 3.1 is 2027-05-07; set GEMINI_CHAT_MODEL=gemini-3.5-flash-lite to switch back.
+    model: ${GEMINI_CHAT_MODEL:gemini-3.1-flash-lite}
     max-question-chars: 500     # longer questions are rejected (a long question also retrieves worse)
     top-k: 5                    # chunks retrieved and sent to the model
     # Retrieval gate. Measured 2026-11-12 on the 5 sources: in-scope questions 0.56-0.74,
@@ -88,9 +92,12 @@ app:
     food-similarity-threshold: 0.60
     history-messages: 6         # previous messages sent back so follow-up questions make sense
     model-timeout: 30s          # well under Nginx's 60 s: a slow Gemini reply is refunded instead of a silent 504
-    # Chat only (photo recognition keeps Gemini's default). Unset: chat-eval 10/15 with calls stuck over 30 s
+    # Chat only (photo recognition has its own, app.ai.food-vision). Unset: chat-eval 10/15 with calls stuck over 30 s
     # and cut JSON; LOW: 14/15 then 15/15, 1.5-3.5 s per call (2026-11-13). Valid: MINIMAL, LOW, MEDIUM, HIGH
     thinking-level: LOW
+    # Ceiling on generated tokens per chat call, thinking included: caps the cost of one call.
+    # A normal answer is 300-800 tokens plus thinking; a cut JSON is refunded and answered 503
+    max-output-tokens: 4096
   food-request:
     daily-limit: 5   # "Báo thiếu món": distinct names per user per day (Vietnam time)
   jwt:
@@ -119,16 +126,24 @@ app:
     timeout: 5s
   ai:
     daily-limit:
+      # 2026-11-14, from measured costs (~23 VND per photo, ~32 VND per chat question on 3.1 Flash-Lite):
+      # a Premium user who uses every call every day costs ~12k VND a month
       food-vision: 3            # food recognition calls per user per day, free plan
-      food-vision-premium: 30   # the same for Premium users
-      chat: 5                   # chatbot calls per user per day, free plan
-      chat-premium: 20          # the same for Premium users
+      food-vision-premium: 10   # the same for Premium users
+      chat: 2                   # chatbot calls per user per day, free plan
+      chat-premium: 5           # the same for Premium users
+    food-vision:
+      # Photo recognition cost guards (2026-11-14). Gemini bills thinking as output, so LOW thinking and a
+      # ceiling on output tokens bound the price of one call. The ceiling counts thinking too: 2048 cut the
+      # JSON of a real meal photo (unreadable array), so 4096. Logs show finish=MAX_TOKENS if it is still short
+      thinking-level: LOW
+      max-output-tokens: 4096
   payment:
     provider: PAYOS             # gateway used for new orders (a PaymentProvider implementation)
     premium:
       # VND for one purchase. Local .env sets PREMIUM_PRICE=2000 for testing: payOS has no sandbox,
       # every test is a real bank transfer.
-      price: ${PREMIUM_PRICE:39000}
+      price: ${PREMIUM_PRICE:29999}
       days: 30                  # Premium days one purchase adds (stacks on top of the remaining time)
     order-ttl: 15m              # how long a QR stays payable
     max-orders-per-day: 10      # new orders per user per day (Vietnam time)

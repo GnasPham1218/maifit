@@ -25,6 +25,7 @@ const MESSAGES: Record<string, string> = {
   FOOD_NOT_FOUND: 'Món ăn không có trong danh sách. Hãy tải lại trang.',
   MEAL_IN_FUTURE: 'Thời gian ăn không được ở tương lai.',
   MEAL_ITEMS_LIMIT: 'Mỗi bữa có tối đa 30 món.',
+  FOOD_CHANGE_NOT_ALLOWED: 'Chỉ đổi được cách chế biến của cùng món. Muốn đổi món khác, hãy xoá món này rồi thêm món mới.',
   MEAL_DAILY_LIMIT: 'Mỗi ngày chỉ ghi được tối đa 10 bữa.',
   FOOD_REQUEST_DAILY_LIMIT: 'Hôm nay bạn đã báo đủ 5 món thiếu. Ngày mai bạn báo tiếp nhé.',
   WORKOUT_TIME_INVALID: 'Set phải được lưu trong vòng 24 giờ và không được ở tương lai.',

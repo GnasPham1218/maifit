@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { AuthHeading } from '../components/AuthHeading';
 import { Link, useSearchParams } from 'react-router';
 import { authApi } from '../apis/authApi';
 import { Alert } from '../components/Alert';
@@ -25,7 +26,7 @@ export default function VerifyEmailPage() {
 
   return (
     <>
-      <h2 className="mb-5 text-lg font-semibold">Xác thực email</h2>
+      <AuthHeading title="Xác thực email" />
       {state === 'verifying' && <Alert type="info">Đang xác thực…</Alert>}
       {state === 'success' && <Alert type="success">Email đã được xác thực. Bạn có thể đăng nhập.</Alert>}
       {state === 'error' && (

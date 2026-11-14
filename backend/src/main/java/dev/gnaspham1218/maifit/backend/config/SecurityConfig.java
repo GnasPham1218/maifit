@@ -29,6 +29,8 @@ public class SecurityConfig {
             "/auth/logout",
             "/auth/forgot-password",
             "/auth/reset-password",
+            // Landing page: price and daily limits from the config, nothing about a user
+            "/payments/pricing",
             // Called by the payment gateway's servers (no JWT); authenticated by the provider's
             // own check inside PaymentProvider.parseWebhook (payOS: HMAC signature)
             "/payments/webhook/*"

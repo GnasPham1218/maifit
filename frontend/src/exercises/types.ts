@@ -36,6 +36,7 @@ export interface HeightResult {
 export interface Exercise {
   id: ExerciseId;
   label: string;
+  jointLabel: string; // the counting joint in the set log: "Rep 12 hợp lệ, gối 88°"
   // Counting: angles are inner joint angles in 3D (180 = straight). Two thresholds far apart
   // (hysteresis): an angle shaking around one value never counts twice.
   sides: readonly JointChain[]; // the joint that counts reps, left and right

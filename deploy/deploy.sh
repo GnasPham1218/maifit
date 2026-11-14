@@ -34,7 +34,10 @@ main() {
   echo "==> Chờ backend UP"
   for _ in $(seq 1 30); do
     if curl -fsS http://127.0.0.1:8080/api/actuator/health | grep -q '"status":"UP"'; then
-      docker image prune -f > /dev/null
+      # Remove images no container uses that were built more than 3 days ago.
+      # "-a" also removes old tagged maifit images (plain "-f" only removes untagged ones),
+      # while the last few days stay local for a quick rollback.
+      docker image prune -af --filter "until=72h" > /dev/null
       echo "==> Deploy xong: $tag"
       exit 0
     fi

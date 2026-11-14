@@ -1,3 +1,4 @@
+import type { AccentColor } from '../utils/accent';
 // Mirrors the backend DTOs (UserResponse, LoginResponse, RegisterRequest)
 export type Role = 'USER' | 'ADMIN';
 
@@ -7,6 +8,7 @@ export interface User {
   username: string;
   displayName: string;
   role: Role;
+  accentColor: AccentColor; // kept per account, applied on <html> by AuthProvider
 }
 
 export interface LoginResponse {

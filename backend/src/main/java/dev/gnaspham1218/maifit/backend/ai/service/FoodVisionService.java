@@ -2,6 +2,7 @@ package dev.gnaspham1218.maifit.backend.ai.service;
 
 import dev.gnaspham1218.maifit.backend.ai.dto.RecognizeResponse;
 import dev.gnaspham1218.maifit.backend.ai.dto.RecognizedFood;
+import dev.gnaspham1218.maifit.backend.ai.dto.TokenUsage;
 import dev.gnaspham1218.maifit.backend.ai.entity.AiFeature;
 import dev.gnaspham1218.maifit.backend.common.exception.AppException;
 import dev.gnaspham1218.maifit.backend.common.exception.ErrorCode;
@@ -13,8 +14,13 @@ import dev.gnaspham1218.maifit.backend.food.service.FoodRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.content.Media;
+import org.springframework.ai.converter.BeanOutputConverter;
+import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
+import org.springframework.ai.google.genai.common.GoogleGenAiThinkingLevel;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
@@ -70,14 +76,20 @@ public class FoodVisionService {
     private final FoodMatcher foodMatcher;
     private final AiUsageService aiUsageService;
     private final FoodRequestService foodRequestService;
+    private final GoogleGenAiThinkingLevel thinkingLevel;
+    private final int maxOutputTokens;
 
     public FoodVisionService(ChatModel chatModel, FoodRepository foodRepository, FoodMatcher foodMatcher,
-                             AiUsageService aiUsageService, FoodRequestService foodRequestService) {
+                             AiUsageService aiUsageService, FoodRequestService foodRequestService,
+                             @Value("${app.ai.food-vision.thinking-level:LOW}") GoogleGenAiThinkingLevel thinkingLevel,
+                             @Value("${app.ai.food-vision.max-output-tokens:2048}") int maxOutputTokens) {
         this.chatClient = ChatClient.builder(chatModel).build();
         this.foodRepository = foodRepository;
         this.foodMatcher = foodMatcher;
         this.aiUsageService = aiUsageService;
         this.foodRequestService = foodRequestService;
+        this.thinkingLevel = thinkingLevel;
+        this.maxOutputTokens = maxOutputTokens;
     }
 
     /**
@@ -93,20 +105,52 @@ public class FoodVisionService {
         // 2. Deduct quota (throws 429 if exhausted)
         int remaining = aiUsageService.acquire(userId, AiFeature.FOOD_VISION);
 
-        List<AiItem> raw;
+        // 3. Call Gemini. The JSON format instructions come from the converter; the raw response is read first
+        //    so its token usage is recorded even when the JSON turns out broken (Google bills it anyway).
+        //    Cost guards for this request only: a low thinking level and a ceiling on output tokens.
+        BeanOutputConverter<List<AiItem>> converter =
+                new BeanOutputConverter<>(new ParameterizedTypeReference<List<AiItem>>() {});
+        ChatResponse modelResponse;
         try {
-            // 3. Call Gemini. entity() adds JSON format instructions to the prompt and parses the answer
-            raw = chatClient.prompt()
+            modelResponse = chatClient.prompt()
+                    .options(GoogleGenAiChatOptions.builder()
+                            .thinkingLevel(thinkingLevel)
+                            .maxOutputTokens(maxOutputTokens))
                     .user(u -> u
-                            .text(PROMPT)
+                            .text(PROMPT + "\n\n" + converter.getFormat())
                             .media(new Media(mimeType, new ByteArrayResource(bytes))))
                     .call()
-                    .entity(new ParameterizedTypeReference<List<AiItem>>() {});
-
+                    .chatResponse();
         } catch (RuntimeException e) {
-            // Network error, Gemini 429/5xx, unparsable JSON...: the user gets the call back
+            // Network error, Gemini 429/5xx...: the user gets the call back
             aiUsageService.refund(userId, AiFeature.FOOD_VISION);
             log.error("Food vision failed for user {}", userId, e);
+            throw new AppException(ErrorCode.AI_UNAVAILABLE);
+        }
+
+        // Measure what the call really cost (best effort: a failed write must not lose the user's result).
+        // finish = MAX_TOKENS means the ceiling cut the answer: raise app.ai.food-vision.max-output-tokens
+        TokenUsage usage = TokenUsage.from(modelResponse);
+        String finish = finishReason(modelResponse);
+        log.info("AI tokens feature=FOOD_VISION user={} input={} output={} finish={} parts={}",
+                userId, usage.input(), usage.output(), finish, partCount(modelResponse));
+        try {
+            aiUsageService.recordTokens(userId, AiFeature.FOOD_VISION, usage);
+        } catch (RuntimeException e) {
+            log.warn("Could not record token usage", e);
+        }
+
+        String text = answerText(modelResponse);
+        List<AiItem> raw;
+        try {
+            raw = converter.convert(text);
+        } catch (RuntimeException e) {
+            // Cut or invalid JSON: not the user's fault, they get the call back (the tokens stay recorded).
+            // The start of the text (food names only, nothing personal) shows what the model really sent.
+            aiUsageService.refund(userId, AiFeature.FOOD_VISION);
+            log.error("Food vision returned unreadable JSON for user {} (finish={}, parts={}, chars={}): {}",
+                    userId, finish, partCount(modelResponse), text.length(),
+                    text.substring(0, Math.min(text.length(), 300)), e);
             throw new AppException(ErrorCode.AI_UNAVAILABLE);
         }
 
@@ -125,6 +169,31 @@ public class FoodVisionService {
     }
 
     // ---- helpers ----
+
+    // With thinking on, Gemini may send the answer in several parts and Spring AI may turn each part into
+    // its own Generation; getResult() is only the first one (a JSON cut in the middle). Join them all.
+    private static String answerText(ChatResponse response) {
+        if (response == null || response.getResults() == null) {
+            return "";
+        }
+        return response.getResults().stream()
+                .filter(g -> g != null && g.getOutput() != null && g.getOutput().getText() != null)
+                .map(g -> g.getOutput().getText())
+                .collect(Collectors.joining());
+    }
+
+    private static int partCount(ChatResponse response) {
+        return response == null || response.getResults() == null ? 0 : response.getResults().size();
+    }
+
+    // STOP = finished normally; MAX_TOKENS = cut by the ceiling
+    private static String finishReason(ChatResponse response) {
+        if (response == null || response.getResult() == null || response.getResult().getMetadata() == null) {
+            return "UNKNOWN";
+        }
+        String reason = response.getResult().getMetadata().getFinishReason();
+        return reason == null ? "UNKNOWN" : reason;
+    }
 
     /** Content-Type is sent by the client and can lie, so the file's first bytes are checked too. */
     private MimeType validateImage(MultipartFile image) {

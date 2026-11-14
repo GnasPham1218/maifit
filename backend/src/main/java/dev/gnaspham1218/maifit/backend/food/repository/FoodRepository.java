@@ -1,6 +1,7 @@
 package dev.gnaspham1218.maifit.backend.food.repository;
 
 import dev.gnaspham1218.maifit.backend.food.entity.Food;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -8,10 +9,22 @@ import java.util.List;
 
 public interface FoodRepository extends JpaRepository<Food, Long> {
 
+    // Group and source in the same query: no extra query per food (N+1)
+    @EntityGraph(attributePaths = {"category", "source"})
     List<Food> findAllByOrderByNameAscPreparationAsc();
 
     /** Every preparation of one food, in table order (the chatbot calculates portions from these). */
+    @EntityGraph(attributePaths = {"category", "source"})
     List<Food> findByNameOrderById(String name);
+
+    /** Other names of a food, from the aliases of all its preparations (food detail page). */
+    @Query(value = """
+            SELECT DISTINCT a.alias
+            FROM food_aliases a JOIN foods f ON f.id = a.food_id
+            WHERE f.name = :name
+            ORDER BY a.alias
+            """, nativeQuery = true)
+    List<String> findAliasesByFoodName(String name);
 
     /**
      * Fuzzy, accent-insensitive search in food names AND aliases (pg_trgm + unaccent, see V6).
