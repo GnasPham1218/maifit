@@ -1,5 +1,6 @@
 package dev.gnaspham1218.maifit.backend.ai.service;
 
+import dev.gnaspham1218.maifit.backend.ai.dto.AiQuota;
 import dev.gnaspham1218.maifit.backend.ai.entity.AiFeature;
 import dev.gnaspham1218.maifit.backend.ai.entity.AiUsage;
 import dev.gnaspham1218.maifit.backend.ai.entity.AiUsageId;
@@ -23,18 +24,21 @@ public class AiUsageService {
     private final int foodVisionLimit;
     private final int foodVisionPremiumLimit;
     private final int chatLimit;
+    private final int chatPremiumLimit;
 
     public AiUsageService(
             AiUsageRepository repo,
             PremiumService premiumService,
             @Value("${app.ai.daily-limit.food-vision:3}") int foodVisionLimit,
             @Value("${app.ai.daily-limit.food-vision-premium:30}") int foodVisionPremiumLimit,
-            @Value("${app.ai.daily-limit.chat:20}") int chatLimit) {
+            @Value("${app.ai.daily-limit.chat:5}") int chatLimit,
+            @Value("${app.ai.daily-limit.chat-premium:20}") int chatPremiumLimit) {
         this.repo = repo;
         this.premiumService = premiumService;
         this.foodVisionLimit = foodVisionLimit;
         this.foodVisionPremiumLimit = foodVisionPremiumLimit;
         this.chatLimit = chatLimit;
+        this.chatPremiumLimit = chatPremiumLimit;
     }
 
     public int freeFoodVisionLimit() {
@@ -43,6 +47,25 @@ public class AiUsageService {
 
     public int premiumFoodVisionLimit() {
         return foodVisionPremiumLimit;
+    }
+
+    public int freeChatLimit() {
+        return chatLimit;
+    }
+
+    public int premiumChatLimit() {
+        return chatPremiumLimit;
+    }
+
+    /** Today's limit and what is left, without using anything (for the UI). */
+    @Transactional(readOnly = true)
+    public AiQuota quota(Long userId, AiFeature feature) {
+        LocalDate today = ZonedDateTime.now(AppTime.ZONE).toLocalDate();
+        int limit = limitFor(userId, feature);
+        int used = repo.findById(new AiUsageId(userId, today, feature))
+                .map(AiUsage::getCount)
+                .orElse(0);
+        return new AiQuota(limit, Math.max(limit - used, 0));
     }
 
     /**
@@ -76,7 +99,7 @@ public class AiUsageService {
     private int limitFor(Long userId, AiFeature feature) {
         return switch (feature) {
             case FOOD_VISION -> premiumService.isPremium(userId) ? foodVisionPremiumLimit : foodVisionLimit;
-            case CHAT        -> chatLimit;
+            case CHAT        -> premiumService.isPremium(userId) ? chatPremiumLimit : chatLimit;
         };
     }
 }

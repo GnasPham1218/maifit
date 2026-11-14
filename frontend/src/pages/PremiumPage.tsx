@@ -187,6 +187,13 @@ export default function PremiumPage() {
               </li>
               <li className="flex items-start gap-2">
                 <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-success" />
+                <span>
+                  Hỏi trợ lý AI <strong className="font-semibold text-ink">{plan.premiumDailyChats} lượt mỗi ngày</strong>{' '}
+                  (gói miễn phí: {plan.freeDailyChats} lượt)
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-success" />
                 <span>Mua thêm khi còn hạn thì số ngày được cộng dồn</span>
               </li>
             </ul>
@@ -256,6 +263,8 @@ export default function PremiumPage() {
           hint={plan?.premium && plan.premiumUntil ? `Đến hết ngày ${formatDate(plan.premiumUntil)}` : undefined} />
         <StatTile tone="peach" label="Nhận diện ảnh"
           value={plan ? (plan.premium ? plan.premiumDailyScans : plan.freeDailyScans) : '—'} unit="lượt mỗi ngày" />
+        <StatTile tone="lime" label="Hỏi trợ lý AI"
+          value={plan ? (plan.premium ? plan.premiumDailyChats : plan.freeDailyChats) : '—'} unit="lượt mỗi ngày" />
         <Card>
           <p className="text-sm text-ink-soft">
             Thanh toán bằng chuyển khoản ngân hàng qua payOS. MAIFit không lưu thông tin thẻ hay tài khoản của bạn.

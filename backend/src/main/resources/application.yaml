@@ -30,6 +30,20 @@ spring:
       mail.smtp.timeout: 5000
       mail.smtp.writetimeout: 5000
   ai:
+    model:
+      # Two providers are on the classpath, so each role is assigned explicitly:
+      # Gemini answers, Ollama embeds. Without "chat", Spring finds two ChatModel beans and fails to start.
+      chat: google-genai
+      embedding: ollama
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      embedding:
+        model: bge-m3           # documents and questions must be embedded by the SAME model
+    vectorstore:
+      pgvector:
+        # Must match vector(1024) in V14__vector_store.sql. Set explicitly so the app does not
+        # have to call Ollama at startup to discover it (the app still starts when Ollama is down).
+        dimensions: 1024
     google:
       genai:
         api-key: ${GEMINI_API_KEY}
@@ -58,6 +72,25 @@ app:
     password-reset:
       max-attempts: 3         # reset emails per address...
       window: 1h
+  rag:
+    # Sources are cut at every heading first; a section longer than one chunk is cut again by tokens
+    chunk-size: 350        # target tokens per chunk
+    min-chunk-chars: 200   # never cut a chunk shorter than this
+  chat:
+    max-question-chars: 500     # longer questions are rejected (a long question also retrieves worse)
+    top-k: 5                    # chunks retrieved and sent to the model
+    # Retrieval gate. Measured 2026-11-12 on the 5 sources: in-scope questions 0.56-0.74,
+    # out-of-scope 0.28-0.37. Below this score a chunk does not count; no chunk left = refusal, no AI call
+    similarity-threshold: 0.45
+    food-top-k: 3               # food chunks (one per food name), searched apart from the documents
+    # Measured 2026-11-13 (ingest check): food questions 0.62-0.70 on the right food, general nutrition
+    # questions 0.46-0.58 on unrelated foods, out of scope 0.29-0.34. Foods named in the question skip it (hybrid)
+    food-similarity-threshold: 0.60
+    history-messages: 6         # previous messages sent back so follow-up questions make sense
+    model-timeout: 30s          # well under Nginx's 60 s: a slow Gemini reply is refunded instead of a silent 504
+    # Chat only (photo recognition keeps Gemini's default). Unset: chat-eval 10/15 with calls stuck over 30 s
+    # and cut JSON; LOW: 14/15 then 15/15, 1.5-3.5 s per call (2026-11-13). Valid: MINIMAL, LOW, MEDIUM, HIGH
+    thinking-level: LOW
   food-request:
     daily-limit: 5   # "Báo thiếu món": distinct names per user per day (Vietnam time)
   jwt:
@@ -88,7 +121,8 @@ app:
     daily-limit:
       food-vision: 3            # food recognition calls per user per day, free plan
       food-vision-premium: 30   # the same for Premium users
-      chat: 20                  # chatbot calls per user per day
+      chat: 5                   # chatbot calls per user per day, free plan
+      chat-premium: 20          # the same for Premium users
   payment:
     provider: PAYOS             # gateway used for new orders (a PaymentProvider implementation)
     premium:

@@ -1,4 +1,6 @@
+import { LogOut } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { bodyCheckinApi, profileApi } from '../apis/profileApi';
 import { Alert } from '../components/Alert';
 import { BodyCheckinSection } from '../components/BodyCheckinSection';
@@ -11,6 +13,7 @@ import type { ActivityLevel, Goal, Profile, Sex } from '../types/profile';
 import { optionalNumber } from '../utils/number';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
+import { useAuth } from '../hooks/useAuth';
 
 interface FormState {
   sex: Sex;
@@ -42,6 +45,31 @@ function toForm(p: Profile): FormState {
     customTargetKcal: p.customTargetKcal != null ? String(p.customTargetKcal) : '',
     weightKg: '',
   };
+}
+
+// The only logout button on phones (the bottom bar keeps its room for the pages)
+function LogoutCard() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [busy, setBusy] = useState(false);
+
+  async function handleLogout() {
+    setBusy(true);
+    await logout();
+    navigate('/login', { replace: true });
+  }
+
+  return (
+    <Card className="flex flex-wrap items-center justify-between gap-3">
+      <p className="min-w-0 text-sm text-ink-soft">
+        Đang đăng nhập: <span className="font-medium text-ink">{user?.displayName}</span>
+      </p>
+      <Button variant="secondary" onClick={() => void handleLogout()} disabled={busy}>
+        <LogOut aria-hidden="true" className="size-4" />
+        {busy ? 'Đang đăng xuất…' : 'Đăng xuất'}
+      </Button>
+    </Card>
+  );
 }
 
 export default function ProfilePage() {
@@ -167,6 +195,8 @@ export default function ProfilePage() {
 
       {/* Check-ins need a profile first, so TDEE can be recomputed right away */}
       {profile && <BodyCheckinSection onChanged={() => void reloadProfile()} />}
+
+      <LogoutCard />
     </section>
   );
 }

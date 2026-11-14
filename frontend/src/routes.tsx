@@ -1,8 +1,10 @@
-import { createBrowserRouter } from 'react-router';
+import { Navigate, createBrowserRouter } from 'react-router';
 import { GuestRoute } from './components/GuestRoute';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
+import WorkoutLayout from './layouts/WorkoutLayout';
+import ChatPage from './pages/ChatPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomePage from './pages/HomePage';
 import LeaderboardPage from './pages/LeaderboardPage';
@@ -26,8 +28,18 @@ export const router = createBrowserRouter([
         children: [
           { path: '/', element: <HomePage /> },
           { path: '/meals', element: <MealsPage /> },
-          { path: '/workout', element: <WorkoutPage /> },
-          { path: '/leaderboard', element: <LeaderboardPage /> },
+          {
+            path: '/workout',
+            element: <WorkoutLayout />,
+            children: [
+              { index: true, element: <WorkoutPage /> },
+              { path: 'leaderboard', element: <LeaderboardPage /> },
+            ],
+          },
+          // Old address (bookmarks, shared links) -> the leaderboard tab
+          { path: '/leaderboard', element: <Navigate to="/workout/leaderboard" replace /> },
+          { path: '/chat', element: <ChatPage /> },
+          { path: '/chat/:conversationId', element: <ChatPage /> },
           { path: '/premium', element: <PremiumPage /> },
           { path: '/profile', element: <ProfilePage /> },
         ],

@@ -10,6 +10,8 @@ public record PremiumPlanResponse(
         int days,                           // Premium days one purchase adds
         int freeDailyScans,                 // photo recognitions per day on the free plan
         int premiumDailyScans,
+        int freeDailyChats,                 // chatbot questions per day on the free plan
+        int premiumDailyChats,
         PaymentOrderResponse pendingOrder   // an order still waiting for payment, so a reload keeps the same QR
 ) {
 }

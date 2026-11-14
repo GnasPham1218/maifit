@@ -1,0 +1,6 @@
+# Profile "ingest": loads src/main/resources/rag/*.md into vector_store, prints a retrieval check, exits.
+# Run from backend/ (Ollama must be running with bge-m3 pulled):
+#   ./mvnw spring-boot:run -Dspring-boot.run.profiles=ingest
+server:
+  port: 0              # any free port, so a normal backend can keep running on 8080 at the same time
+  address: 127.0.0.1   # the short-lived web server of this run is never reachable from the network

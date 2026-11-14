@@ -1,0 +1,11 @@
+# Profile "chat-eval": runs src/main/resources/chat-eval/cases.txt through the real chat logic, then exits.
+# Run from backend/ (Ollama with bge-m3, Postgres with the ingested sources, a Gemini key in .env):
+#   ./mvnw spring-boot:run -Dspring-boot.run.profiles=chat-eval
+server:
+  port: 0              # any free port, so a normal backend can keep running on 8080 at the same time
+  address: 127.0.0.1   # the short-lived web server of this run is never reachable from the network
+app:
+  chat-eval:
+    # Wait between cases. The dev Gemini key is free tier: 15 requests per minute for this model
+    # (a run without a pause hit 429 on its 20th call, 2026-11-13). 4.5 s = at most ~13 per minute
+    pause: 4500ms
