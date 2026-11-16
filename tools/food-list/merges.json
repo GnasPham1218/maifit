@@ -1,0 +1,20 @@
+[
+  {
+    "from_id": 148,
+    "from_name": "Heo thăn",
+    "from_preparation": "GRILLED",
+    "into_id": 15,
+    "into_name": "Thịt thăn heo",
+    "into_preparation": "GRILLED",
+    "why": "cùng thăn heo (USDA tenderloin, broiled vs roasted)"
+  },
+  {
+    "from_id": 265,
+    "from_name": "Sữa tươi nguyên kem",
+    "from_preparation": "RAW",
+    "into_id": 45,
+    "into_name": "Sữa tươi",
+    "into_preparation": "RAW",
+    "why": "cùng mã USDA (Milk, whole, 3.25% milkfat)"
+  }
+]

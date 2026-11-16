@@ -1,0 +1,5895 @@
+[
+  {
+    "name": "Bánh mì",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 5,
+        "preparation": "RAW",
+        "source_description": "Bread, french or vienna (includes sourdough)",
+        "source_approximate": true,
+        "aliases": [
+          "Ổ bánh mì",
+          "Bánh mì không",
+          "Bánh mì trắng",
+          "Bánh mì thường"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bánh mì nguyên cám",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 326,
+        "preparation": "RAW",
+        "source_description": "Bread, whole-wheat, commercially prepared",
+        "source_approximate": false,
+        "aliases": [
+          "Bánh mì nguyên cám",
+          "Bánh mì lúa mạch nguyên cám",
+          "Whole wheat bread"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bánh mì sandwich",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 325,
+        "preparation": "RAW",
+        "source_description": "Bread, white, commercially prepared (includes soft bread crumbs)",
+        "source_approximate": false,
+        "aliases": [
+          "Bánh mì gối",
+          "Bánh mì lát",
+          "Bánh mì sandwich trắng",
+          "Bánh mì sandwich",
+          "Sandwich"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bánh phở",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 3,
+        "preparation": "RAW",
+        "source_description": "Rice noodles, cooked",
+        "source_approximate": true,
+        "aliases": [
+          "Bánh phở",
+          "Sợi phở",
+          "Phở tươi"
+        ],
+        "locking_aliases": [
+          "Phở luộc",
+          "Phở chín"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Bột bắp",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 263,
+        "preparation": "RAW",
+        "source_description": "Cornstarch",
+        "source_approximate": false,
+        "aliases": [
+          "Bột ngô",
+          "Tinh bột bắp"
+        ],
+        "locking_aliases": [
+          "Bột bắp sống"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Bột gạo",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 255,
+        "preparation": "RAW",
+        "source_description": "Rice flour, white, unenriched",
+        "source_approximate": false,
+        "aliases": [
+          "Bột gạo tẻ",
+          "Bột gạo trắng"
+        ],
+        "locking_aliases": [
+          "Bột gạo sống"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Bột mì",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 262,
+        "preparation": "RAW",
+        "source_description": "Wheat flour, white, all-purpose, enriched, bleached",
+        "source_approximate": false,
+        "aliases": [
+          "Bột mì đa dụng",
+          "Bột mì số 11",
+          "Bột mì trắng",
+          "All-purpose flour"
+        ],
+        "locking_aliases": [
+          "Bột mì sống",
+          "Bột mì thô"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Trân châu",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 264,
+        "preparation": "RAW",
+        "source_description": "Tapioca, pearl, dry",
+        "source_approximate": false,
+        "aliases": [
+          "Trân châu khô",
+          "Hạt trân châu",
+          "Trân châu đen khô",
+          "Tapioca pearl"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bún khô",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 256,
+        "preparation": "RAW",
+        "source_description": "Rice noodles, dry",
+        "source_approximate": false,
+        "aliases": [
+          "Bún gạo khô",
+          "Bún khô"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bún",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 4,
+        "preparation": "RAW",
+        "source_description": "Rice noodles, cooked",
+        "source_approximate": true,
+        "aliases": [
+          "Bún tươi",
+          "Sợi bún"
+        ],
+        "locking_aliases": [
+          "Bún lá",
+          "Bún rối"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Gạo lứt",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 252,
+        "preparation": "BOILED",
+        "source_description": "Rice, brown, long-grain, cooked (Includes foods for USDA's Food Distribution Program)",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cơm gạo lứt",
+          "Gạo lứt nấu chín",
+          "Gạo lứt luộc"
+        ]
+      },
+      {
+        "id": 251,
+        "preparation": "RAW",
+        "source_description": "Rice, brown, long-grain, raw (Includes foods for USDA's Food Distribution Program)",
+        "source_approximate": false,
+        "aliases": [
+          "Gạo lứt",
+          "Gạo lứt đỏ",
+          "Gạo lứt huyết rồng",
+          "Gạo lứt nguyên cám"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Gạo nếp",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 254,
+        "preparation": "BOILED",
+        "source_description": "Rice, white, glutinous, unenriched, cooked",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Xôi",
+          "Cơm nếp",
+          "Nếp nấu chín",
+          "Xôi nếp"
+        ]
+      },
+      {
+        "id": 253,
+        "preparation": "RAW",
+        "source_description": "Rice, white, glutinous, unenriched, uncooked",
+        "source_approximate": false,
+        "aliases": [
+          "Gạo nếp",
+          "Nếp",
+          "Hạt nếp",
+          "Gạo nếp cái hoa vàng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Gạo tẻ",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 2,
+        "preparation": "BOILED",
+        "source_description": "Rice, white, long-grain, regular, enriched, cooked",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cơm",
+          "Cơm trắng",
+          "Cơm tẻ",
+          "Cơm gạo tẻ"
+        ]
+      },
+      {
+        "id": 1,
+        "preparation": "RAW",
+        "source_description": "Rice, white, long-grain, regular, raw, enriched",
+        "source_approximate": false,
+        "aliases": [
+          "Gạo",
+          "Gạo trắng"
+        ],
+        "locking_aliases": [
+          "Gạo sống"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Khoai lang",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 7,
+        "preparation": "BOILED",
+        "source_description": "Sweet potato, cooked, boiled, without skin",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Khoai lang luộc",
+          "Khoai lang chín"
+        ]
+      },
+      {
+        "id": 6,
+        "preparation": "RAW",
+        "source_description": "Sweet potato, raw, unprepared (Includes foods for USDA's Food Distribution Program)",
+        "source_approximate": false,
+        "aliases": [
+          "Khoai",
+          "Củ khoai lang",
+          "Khoai lang sống"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Khoai mì",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 68,
+        "preparation": "RAW",
+        "source_description": "Cassava, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Sắn",
+          "Củ sắn"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Khoai môn",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 67,
+        "preparation": "BOILED",
+        "source_description": "Taro, cooked, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Khoai môn luộc",
+          "Khoai môn chín",
+          "Khoai môn hấp"
+        ]
+      },
+      {
+        "id": 66,
+        "preparation": "RAW",
+        "source_description": "Taro, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Khoai môn",
+          "Củ khoai môn"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Khoai tây",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 64,
+        "preparation": "BOILED",
+        "source_description": "Potatoes, boiled, cooked without skin, flesh, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Khoai tây luộc",
+          "Khoai tây luộc chín"
+        ]
+      },
+      {
+        "id": 65,
+        "preparation": "GRILLED",
+        "source_description": "Potatoes, baked, flesh and skin, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Khoai tây nướng",
+          "Khoai tây đút lò"
+        ]
+      },
+      {
+        "id": 63,
+        "preparation": "RAW",
+        "source_description": "Potatoes, flesh and skin, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Khoai tây",
+          "Củ khoai tây"
+        ],
+        "locking_aliases": [
+          "Khoai tây sống",
+          "Khoai tây tươi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Miến",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 261,
+        "preparation": "RAW",
+        "source_description": "Noodles, chinese, cellophane or long rice (mung beans), dehydrated",
+        "source_approximate": false,
+        "aliases": [
+          "Miến dong",
+          "Miến đậu xanh",
+          "Miến khô",
+          "Sợi miến"
+        ],
+        "locking_aliases": [
+          "Miến khô",
+          "Miến chưa nấu"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Mì ống",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 260,
+        "preparation": "BOILED",
+        "source_description": "Pasta, cooked, enriched, without added salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Mì ống luộc",
+          "Mì Ý luộc",
+          "Spaghetti luộc"
+        ]
+      },
+      {
+        "id": 259,
+        "preparation": "RAW",
+        "source_description": "Pasta, dry, enriched",
+        "source_approximate": false,
+        "aliases": [
+          "Mì Ý",
+          "Spaghetti",
+          "Mì sợi",
+          "Pasta"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Mì trứng",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 258,
+        "preparation": "BOILED",
+        "source_description": "Noodles, egg, enriched, cooked",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Mì trứng luộc",
+          "Mì trứng nấu",
+          "Mì trứng chín"
+        ]
+      },
+      {
+        "id": 257,
+        "preparation": "RAW",
+        "source_description": "Noodles, egg, dry, enriched",
+        "source_approximate": false,
+        "aliases": [
+          "Mì trứng",
+          "Mì vắt",
+          "Mì trứng khô"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Ngô",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 91,
+        "preparation": "BOILED",
+        "source_description": "Corn, sweet, yellow, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Ngô luộc",
+          "Bắp luộc"
+        ]
+      },
+      {
+        "id": 90,
+        "preparation": "RAW",
+        "source_description": "Corn, sweet, yellow, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Bắp",
+          "Bắp ngô",
+          "Ngô ngọt",
+          "Bắp ngọt"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Yến mạch",
+    "category_code": "STARCH",
+    "category": "Tinh bột",
+    "preparations": [
+      {
+        "id": 8,
+        "preparation": "RAW",
+        "source_description": "Cereals, oats, regular and quick, not fortified, dry",
+        "source_approximate": false,
+        "aliases": [
+          "Hạt yến mạch",
+          "Yến mạch khô",
+          "Yến mạch nguyên chất",
+          "Oats"
+        ],
+        "locking_aliases": [
+          "Cháo yến mạch",
+          "Yến mạch nấu chín"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Bắp bò",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 158,
+        "preparation": "BOILED",
+        "source_description": "Beef, shank crosscuts, separable lean only, trimmed to 1/4\" fat, choice, cooked, simmered",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Bắp bò luộc",
+          "Bắp bò chín",
+          "Thịt bắp bò luộc"
+        ]
+      },
+      {
+        "id": 157,
+        "preparation": "RAW",
+        "source_description": "Beef, shank crosscuts, separable lean only, trimmed to 1/4\" fat, choice, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Bắp bò",
+          "Thịt bắp bò",
+          "Bắp hoa",
+          "Bắp kèn"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thịt bò xay",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 154,
+        "preparation": "GRILLED",
+        "source_description": "Beef, ground, 85% lean meat / 15% fat, patty, cooked, broiled",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Thịt bò xay nướng",
+          "Bò xay nướng",
+          "Chả bò xay nướng"
+        ]
+      },
+      {
+        "id": 153,
+        "preparation": "RAW",
+        "source_description": "Beef, ground, 85% lean meat / 15% fat, raw (Includes foods for USDA's Food Distribution Program)",
+        "source_approximate": false,
+        "aliases": [
+          "Thịt bò băm",
+          "Bò xay",
+          "Thịt bò xay",
+          "Bò băm"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cánh gà",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 164,
+        "preparation": "BOILED",
+        "source_description": "Chicken, broilers or fryers, wing, meat and skin, cooked, stewed",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cánh gà luộc",
+          "Cánh gà nấu",
+          "Cánh gà kho"
+        ]
+      },
+      {
+        "id": 166,
+        "preparation": "FRIED",
+        "source_description": "Chicken, broilers or fryers, wing, meat and skin, cooked, fried, flour",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cánh gà chiên",
+          "Cánh gà rán",
+          "Cánh gà chiên giòn",
+          "Cánh gà chiên bột"
+        ]
+      },
+      {
+        "id": 165,
+        "preparation": "GRILLED",
+        "source_description": "Chicken, broilers or fryers, wing, meat and skin, cooked, roasted",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cánh gà nướng",
+          "Cánh gà quay"
+        ]
+      },
+      {
+        "id": 163,
+        "preparation": "RAW",
+        "source_description": "Chicken, broilers or fryers, wing, meat and skin, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cánh gà",
+          "Thịt cánh gà",
+          "Cánh gà sống"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Chân giò heo",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 152,
+        "preparation": "GRILLED",
+        "source_description": "Pork, fresh, leg (ham), whole, separable lean only, cooked, roasted",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Chân giò heo quay",
+          "Giò heo nướng",
+          "Thịt chân giò quay",
+          "Chân giò nướng"
+        ]
+      },
+      {
+        "id": 151,
+        "preparation": "RAW",
+        "source_description": "Pork, fresh, leg (ham), whole, separable lean only, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Chân giò heo",
+          "Giò heo",
+          "Móng giò",
+          "Thịt chân giò",
+          "Giò sống"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Chim bồ câu",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 174,
+        "preparation": "RAW",
+        "source_description": "Squab, (pigeon), meat only, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Bồ câu",
+          "Thịt chim bồ câu",
+          "Chim bồ câu ra ràng",
+          "Thịt bồ câu",
+          "Chim câu"
+        ],
+        "locking_aliases": [
+          "Bồ câu quay",
+          "Bồ câu hầm",
+          "Cháo bồ câu",
+          "Bồ câu tần"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Chim cút",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 173,
+        "preparation": "RAW",
+        "source_description": "Quail, meat only, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cút",
+          "Thịt chim cút",
+          "Chim cút sống",
+          "Thịt cút"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đùi gà",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 13,
+        "preparation": "RAW",
+        "source_description": "Chicken, broilers or fryers, dark meat, thigh, meat only, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Đùi gà",
+          "Thịt đùi gà",
+          "Đùi gà lọc xương",
+          "Đùi gà phi lê"
+        ],
+        "locking_aliases": [
+          "Đùi gà sống",
+          "Đùi gà tươi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Gan bò",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 188,
+        "preparation": "BRAISED",
+        "source_description": "Beef, variety meats and by-products, liver, cooked, braised",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "gan bò kho",
+          "gan bò rim"
+        ]
+      },
+      {
+        "id": 187,
+        "preparation": "FRIED",
+        "source_description": "Beef, variety meats and by-products, liver, cooked, pan-fried",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "gan bò chiên",
+          "gan bò xào",
+          "gan bò áp chảo"
+        ]
+      },
+      {
+        "id": 186,
+        "preparation": "RAW",
+        "source_description": "Beef, variety meats and by-products, liver, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Gan bò",
+          "Lòng bò"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Gan gà",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 190,
+        "preparation": "BOILED",
+        "source_description": "Chicken, liver, all classes, cooked, simmered",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "gan gà luộc",
+          "gan gà nấu",
+          "gan gà luộc chín"
+        ]
+      },
+      {
+        "id": 191,
+        "preparation": "FRIED",
+        "source_description": "Chicken, liver, all classes, cooked, pan-fried",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "gan gà chiên",
+          "gan gà rán",
+          "gan gà xào"
+        ]
+      },
+      {
+        "id": 189,
+        "preparation": "RAW",
+        "source_description": "Chicken, liver, all classes, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Gan gà",
+          "Bộ phận nội tạng gà",
+          "Gan gia cầm"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thịt gà",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 168,
+        "preparation": "BOILED",
+        "source_description": "Chicken, broilers or fryers, meat and skin and giblets and neck, stewed",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Gà luộc",
+          "Thịt gà luộc",
+          "Gà nấu"
+        ]
+      },
+      {
+        "id": 170,
+        "preparation": "FRIED",
+        "source_description": "Chicken, broilers or fryers, meat and skin, cooked, fried, flour",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Gà rán",
+          "Gà chiên",
+          "Thịt gà rán",
+          "Gà chiên bột"
+        ]
+      },
+      {
+        "id": 169,
+        "preparation": "GRILLED",
+        "source_description": "Chicken, broilers or fryers, meat and skin and giblets and neck, roasted",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Gà nướng",
+          "Thịt gà nướng",
+          "Gà quay"
+        ]
+      },
+      {
+        "id": 167,
+        "preparation": "RAW",
+        "source_description": "Chicken, broilers or fryers, meat and skin, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Thịt gà",
+          "Thịt gà cả da",
+          "Gà"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Gan heo",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 183,
+        "preparation": "BRAISED",
+        "source_description": "Pork, fresh, variety meats and by-products, liver, cooked, braised",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Gan heo kho",
+          "Gan lợn kho",
+          "Gan heo nấu",
+          "Gan lợn nấu chín",
+          "Gan heo rim"
+        ]
+      },
+      {
+        "id": 182,
+        "preparation": "RAW",
+        "source_description": "Pork, fresh, variety meats and by-products, liver, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Gan heo",
+          "Gan lợn",
+          "Gan"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Gầu bò",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 160,
+        "preparation": "BRAISED",
+        "source_description": "Beef, brisket, flat half, separable lean and fat, trimmed to 0\" fat, choice, cooked, braised",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Gầu bò kho",
+          "Gầu bò nấu",
+          "Gầu bò hầm"
+        ]
+      },
+      {
+        "id": 159,
+        "preparation": "RAW",
+        "source_description": "Beef, brisket, flat half, separable lean and fat, trimmed to 1/8\" fat, choice, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Gầu bò",
+          "Thịt gầu bò",
+          "Nạm gầu bò"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thịt thăn heo",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 148,
+        "preparation": "GRILLED",
+        "source_description": "Pork, fresh, loin, tenderloin, separable lean only, cooked, broiled",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Thịt thăn heo nướng",
+          "Thăn heo nướng",
+          "Thịt heo thăn nướng"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Mề gà",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 193,
+        "preparation": "BOILED",
+        "source_description": "Chicken, gizzard, all classes, cooked, simmered",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Mề gà luộc",
+          "Mề gà chín"
+        ]
+      },
+      {
+        "id": 192,
+        "preparation": "RAW",
+        "source_description": "Chicken, gizzard, all classes, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Mề gà",
+          "Lòng mề gà"
+        ],
+        "locking_aliases": [
+          "Mề gà sống"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Nạc vai heo",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 150,
+        "preparation": "GRILLED",
+        "source_description": "Pork, fresh, shoulder, whole, separable lean only, cooked, roasted",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Thịt nạc vai nướng",
+          "Nạc vai heo nướng",
+          "Vai heo nướng"
+        ]
+      },
+      {
+        "id": 149,
+        "preparation": "RAW",
+        "source_description": "Pork, fresh, shoulder, whole, separable lean only, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Thịt vai",
+          "Thịt nạc vai",
+          "Nạc vai",
+          "Vai heo",
+          "Thịt vai heo"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sườn bò",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 162,
+        "preparation": "BRAISED",
+        "source_description": "Beef, chuck, short ribs, boneless, separable lean only, trimmed to 0\" fat, choice, cooked, braised",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Sườn bò kho",
+          "Sườn bò om",
+          "Thịt bò hầm",
+          "Sườn bò nấu"
+        ]
+      },
+      {
+        "id": 161,
+        "preparation": "RAW",
+        "source_description": "Beef, chuck, short ribs, boneless, separable lean only, trimmed to 0\" fat, choice, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Sườn bò",
+          "Dẻ sườn bò",
+          "Thịt sườn bò"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sườn heo",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 19,
+        "preparation": "BRAISED",
+        "source_description": "Pork, fresh, spareribs, separable lean and fat, cooked, braised",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Sườn kho",
+          "Sườn heo kho",
+          "Sườn rim"
+        ]
+      },
+      {
+        "id": 18,
+        "preparation": "RAW",
+        "source_description": "Pork, fresh, spareribs, separable lean and fat, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Sườn",
+          "Sườn heo",
+          "Sườn lợn",
+          "Sườn cục"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sườn heo",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 334,
+        "preparation": "GRILLED",
+        "source_description": "Pork, fresh, backribs, separable lean and fat, cooked, roasted",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Sườn heo nướng",
+          "Sườn lưng heo nướng"
+        ]
+      },
+      {
+        "id": 333,
+        "preparation": "RAW",
+        "source_description": "Pork, fresh, backribs, separable lean and fat, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Sườn lưng",
+          "Sườn lưng heo",
+          "Sườn heo",
+          "Sườn non",
+          "Sườn"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sườn lưng heo",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 336,
+        "preparation": "GRILLED",
+        "source_description": "Pork loin, fresh, backribs, bone-in, cooked-roasted, lean only",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Sườn heo nướng",
+          "Sườn lưng heo nướng",
+          "Sườn nạc nướng",
+          "Sườn heo quay"
+        ]
+      },
+      {
+        "id": 335,
+        "preparation": "RAW",
+        "source_description": "Pork loin, fresh, backribs, bone-in, raw, lean only",
+        "source_approximate": false,
+        "aliases": [
+          "Sườn lưng heo",
+          "Sườn heo",
+          "Sườn non",
+          "Sườn heo nạc",
+          "Sườn lưng",
+          "Sườn cộng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sườn thăn heo",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 328,
+        "preparation": "BRAISED",
+        "source_description": "Pork, fresh, loin, country-style ribs, separable lean and fat, cooked, braised",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Sườn thăn kho",
+          "Sườn heo kho",
+          "Sườn rim",
+          "Sườn thăn om"
+        ]
+      },
+      {
+        "id": 329,
+        "preparation": "GRILLED",
+        "source_description": "Pork, fresh, loin, country-style ribs, separable lean and fat, bone-in, cooked, broiled",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Sườn thăn nướng",
+          "Sườn heo nướng",
+          "Sườn nướng mật ong",
+          "Sườn nướng BBQ"
+        ]
+      },
+      {
+        "id": 327,
+        "preparation": "RAW",
+        "source_description": "Pork, fresh, loin, country-style ribs, separable lean and fat, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Sườn thăn",
+          "Sườn heo",
+          "Sườn non",
+          "Sườn thăn lợn",
+          "Sườn heo sống"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sườn thăn",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 331,
+        "preparation": "BRAISED",
+        "source_description": "Pork, fresh, loin, country-style ribs, separable lean only, cooked, braised",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Sườn thăn kho",
+          "Sườn thăn rim",
+          "Sườn kho"
+        ]
+      },
+      {
+        "id": 332,
+        "preparation": "GRILLED",
+        "source_description": "Pork, fresh, loin, country-style ribs, separable lean only, bone-in, cooked, broiled",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Sườn thăn nướng",
+          "Sườn nướng"
+        ]
+      },
+      {
+        "id": 330,
+        "preparation": "RAW",
+        "source_description": "Pork, fresh, loin, country-style ribs, separable lean only, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Sườn thăn",
+          "Sườn heo",
+          "Sườn lợn",
+          "Sườn non",
+          "Sườn nạc"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thăn bò",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 156,
+        "preparation": "GRILLED",
+        "source_description": "Beef, loin, tenderloin roast, boneless, separable lean only, trimmed to 0\" fat, choice, cooked, roasted",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Thăn bò nướng",
+          "Thịt thăn bò nướng",
+          "Bò thăn nướng"
+        ]
+      },
+      {
+        "id": 155,
+        "preparation": "RAW",
+        "source_description": "Beef, loin, tenderloin roast, boneless, separable lean only, trimmed to 0\" fat, choice, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Thịt thăn bò",
+          "Thăn bò tươi",
+          "Thăn nội bò",
+          "Lõi thăn bò"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thịt ba chỉ",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 17,
+        "preparation": "BRAISED",
+        "source_description": null,
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Thịt kho",
+          "Thịt kho tàu",
+          "Thịt ba chỉ kho",
+          "Thịt ba rọi kho"
+        ]
+      },
+      {
+        "id": 16,
+        "preparation": "RAW",
+        "source_description": "Pork, fresh, belly, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Ba chỉ",
+          "Thịt ba rọi",
+          "Ba rọi",
+          "Thịt ba chỉ heo",
+          "Thịt bụng heo"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thịt bắp bò nạc",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 21,
+        "preparation": "BRAISED",
+        "source_description": "Beef, round, top round, separable lean only, trimmed to 0\" fat, select, cooked, braised",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Thịt bò kho",
+          "Bò kho",
+          "Thịt bò hầm",
+          "Bò sốt vang"
+        ]
+      },
+      {
+        "id": 20,
+        "preparation": "RAW",
+        "source_description": "Beef, round, top round steak, boneless, separable lean only, trimmed to 0\" fat, all grades, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Thịt bò",
+          "Bò",
+          "Thịt bò nạc",
+          "Thịt bò đùi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thịt dê",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 176,
+        "preparation": "GRILLED",
+        "source_description": "Game meat, goat, cooked, roasted",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Dê nướng",
+          "Thịt dê nướng",
+          "Dê quay",
+          "Thịt dê quay"
+        ]
+      },
+      {
+        "id": 175,
+        "preparation": "RAW",
+        "source_description": "Game meat, goat, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Dê",
+          "Thịt dê tươi",
+          "Thịt dê sống"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thịt thăn heo",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 15,
+        "preparation": "GRILLED",
+        "source_description": "Pork, fresh, loin, tenderloin, separable lean only, cooked, roasted",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Thịt thăn heo nướng",
+          "Thăn heo nướng",
+          "Thịt lợn thăn nướng",
+          "Thịt heo nướng"
+        ]
+      },
+      {
+        "id": 14,
+        "preparation": "RAW",
+        "source_description": "Pork, fresh, loin, tenderloin, separable lean only, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Thăn heo",
+          "Thịt thăn",
+          "Thịt thăn lợn",
+          "Thịt thăn heo",
+          "Thịt nạc thăn"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thịt heo xay",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 147,
+        "preparation": "RAW",
+        "source_description": "Pork, fresh, ground, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Thịt xay",
+          "Heo xay",
+          "Thịt lợn xay",
+          "Lợn xay"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thịt thỏ",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 180,
+        "preparation": "BOILED",
+        "source_description": "Game meat, rabbit, domesticated, composite of cuts, cooked, stewed",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Thịt thỏ nấu",
+          "Thịt thỏ hầm",
+          "Thịt thỏ luộc",
+          "Thịt thỏ kho"
+        ]
+      },
+      {
+        "id": 181,
+        "preparation": "GRILLED",
+        "source_description": "Game meat, rabbit, domesticated, composite of cuts, cooked, roasted",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Thịt thỏ nướng",
+          "Thịt thỏ quay",
+          "Thịt thỏ áp chảo"
+        ]
+      },
+      {
+        "id": 179,
+        "preparation": "RAW",
+        "source_description": "Game meat, rabbit, domesticated, composite of cuts, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Thịt thỏ",
+          "Thỏ",
+          "Thịt thỏ tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thịt trâu",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 178,
+        "preparation": "GRILLED",
+        "source_description": "Game meat, buffalo, water, cooked, roasted",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "thịt trâu nướng",
+          "trâu nướng",
+          "thịt trâu quay"
+        ]
+      },
+      {
+        "id": 177,
+        "preparation": "RAW",
+        "source_description": "Game meat, buffalo, water, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Thịt trâu",
+          "Trâu",
+          "Thịt trâu tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Tim gà",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 195,
+        "preparation": "BOILED",
+        "source_description": "Chicken, heart, all classes, cooked, simmered",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Tim gà luộc",
+          "Tim gà chín",
+          "Tim gà nấu"
+        ]
+      },
+      {
+        "id": 194,
+        "preparation": "RAW",
+        "source_description": "Chicken, heart, all classes, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Tim gà",
+          "Lòng gà"
+        ],
+        "locking_aliases": [
+          "Tim gà sống",
+          "Tim gà tươi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Tim heo",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 185,
+        "preparation": "BRAISED",
+        "source_description": "Pork, fresh, variety meats and by-products, heart, cooked, braised",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Tim heo kho",
+          "Tim heo rim",
+          "Tim lợn kho",
+          "Tim heo nấu chín"
+        ]
+      },
+      {
+        "id": 184,
+        "preparation": "RAW",
+        "source_description": "Pork, fresh, variety meats and by-products, heart, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Tim heo",
+          "Tim lợn",
+          "Huyết heo tim",
+          "Tim heo tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Ức gà",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 10,
+        "preparation": "BOILED",
+        "source_description": "Chicken, broilers or fryers, breast, meat only, cooked, stewed",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Ức gà luộc",
+          "Lườn gà luộc",
+          "Thịt ức gà luộc"
+        ]
+      },
+      {
+        "id": 12,
+        "preparation": "FRIED",
+        "source_description": "Chicken, broilers or fryers, breast, meat only, cooked, fried",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Ức gà chiên",
+          "Lườn gà rán",
+          "Ức gà rán"
+        ]
+      },
+      {
+        "id": 11,
+        "preparation": "GRILLED",
+        "source_description": "Chicken, broilers or fryers, breast, meat only, cooked, roasted",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Ức gà nướng",
+          "Lườn gà nướng",
+          "Ức gà áp chảo"
+        ]
+      },
+      {
+        "id": 9,
+        "preparation": "RAW",
+        "source_description": "Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Ức gà",
+          "Lườn gà",
+          "Thịt ức gà",
+          "Ức gà phi lê"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thịt vịt",
+    "category_code": "MEAT",
+    "category": "Thịt",
+    "preparations": [
+      {
+        "id": 172,
+        "preparation": "GRILLED",
+        "source_description": "Duck, domesticated, meat only, cooked, roasted",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Vịt quay",
+          "Thịt vịt quay",
+          "Vịt nướng",
+          "Thịt vịt nướng"
+        ]
+      },
+      {
+        "id": 171,
+        "preparation": "RAW",
+        "source_description": "Duck, domesticated, meat only, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Thịt vịt",
+          "Vịt",
+          "Thịt vịt sống"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bạch tuộc",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 223,
+        "preparation": "RAW",
+        "source_description": "Mollusks, octopus, common, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Bạch tuộc",
+          "Con bạch tuộc",
+          "Bạch tuộc tươi",
+          "Bạch tuộc sống"
+        ],
+        "locking_aliases": []
+      },
+      {
+        "id": 224,
+        "preparation": "STEAMED",
+        "source_description": "Mollusks, octopus, common, cooked, moist heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Bạch tuộc hấp",
+          "Bạch tuộc luộc",
+          "Bạch tuộc chín",
+          "Bạch tuộc nấu chín"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cá basa",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 27,
+        "preparation": "RAW",
+        "source_description": "Fish, catfish, channel, farmed, raw",
+        "source_approximate": true,
+        "aliases": [
+          "Cá basa",
+          "Cá basa tươi",
+          "Phi lê cá basa",
+          "Cá tra"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cá bơn",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 214,
+        "preparation": "GRILLED",
+        "source_description": "Fish, flatfish (flounder and sole species), cooked, dry heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cá bơn nướng",
+          "Cá bơn áp chảo",
+          "Cá bơn chín"
+        ]
+      },
+      {
+        "id": 213,
+        "preparation": "RAW",
+        "source_description": "Fish, flatfish (flounder and sole species), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cá bơn",
+          "Cá bơn tươi",
+          "Flatfish",
+          "Sole fish"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cá chép",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 207,
+        "preparation": "GRILLED",
+        "source_description": "Fish, carp, cooked, dry heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cá chép nướng",
+          "Cá chép quay"
+        ]
+      },
+      {
+        "id": 206,
+        "preparation": "RAW",
+        "source_description": "Fish, carp, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cá chép",
+          "Cá chép sông"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cá chim",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 217,
+        "preparation": "GRILLED",
+        "source_description": "Fish, pompano, florida, cooked, dry heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cá chim nướng",
+          "Cá chim nướng mọi",
+          "Cá chim nướng khô"
+        ]
+      },
+      {
+        "id": 216,
+        "preparation": "RAW",
+        "source_description": "Fish, pompano, florida, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cá chim",
+          "Cá chim trắng",
+          "Cá biển"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cá chình",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 209,
+        "preparation": "GRILLED",
+        "source_description": "Fish, eel, mixed species, cooked, dry heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cá chình nướng",
+          "Cá chình quay"
+        ]
+      },
+      {
+        "id": 208,
+        "preparation": "RAW",
+        "source_description": "Fish, eel, mixed species, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cá chình",
+          "Chình biển"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cá cơm",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 212,
+        "preparation": "RAW",
+        "source_description": "Fish, anchovy, european, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cá cơm",
+          "Cá cơm tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cá hồi",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 28,
+        "preparation": "RAW",
+        "source_description": "Fish, salmon, Atlantic, farmed, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cá hồi phi lê",
+          "Thịt cá hồi",
+          "Cá hồi tươi",
+          "Salmon"
+        ],
+        "locking_aliases": [
+          "Cá hồi sống",
+          "Cá hồi sashimi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cá mòi hộp",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 218,
+        "preparation": "RAW",
+        "source_description": "Fish, sardine, Atlantic, canned in oil, drained solids with bone",
+        "source_approximate": false,
+        "aliases": [
+          "Cá mòi hộp",
+          "Cá mòi đóng hộp",
+          "Cá hộp",
+          "Cá mòi sốt dầu"
+        ],
+        "locking_aliases": [
+          "Cá mòi hộp ngâm dầu",
+          "Cá mòi hộp rán",
+          "Cá mòi hộp sốt"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cá ngừ",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 205,
+        "preparation": "GRILLED",
+        "source_description": "Fish, tuna, yellowfin, fresh, cooked, dry heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cá ngừ nướng",
+          "Cá ngừ nấu chín"
+        ]
+      },
+      {
+        "id": 204,
+        "preparation": "RAW",
+        "source_description": "Fish, tuna, fresh, yellowfin, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cá ngừ đại dương",
+          "Thịt cá ngừ",
+          "Cá ngừ vàng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cá rô phi",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 201,
+        "preparation": "GRILLED",
+        "source_description": "Fish, tilapia, cooked, dry heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cá rô phi nướng",
+          "Cá rô phi chiên",
+          "Cá rô phi quay"
+        ]
+      },
+      {
+        "id": 200,
+        "preparation": "RAW",
+        "source_description": "Fish, tilapia, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cá rô phi",
+          "Rô phi",
+          "Cá phi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cá thu",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 203,
+        "preparation": "GRILLED",
+        "source_description": "Fish, mackerel, king, cooked, dry heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cá thu nướng",
+          "Cá thu nướng chín",
+          "Cá thu chiên",
+          "Cá thu rán"
+        ]
+      },
+      {
+        "id": 202,
+        "preparation": "RAW",
+        "source_description": "Fish, mackerel, king, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cá thu",
+          "Thịt cá thu",
+          "Cá thu vua",
+          "King mackerel"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cá tra",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 215,
+        "preparation": "GRILLED",
+        "source_description": "Fish, catfish, channel, farmed, cooked, dry heat",
+        "source_approximate": false,
+        "aliases": [
+          "Cá da trơn",
+          "Cá tra nuôi"
+        ],
+        "locking_aliases": [
+          "Cá tra nướng",
+          "Cá da trơn nướng"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cá trích",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 211,
+        "preparation": "GRILLED",
+        "source_description": "Fish, herring, Atlantic, cooked, dry heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cá trích nướng",
+          "Cá trích chín",
+          "Cá trích nướng khô"
+        ]
+      },
+      {
+        "id": 210,
+        "preparation": "RAW",
+        "source_description": "Fish, herring, Atlantic, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cá trích",
+          "Cá trích tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cá tuyết",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 220,
+        "preparation": "GRILLED",
+        "source_description": "Fish, cod, Atlantic, cooked, dry heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cá tuyết nướng",
+          "Cá tuyết khô",
+          "Cá tuyết chín"
+        ]
+      },
+      {
+        "id": 219,
+        "preparation": "RAW",
+        "source_description": "Fish, cod, Atlantic, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cá tuyết",
+          "Thịt cá tuyết",
+          "Cá tuyết Đại Tây Dương"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cua biển",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 232,
+        "preparation": "RAW",
+        "source_description": "Crustaceans, crab, blue, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cua",
+          "Ghẹ xanh",
+          "Cua thịt",
+          "Cua gạch"
+        ],
+        "locking_aliases": []
+      },
+      {
+        "id": 233,
+        "preparation": "STEAMED",
+        "source_description": "Crustaceans, crab, blue, cooked, moist heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cua hấp",
+          "Ghẹ hấp",
+          "Cua biển hấp"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Hàu",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 229,
+        "preparation": "RAW",
+        "source_description": "Mollusks, oyster, eastern, wild, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Hàu",
+          "Con hàu",
+          "Hàu biển",
+          "Thịt hàu tươi"
+        ],
+        "locking_aliases": [
+          "Hàu sống",
+          "Hàu tươi sống"
+        ]
+      },
+      {
+        "id": 230,
+        "preparation": "STEAMED",
+        "source_description": "Mollusks, oyster, eastern, wild, cooked, moist heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Hàu hấp",
+          "Hàu hấp sả",
+          "Hàu chín",
+          "Hàu nấu chín"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Mực",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 222,
+        "preparation": "FRIED",
+        "source_description": "Mollusks, squid, mixed species, cooked, fried",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Mực chiên",
+          "Mực rán",
+          "Mực chiên giòn",
+          "Mực xù"
+        ]
+      },
+      {
+        "id": 221,
+        "preparation": "RAW",
+        "source_description": "Mollusks, squid, mixed species, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Mực",
+          "Mực ống",
+          "Mực lá",
+          "Mực tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Nghêu",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 225,
+        "preparation": "RAW",
+        "source_description": "Mollusks, clam, mixed species, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Nghêu",
+          "Ngao",
+          "Nghêu sống",
+          "Ngao tươi"
+        ],
+        "locking_aliases": []
+      },
+      {
+        "id": 226,
+        "preparation": "STEAMED",
+        "source_description": "Mollusks, clam, mixed species, cooked, moist heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Nghêu hấp",
+          "Ngao hấp",
+          "Nghêu chín",
+          "Ngao luộc"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Ốc",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 231,
+        "preparation": "RAW",
+        "source_description": "Mollusks, snail, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Ốc",
+          "Thịt ốc",
+          "Con ốc",
+          "Ốc tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sò điệp",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 227,
+        "preparation": "RAW",
+        "source_description": "Mollusks, scallop, mixed species, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Sò điệp",
+          "Cồi sò điệp",
+          "Thịt sò điệp",
+          "Sò điệp tươi"
+        ],
+        "locking_aliases": []
+      },
+      {
+        "id": 228,
+        "preparation": "STEAMED",
+        "source_description": "Mollusks, scallop, (bay and sea), cooked, steamed",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Sò điệp hấp",
+          "Cồi sò điệp hấp",
+          "Sò điệp hấp chín"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Tôm",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 29,
+        "preparation": "RAW",
+        "source_description": "Crustaceans, shrimp, farm raised, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Tôm",
+          "Tôm tươi",
+          "Tôm sống",
+          "Tôm thẻ",
+          "Tôm sú",
+          "Tôm nuôi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Tôm càng",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 236,
+        "preparation": "RAW",
+        "source_description": "Crustaceans, crayfish, mixed species, wild, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Tôm nước ngọt",
+          "Tôm sông",
+          "Tôm càng xanh"
+        ],
+        "locking_aliases": []
+      },
+      {
+        "id": 237,
+        "preparation": "STEAMED",
+        "source_description": "Crustaceans, crayfish, mixed species, wild, cooked, moist heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Tôm càng hấp",
+          "Tôm sông hấp",
+          "Tôm nước ngọt hấp"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Tôm hùm",
+    "category_code": "SEAFOOD",
+    "category": "Cá & hải sản",
+    "preparations": [
+      {
+        "id": 234,
+        "preparation": "RAW",
+        "source_description": "Crustaceans, lobster, northern, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Tôm hùm",
+          "Tôm hùm tươi",
+          "Tôm hùm sống",
+          "Lobster"
+        ],
+        "locking_aliases": [
+          "tôm hùm sống",
+          "tôm hùm tươi sống"
+        ]
+      },
+      {
+        "id": 235,
+        "preparation": "STEAMED",
+        "source_description": "Crustaceans, lobster, northern, cooked, moist heat",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "tôm hùm hấp",
+          "tôm hùm luộc",
+          "tôm hùm chín",
+          "tôm hùm hấp chín"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Bơ nhạt",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 271,
+        "preparation": "RAW",
+        "source_description": "Butter, without salt",
+        "source_approximate": false,
+        "aliases": [
+          "Bơ nhạt",
+          "Bơ không muối",
+          "Bơ ngọt"
+        ],
+        "locking_aliases": [
+          "Bơ lạt không muối"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Kem whipping",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 272,
+        "preparation": "RAW",
+        "source_description": "Cream, fluid, heavy whipping",
+        "source_approximate": false,
+        "aliases": [
+          "Whipping cream",
+          "Heavy cream",
+          "Kem béo",
+          "Kem whipping",
+          "Kem sữa béo"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Lòng đỏ trứng gà",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 198,
+        "preparation": "RAW",
+        "source_description": "Egg, yolk, raw, fresh",
+        "source_approximate": false,
+        "aliases": [
+          "Lòng đỏ",
+          "Lòng đỏ trứng",
+          "Trứng gà lòng đỏ",
+          "Lòng đỏ trứng gà tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Lòng trắng trứng",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 199,
+        "preparation": "RAW",
+        "source_description": "Egg, white, raw, fresh",
+        "source_approximate": false,
+        "aliases": [
+          "Lòng trắng",
+          "Lòng trắng trứng",
+          "Lòng trắng trứng gà"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Phô mai Cheddar",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 269,
+        "preparation": "RAW",
+        "source_description": "Cheese, cheddar (Includes foods for USDA's Food Distribution Program)",
+        "source_approximate": false,
+        "aliases": [
+          "Cheddar",
+          "Phô mai Cheddar",
+          "Phô mai"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Phô mai mozzarella",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 270,
+        "preparation": "RAW",
+        "source_description": "Cheese, mozzarella, whole milk",
+        "source_approximate": false,
+        "aliases": [
+          "Phô mai mozzarella",
+          "Mozzarella",
+          "Phô mai kéo sợi"
+        ],
+        "locking_aliases": [
+          "Phô mai mozzarella nấu chảy",
+          "Mozzarella nướng"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sữa bột nguyên kem",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 268,
+        "preparation": "RAW",
+        "source_description": "Milk, dry, whole, with added vitamin D",
+        "source_approximate": false,
+        "aliases": [
+          "Sữa bột nguyên kem",
+          "Sữa bột",
+          "Sữa bột béo"
+        ],
+        "locking_aliases": [
+          "Sữa bột pha",
+          "Sữa bột nguyên kem pha"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sữa chua",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 46,
+        "preparation": "RAW",
+        "source_description": "Yogurt, plain, whole milk",
+        "source_approximate": false,
+        "aliases": [
+          "Sữa chua",
+          "Da yua",
+          "Yaourt",
+          "Sữa chua trắng",
+          "Sữa chua nguyên chất"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sữa đặc có đường",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 267,
+        "preparation": "RAW",
+        "source_description": "Milk, canned, condensed, sweetened",
+        "source_approximate": false,
+        "aliases": [
+          "Sữa đặc",
+          "Sữa đặc có đường",
+          "Sữa hộp đặc"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sữa tách béo",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 266,
+        "preparation": "RAW",
+        "source_description": "Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)",
+        "source_approximate": false,
+        "aliases": [
+          "Sữa không béo",
+          "Sữa gầy",
+          "Sữa skim"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sữa",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 45,
+        "preparation": "RAW",
+        "source_description": "Milk, whole, 3.25% milkfat, with added vitamin D",
+        "source_approximate": false,
+        "aliases": [
+          "Sữa tươi",
+          "Sữa bò nguyên chất",
+          "Sữa nguyên kem"
+        ],
+        "locking_aliases": [
+          "Sữa tươi không đường"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sữa tươi",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 265,
+        "preparation": "RAW",
+        "source_description": "Milk, whole, 3.25% milkfat, with added vitamin D",
+        "source_approximate": false,
+        "aliases": [
+          "Sữa nguyên kem",
+          "Sữa tươi nguyên chất",
+          "Sữa bò tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Trứng cút",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 197,
+        "preparation": "RAW",
+        "source_description": "Egg, quail, whole, fresh, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Trứng cút",
+          "Hột cút"
+        ],
+        "locking_aliases": [
+          "Trứng cút tươi",
+          "Hột cút sống"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Trứng gà",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 23,
+        "preparation": "BOILED",
+        "source_description": "Egg, whole, cooked, hard-boiled",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Trứng luộc",
+          "Trứng gà luộc"
+        ]
+      },
+      {
+        "id": 24,
+        "preparation": "FRIED",
+        "source_description": "Egg, whole, cooked, fried",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Trứng chiên",
+          "Trứng gà chiên",
+          "Trứng ốp la",
+          "Trứng rán",
+          "Trứng gà rán",
+          "Trứng ốp"
+        ]
+      },
+      {
+        "id": 22,
+        "preparation": "RAW",
+        "source_description": "Egg, whole, raw, fresh",
+        "source_approximate": false,
+        "aliases": [
+          "Trứng",
+          "Trứng gà",
+          "Hột gà"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Trứng vịt",
+    "category_code": "EGG_DAIRY",
+    "category": "Trứng & sữa",
+    "preparations": [
+      {
+        "id": 196,
+        "preparation": "RAW",
+        "source_description": "Egg, duck, whole, fresh, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Trứng vịt",
+          "Hột vịt",
+          "Trứng vịt tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bơ đậu phộng",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 283,
+        "preparation": "RAW",
+        "source_description": "Peanut butter, smooth style, without salt",
+        "source_approximate": false,
+        "aliases": [
+          "Bơ lạc",
+          "Bơ đậu phộng mịn"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đậu đen",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 241,
+        "preparation": "BOILED",
+        "source_description": "Beans, black, mature seeds, cooked, boiled, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Đậu đen luộc",
+          "Chè đậu đen",
+          "Đậu đen nấu chín"
+        ]
+      },
+      {
+        "id": 240,
+        "preparation": "RAW",
+        "source_description": "Beans, black, mature seeds, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Đậu đen",
+          "Hạt đậu đen",
+          "Đỗ đen"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đậu đỏ",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 243,
+        "preparation": "BOILED",
+        "source_description": "Beans, adzuki, mature seeds, cooked, boiled, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "đậu đỏ luộc",
+          "đậu đỏ chín",
+          "chè đậu đỏ"
+        ]
+      },
+      {
+        "id": 242,
+        "preparation": "RAW",
+        "source_description": "Beans, adzuki, mature seeds, raw",
+        "source_approximate": false,
+        "aliases": [
+          "đậu đỏ",
+          "hạt đậu đỏ"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đậu nành",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 245,
+        "preparation": "BOILED",
+        "source_description": "Soybeans, mature seeds, cooked, boiled, with salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Đậu nành luộc",
+          "Đậu tương luộc"
+        ]
+      },
+      {
+        "id": 244,
+        "preparation": "RAW",
+        "source_description": "Soybeans, mature seeds, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Đậu tương",
+          "Hạt đậu nành",
+          "Hạt đậu tương"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đậu phộng",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 247,
+        "preparation": "BOILED",
+        "source_description": "Peanuts, all types, cooked, boiled, with salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Đậu phộng luộc",
+          "Lạc luộc"
+        ]
+      },
+      {
+        "id": 246,
+        "preparation": "RAW",
+        "source_description": "Peanuts, all types, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Lạc",
+          "Đậu phụng",
+          "Hạt lạc",
+          "Hạt đậu phộng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đậu phụ",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 26,
+        "preparation": "FRIED",
+        "source_description": "Tofu, fried",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Đậu rán",
+          "Đậu hũ chiên",
+          "Đậu phụ rán",
+          "Đậu rán vàng"
+        ]
+      },
+      {
+        "id": 25,
+        "preparation": "RAW",
+        "source_description": "Tofu, raw, regular, prepared with calcium sulfate",
+        "source_approximate": false,
+        "aliases": [
+          "Đậu hũ",
+          "Tàu hũ",
+          "Đậu phụ trắng",
+          "Đậu hũ trắng",
+          "Đậu non"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đậu trắng",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 249,
+        "preparation": "BOILED",
+        "source_description": "Beans, white, mature seeds, cooked, boiled, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "đậu trắng luộc",
+          "chè đậu trắng",
+          "đậu trắng nấu chín"
+        ]
+      },
+      {
+        "id": 248,
+        "preparation": "RAW",
+        "source_description": "Beans, white, mature seeds, raw",
+        "source_approximate": false,
+        "aliases": [
+          "hạt đậu trắng",
+          "đậu trắng khô",
+          "đậu trắng hạt khô"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đậu xanh",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 239,
+        "preparation": "BOILED",
+        "source_description": "Mung beans, mature seeds, cooked, boiled, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Đậu xanh luộc",
+          "Chè đậu xanh",
+          "Đậu xanh nấu chín"
+        ]
+      },
+      {
+        "id": 238,
+        "preparation": "RAW",
+        "source_description": "Mung beans, mature seeds, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Đậu xanh",
+          "Hạt đậu xanh",
+          "Đậu xanh nguyên hạt",
+          "Đậu xanh cà vỏ"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Hạnh nhân",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 278,
+        "preparation": "RAW",
+        "source_description": "Nuts, almonds",
+        "source_approximate": false,
+        "aliases": [
+          "Hạnh nhân",
+          "Quả hạnh nhân",
+          "Hạt hạnh nhân"
+        ],
+        "locking_aliases": [
+          "hạnh nhân rang",
+          "hạnh nhân sấy",
+          "hạnh nhân bóc vỏ"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Hạt chia",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 282,
+        "preparation": "RAW",
+        "source_description": "Seeds, chia seeds, dried",
+        "source_approximate": false,
+        "aliases": [
+          "Hạt chia khô",
+          "Chia seed",
+          "Hạt chia"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Hạt điều",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 277,
+        "preparation": "RAW",
+        "source_description": "Nuts, cashew nuts, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Điều",
+          "Hạt điều sống",
+          "Củ điều",
+          "Hạt điều tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Hạt hướng dương",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 281,
+        "preparation": "RAW",
+        "source_description": "Seeds, sunflower seed kernels, dried",
+        "source_approximate": false,
+        "aliases": [
+          "Nhân hạt hướng dương",
+          "Hạt hướng dương khô",
+          "Hướng dương"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Hạt sen",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 303,
+        "preparation": "RAW",
+        "source_description": "Seeds, lotus seeds, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Hạt sen tươi",
+          "Củ sen",
+          "Sen tươi"
+        ],
+        "locking_aliases": [
+          "Hạt sen tươi",
+          "Sen tươi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Mè",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 280,
+        "preparation": "RAW",
+        "source_description": "Seeds, sesame seeds, whole, dried",
+        "source_approximate": false,
+        "aliases": [
+          "Mè",
+          "Vừng",
+          "Mè trắng",
+          "Hạt mè",
+          "Hạt vừng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Óc chó",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 279,
+        "preparation": "RAW",
+        "source_description": "Nuts, walnuts, english",
+        "source_approximate": false,
+        "aliases": [
+          "Hạt óc chó",
+          "Quả óc chó",
+          "Nhân óc chó"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sữa đậu nành",
+    "category_code": "LEGUME_NUT",
+    "category": "Đậu & hạt",
+    "preparations": [
+      {
+        "id": 250,
+        "preparation": "RAW",
+        "source_description": "Soymilk, original and vanilla, unfortified",
+        "source_approximate": false,
+        "aliases": [
+          "Sữa đậu nành",
+          "Sữa đậu",
+          "Nước đậu",
+          "Sữa đậu nành nguyên chất"
+        ],
+        "locking_aliases": [
+          "Sữa đậu nành hộp",
+          "Sữa đậu nành bịch"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Bạc hà",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 113,
+        "preparation": "RAW",
+        "source_description": "Spearmint, fresh",
+        "source_approximate": false,
+        "aliases": [
+          "Húng lủi",
+          "Rau húng lủi",
+          "Cây bạc hà",
+          "Mint"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bắp cải",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 52,
+        "preparation": "BOILED",
+        "source_description": "Cabbage, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Bắp cải luộc",
+          "Cải bắp luộc"
+        ]
+      },
+      {
+        "id": 51,
+        "preparation": "RAW",
+        "source_description": "Cabbage, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cải bắp",
+          "Su hào trắng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bầu",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 81,
+        "preparation": "BOILED",
+        "source_description": "Gourd, white-flowered (calabash), cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Bầu luộc",
+          "Canh bầu",
+          "Bầu nấu"
+        ]
+      },
+      {
+        "id": 80,
+        "preparation": "RAW",
+        "source_description": "Gourd, white-flowered (calabash), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Bầu",
+          "Bầu nậm",
+          "Trái bầu",
+          "Quả bầu"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bí đỏ",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 74,
+        "preparation": "BOILED",
+        "source_description": "Pumpkin, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Bí đỏ luộc",
+          "Bí ngô luộc",
+          "Bí đỏ nấu chín"
+        ]
+      },
+      {
+        "id": 73,
+        "preparation": "RAW",
+        "source_description": "Pumpkin, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Bí ngô",
+          "Bí ngô tươi",
+          "Bí đỏ tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bí ngòi",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 308,
+        "preparation": "BOILED",
+        "source_description": "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "bí ngòi luộc",
+          "bí ngồi luộc"
+        ]
+      },
+      {
+        "id": 307,
+        "preparation": "RAW",
+        "source_description": "Squash, summer, zucchini, includes skin, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Bí ngòi",
+          "Bí ngồi",
+          "Zucchini",
+          "Bí ngòi xanh"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bí đao",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 76,
+        "preparation": "BOILED",
+        "source_description": "Waxgourd, (chinese preserving melon), cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "bí đao luộc",
+          "bí xanh luộc",
+          "canh bí đao"
+        ]
+      },
+      {
+        "id": 75,
+        "preparation": "RAW",
+        "source_description": "Waxgourd, (chinese preserving melon), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Bí xanh",
+          "Bí phấn",
+          "Bí đao tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bơ",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 109,
+        "preparation": "RAW",
+        "source_description": "Avocados, raw, all commercial varieties",
+        "source_approximate": false,
+        "aliases": [
+          "Trái bơ",
+          "Quả bơ",
+          "Bơ sáp",
+          "Bơ booth"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Súp lơ trắng",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 97,
+        "preparation": "BOILED",
+        "source_description": "Cauliflower, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Súp lơ trắng luộc",
+          "Bông cải trắng luộc",
+          "Súp lơ luộc"
+        ]
+      },
+      {
+        "id": 96,
+        "preparation": "RAW",
+        "source_description": "Cauliflower, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Bông cải trắng",
+          "Súp lơ",
+          "Bông cải",
+          "Súp lơ trắng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bông cải xanh",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 34,
+        "preparation": "BOILED",
+        "source_description": "Broccoli, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Bông cải xanh luộc",
+          "Súp lơ xanh luộc",
+          "Súp lơ luộc"
+        ]
+      },
+      {
+        "id": 33,
+        "preparation": "RAW",
+        "source_description": "Broccoli, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Súp lơ",
+          "Súp lơ xanh",
+          "Bông cải"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cà chua",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 35,
+        "preparation": "RAW",
+        "source_description": "Tomatoes, red, ripe, raw, year round average",
+        "source_approximate": false,
+        "aliases": [
+          "Cà chua",
+          "Cà chua đỏ",
+          "Cà chua chín"
+        ],
+        "locking_aliases": [
+          "Cà chua sống",
+          "Cà chua tươi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cải bó xôi",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 54,
+        "preparation": "BOILED",
+        "source_description": "Spinach, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cải bó xôi luộc",
+          "Rau bina luộc",
+          "Rau chân vịt luộc"
+        ]
+      },
+      {
+        "id": 53,
+        "preparation": "RAW",
+        "source_description": "Spinach, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cải bó xôi",
+          "Rau bina",
+          "Rau chân vịt",
+          "Spinach"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cải cúc",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 311,
+        "preparation": "BOILED",
+        "source_description": "Chrysanthemum, garland, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cải cúc luộc",
+          "Tần ô luộc"
+        ]
+      },
+      {
+        "id": 310,
+        "preparation": "RAW",
+        "source_description": "Chrysanthemum leaves, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Tần ô",
+          "Rau tần ô",
+          "Rau cải cúc"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cải thảo",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 48,
+        "preparation": "BOILED",
+        "source_description": "Cabbage, chinese (pe-tsai), cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cải thảo luộc",
+          "Bắp cải thảo luộc"
+        ]
+      },
+      {
+        "id": 47,
+        "preparation": "RAW",
+        "source_description": "Cabbage, chinese (pe-tsai), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Bắp cải thảo",
+          "Rau cải thảo",
+          "Cải bẹ trắng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cải thìa",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 50,
+        "preparation": "BOILED",
+        "source_description": "Cabbage, chinese (pak-choi), cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cải thìa luộc",
+          "Cải chíp luộc",
+          "Bok choy luộc"
+        ]
+      },
+      {
+        "id": 49,
+        "preparation": "RAW",
+        "source_description": "Cabbage, chinese (pak-choi), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cải chíp",
+          "Bok choy",
+          "Rau cải thìa"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cải xanh",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 32,
+        "preparation": "RAW",
+        "source_description": "Mustard greens, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Rau cải xanh",
+          "Cải bẹ xanh",
+          "Rau bẹ xanh",
+          "Cải cay"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cải xoong",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 309,
+        "preparation": "RAW",
+        "source_description": "Watercress, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Xà lách xoong",
+          "Rau cải xoong",
+          "Cải xoong tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cần tây",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 57,
+        "preparation": "BOILED",
+        "source_description": "Celery, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cần tây luộc",
+          "Rau cần tây luộc",
+          "Cần tây nấu chín"
+        ]
+      },
+      {
+        "id": 56,
+        "preparation": "RAW",
+        "source_description": "Celery, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cần tây",
+          "Rau cần tây",
+          "Cần ta",
+          "Cần tây tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cà rốt",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 62,
+        "preparation": "BOILED",
+        "source_description": "Carrots, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cà rốt luộc",
+          "Cà rốt nấu chín"
+        ]
+      },
+      {
+        "id": 61,
+        "preparation": "RAW",
+        "source_description": "Carrots, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cà rốt",
+          "Củ cà rốt",
+          "Carrot"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cà tím",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 85,
+        "preparation": "BOILED",
+        "source_description": "Eggplant, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Cà tím luộc",
+          "Cà tím chín",
+          "Cà tím luộc chín"
+        ]
+      },
+      {
+        "id": 84,
+        "preparation": "RAW",
+        "source_description": "Eggplant, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cà tím",
+          "Trái cà tím",
+          "Quả cà tím"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Củ cải trắng",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 70,
+        "preparation": "BOILED",
+        "source_description": "Radishes, oriental, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Củ cải trắng luộc",
+          "Củ cải luộc"
+        ]
+      },
+      {
+        "id": 69,
+        "preparation": "RAW",
+        "source_description": "Radishes, oriental, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Củ cải",
+          "Củ cải trắng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Củ dền",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 306,
+        "preparation": "BOILED",
+        "source_description": "Beets, cooked, boiled, drained",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Củ dền luộc",
+          "Củ dền chín",
+          "Củ dền nấu"
+        ]
+      },
+      {
+        "id": 305,
+        "preparation": "RAW",
+        "source_description": "Beets, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Củ dền đỏ",
+          "Dền đỏ"
+        ],
+        "locking_aliases": [
+          "Củ dền sống",
+          "Củ dền tươi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Củ năng",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 304,
+        "preparation": "RAW",
+        "source_description": "Waterchestnuts, chinese, (matai), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Củ mã thầy",
+          "Mã thầy",
+          "Củ ngựa"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Củ sen",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 302,
+        "preparation": "BOILED",
+        "source_description": "Lotus root, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Củ sen luộc",
+          "Canh củ sen",
+          "Củ sen nấu chín"
+        ]
+      },
+      {
+        "id": 301,
+        "preparation": "RAW",
+        "source_description": "Lotus root, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Củ sen",
+          "Thân củ sen"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đậu bắp",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 83,
+        "preparation": "BOILED",
+        "source_description": "Okra, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Đậu bắp luộc",
+          "Đậu bắp chín"
+        ]
+      },
+      {
+        "id": 82,
+        "preparation": "RAW",
+        "source_description": "Okra, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Đậu bắp",
+          "Mướp tây",
+          "Bắp còi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đậu cô ve",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 87,
+        "preparation": "BOILED",
+        "source_description": "Beans, snap, green, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Đậu cô ve luộc",
+          "Đậu que luộc"
+        ]
+      },
+      {
+        "id": 86,
+        "preparation": "RAW",
+        "source_description": "Beans, snap, green, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Đậu que",
+          "Đậu cô ve",
+          "Đậu xanh",
+          "Đậu cove"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đậu đũa",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 89,
+        "preparation": "BOILED",
+        "source_description": "Yardlong bean, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Đậu đũa luộc",
+          "Đậu dải áo luộc"
+        ]
+      },
+      {
+        "id": 88,
+        "preparation": "RAW",
+        "source_description": "Yardlong bean, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Đậu đũa",
+          "Đậu dải áo",
+          "Đậu cô ve dài"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đậu Hà Lan",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 101,
+        "preparation": "BOILED",
+        "source_description": "Peas, green, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "đậu hà lan luộc",
+          "đậu hà lan chín"
+        ]
+      },
+      {
+        "id": 100,
+        "preparation": "RAW",
+        "source_description": "Peas, green, raw",
+        "source_approximate": false,
+        "aliases": [
+          "đậu Hà Lan",
+          "đậu Hà Lan tươi",
+          "hạt đậu Hà Lan"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Dưa chuột",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 36,
+        "preparation": "RAW",
+        "source_description": "Cucumber, with peel, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Dưa leo",
+          "Trái dưa chuột",
+          "Quả dưa chuột",
+          "Dưa leo ta"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Giá đỗ",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 37,
+        "preparation": "RAW",
+        "source_description": "Mung beans, mature seeds, sprouted, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Giá",
+          "Giá đậu",
+          "Giá đậu xanh",
+          "Củ giá"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Gừng",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 115,
+        "preparation": "RAW",
+        "source_description": "Ginger root, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Củ gừng",
+          "Gừng tươi",
+          "Gừng ta"
+        ],
+        "locking_aliases": [
+          "Gừng giã",
+          "Gừng thái lát"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Hành lá",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 60,
+        "preparation": "RAW",
+        "source_description": "Onions, spring or scallions (includes tops and bulb), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Hành hoa",
+          "Hành tươi",
+          "Hành ta"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Hành tây",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 59,
+        "preparation": "BOILED",
+        "source_description": "Onions, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Hành tây luộc",
+          "Hành tây chín",
+          "Hành tây nấu chín"
+        ]
+      },
+      {
+        "id": 58,
+        "preparation": "RAW",
+        "source_description": "Onions, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Hành tây",
+          "Củ hành tây"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Húng quế",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 111,
+        "preparation": "RAW",
+        "source_description": "Basil, fresh",
+        "source_approximate": false,
+        "aliases": [
+          "Rau quế",
+          "Húng giổi",
+          "Rau é quế",
+          "Húng chó"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Mướp đắng",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 79,
+        "preparation": "BOILED",
+        "source_description": "Balsam-pear (bitter gourd), pods, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Mướp đắng luộc",
+          "Khổ qua luộc"
+        ]
+      },
+      {
+        "id": 78,
+        "preparation": "RAW",
+        "source_description": "Balsam-pear (bitter gourd), pods, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Khổ qua",
+          "Mướp đắng",
+          "Khổ qua rừng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Măng",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 93,
+        "preparation": "BOILED",
+        "source_description": "Bamboo shoots, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Măng luộc",
+          "Măng chín",
+          "Măng luộc sẵn"
+        ]
+      },
+      {
+        "id": 92,
+        "preparation": "RAW",
+        "source_description": "Bamboo shoots, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Măng",
+          "Măng tươi",
+          "Măng tre"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Mộc nhĩ",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 108,
+        "preparation": "RAW",
+        "source_description": "Jew's ear, (pepeao), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Nấm mèo",
+          "Nấm tai mèo",
+          "Mộc nhĩ đen"
+        ],
+        "locking_aliases": [
+          "Mộc nhĩ khô",
+          "Nấm mèo khô"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Ngò gai",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 119,
+        "preparation": "RAW",
+        "source_description": "Parsley, fresh",
+        "source_approximate": false,
+        "aliases": [
+          "Ngò gai",
+          "Mùi tàu",
+          "Rau mùi tàu"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Mướp",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 77,
+        "preparation": "RAW",
+        "source_description": "Gourd, dishcloth (towelgourd), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Quả mướp",
+          "Trái mướp",
+          "Mướp ta",
+          "Mướp ngọt"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Nấm bào ngư",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 105,
+        "preparation": "RAW",
+        "source_description": "Mushrooms, oyster, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Nấm bào ngư",
+          "Nấm sò",
+          "Nấm dai",
+          "Nấm trắng bào ngư"
+        ],
+        "locking_aliases": [
+          "nấm bào ngư tươi",
+          "nấm sò tươi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Nấm hương",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 103,
+        "preparation": "BOILED",
+        "source_description": "Mushrooms, shiitake, cooked, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Nấm hương luộc",
+          "Nấm đông cô luộc",
+          "Nấm hương chín"
+        ]
+      },
+      {
+        "id": 102,
+        "preparation": "RAW",
+        "source_description": "Mushrooms, shiitake, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Nấm đông cô",
+          "Nấm mèo",
+          "Nấm hương tươi",
+          "Nấm đông cô tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Nấm kim châm",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 104,
+        "preparation": "RAW",
+        "source_description": "Mushrooms, enoki, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Nấm kim châm",
+          "Nấm enoki",
+          "Kim châm"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Nấm mỡ",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 107,
+        "preparation": "BOILED",
+        "source_description": "Mushrooms, white, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Nấm mỡ luộc",
+          "Nấm trắng luộc"
+        ]
+      },
+      {
+        "id": 106,
+        "preparation": "RAW",
+        "source_description": "Mushrooms, white, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Nấm mỡ",
+          "Nấm trắng",
+          "Nấm mỡ tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Rau mùi",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 110,
+        "preparation": "RAW",
+        "source_description": "Coriander (cilantro) leaves, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Ngò rí",
+          "Ngò",
+          "Rau mùi",
+          "Cây ngò"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Ớt",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 117,
+        "preparation": "RAW",
+        "source_description": "Peppers, hot chili, red, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Ớt cay",
+          "Ớt hiểm",
+          "Ớt sừng",
+          "Trái ớt",
+          "Quả ớt"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Ớt chuông đỏ",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 118,
+        "preparation": "RAW",
+        "source_description": "Peppers, sweet, red, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Ớt chuông đỏ",
+          "Ớt ngọt đỏ",
+          "Ớt Đà Lạt đỏ",
+          "Ớt paprika đỏ"
+        ],
+        "locking_aliases": [
+          "ớt chuông đỏ sống",
+          "ớt ngọt đỏ tươi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Rau đay",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 313,
+        "preparation": "BOILED",
+        "source_description": "Jute, potherb, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Rau đay luộc",
+          "Canh rau đay"
+        ]
+      },
+      {
+        "id": 312,
+        "preparation": "RAW",
+        "source_description": "Jute, potherb, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Rau đay",
+          "Đọt rau đay"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Rau dền",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 95,
+        "preparation": "BOILED",
+        "source_description": "Amaranth leaves, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Rau dền luộc",
+          "Canh rau dền",
+          "Rau dền nấu"
+        ]
+      },
+      {
+        "id": 94,
+        "preparation": "RAW",
+        "source_description": "Amaranth leaves, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Rau dền",
+          "Rau dền đỏ",
+          "Rau dền cơm",
+          "Dền đỏ"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Rau lang",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 314,
+        "preparation": "RAW",
+        "source_description": "Sweet potato leaves, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Rau khoai lang",
+          "Lá khoai lang",
+          "Rau lang"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Rau muống",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 31,
+        "preparation": "BOILED",
+        "source_description": "Water convolvulus, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Rau muống luộc",
+          "Muống luộc"
+        ]
+      },
+      {
+        "id": 30,
+        "preparation": "RAW",
+        "source_description": "Water convolvulus,raw",
+        "source_approximate": false,
+        "aliases": [
+          "Rau muống",
+          "Rau muống sống",
+          "Rau muống tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Rau sam",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 316,
+        "preparation": "BOILED",
+        "source_description": "Purslane, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "Rau sam luộc"
+        ]
+      },
+      {
+        "id": 315,
+        "preparation": "RAW",
+        "source_description": "Purslane, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Rau sam",
+          "Cỏ sam"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Thì là",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 112,
+        "preparation": "RAW",
+        "source_description": "Dill weed, fresh",
+        "source_approximate": false,
+        "aliases": [
+          "Thì là",
+          "Rau thì là",
+          "Thì la",
+          "Cây thì là"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sả",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 114,
+        "preparation": "RAW",
+        "source_description": "Lemon grass (citronella), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cây sả",
+          "Rễ sả",
+          "Củ sả"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Su hào",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 72,
+        "preparation": "BOILED",
+        "source_description": "Kohlrabi, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "su hào luộc",
+          "su hào nấu"
+        ]
+      },
+      {
+        "id": 71,
+        "preparation": "RAW",
+        "source_description": "Kohlrabi, raw",
+        "source_approximate": false,
+        "aliases": [
+          "su hào",
+          "củ su hào"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Su su",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 99,
+        "preparation": "BOILED",
+        "source_description": "Chayote, fruit, cooked, boiled, drained, without salt",
+        "source_approximate": false,
+        "aliases": [],
+        "locking_aliases": [
+          "su su luộc",
+          "su su chín",
+          "su su luộc chín"
+        ]
+      },
+      {
+        "id": 98,
+        "preparation": "RAW",
+        "source_description": "Chayote, fruit, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Su su",
+          "Trái su su",
+          "Củ su su",
+          "Su su tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Tỏi",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 116,
+        "preparation": "RAW",
+        "source_description": "Garlic, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Củ tỏi",
+          "Tỏi tươi",
+          "Tỏi ta",
+          "Tỏi tép"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Xà lách",
+    "category_code": "VEGETABLE",
+    "category": "Rau",
+    "preparations": [
+      {
+        "id": 55,
+        "preparation": "RAW",
+        "source_description": "Lettuce, green leaf, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Rau xà lách",
+          "Xà lách xanh",
+          "Rau diếp",
+          "Cải lá xoăn"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bưởi",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 120,
+        "preparation": "RAW",
+        "source_description": "Pummelo, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Trái bưởi",
+          "Quả bưởi",
+          "Bưởi tươi",
+          "Múi bưởi"
+        ],
+        "locking_aliases": [
+          "Bưởi bóc vỏ",
+          "Bưởi tách múi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cam",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 40,
+        "preparation": "RAW",
+        "source_description": "Oranges, raw, all commercial varieties",
+        "source_approximate": false,
+        "aliases": [
+          "Cam tươi",
+          "Trái cam",
+          "Quả cam",
+          "Cam vàng",
+          "Cam sành"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Chà là Medjool",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 319,
+        "preparation": "RAW",
+        "source_description": "Dates, medjool",
+        "source_approximate": false,
+        "aliases": [
+          "Quả chà là",
+          "Chà là tươi",
+          "Chà là",
+          "Medjool dates"
+        ],
+        "locking_aliases": [
+          "chà là medjool"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Chanh vàng",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 134,
+        "preparation": "RAW",
+        "source_description": "Lemons, raw, without peel",
+        "source_approximate": false,
+        "aliases": [
+          "Chanh tây",
+          "Lemon",
+          "Quả chanh vàng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Chanh",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 135,
+        "preparation": "RAW",
+        "source_description": "Limes, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Chanh",
+          "Chanh ta",
+          "Quả chanh",
+          "Trái chanh"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Chuối",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 38,
+        "preparation": "RAW",
+        "source_description": "Bananas, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Chuối tiêu",
+          "Chuối tây",
+          "Quả chuối",
+          "Chuối ta"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cơm dừa",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 138,
+        "preparation": "RAW",
+        "source_description": "Nuts, coconut meat, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Cùi dừa",
+          "Thịt dừa",
+          "Nhân dừa",
+          "Cơm dừa"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đào",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 141,
+        "preparation": "RAW",
+        "source_description": "Peaches, yellow, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Quả đào",
+          "Trái đào",
+          "Đào vàng",
+          "Đào tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Dâu tây",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 131,
+        "preparation": "RAW",
+        "source_description": "Strawberries, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Dâu tây",
+          "Trái dâu tây",
+          "Quả dâu tây",
+          "Strawberry"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Dứa",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 124,
+        "preparation": "RAW",
+        "source_description": "Pineapple, raw, all varieties",
+        "source_approximate": false,
+        "aliases": [
+          "Khóm",
+          "Thơm",
+          "Trái dứa",
+          "Trái thơm",
+          "Quả dứa"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Dưa hấu",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 123,
+        "preparation": "RAW",
+        "source_description": "Watermelon, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Dưa hấu",
+          "Trái dưa hấu",
+          "Quả dưa hấu"
+        ],
+        "locking_aliases": [
+          "dưa hấu tươi",
+          "dưa hấu nguyên quả",
+          "dưa hấu cắt miếng"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Dưa lưới",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 140,
+        "preparation": "RAW",
+        "source_description": "Melons, cantaloupe, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Dưa vàng",
+          "Cantaloupe",
+          "Dưa bở",
+          "Dưa hồng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đu đủ",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 122,
+        "preparation": "RAW",
+        "source_description": "Papayas, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Đu đủ chín",
+          "Trái đu đủ",
+          "Quả đu đủ",
+          "Đu đủ ta"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Hồng",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 143,
+        "preparation": "RAW",
+        "source_description": "Persimmons, japanese, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Quả hồng",
+          "Trái hồng",
+          "Hồng giòn",
+          "Hồng ngọt",
+          "Hồng vuông"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Khế",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 129,
+        "preparation": "RAW",
+        "source_description": "Carambola, (starfruit), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Khế",
+          "Quả khế",
+          "Trái khế",
+          "Khế chua",
+          "Khế ngọt"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Kiwi xanh",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 136,
+        "preparation": "RAW",
+        "source_description": "Kiwifruit, green, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Kiwi",
+          "Quả kiwi",
+          "Trái kiwi",
+          "Kiwi tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Lê",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 132,
+        "preparation": "RAW",
+        "source_description": "Pears, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Trái lê",
+          "Quả lê",
+          "Lê tươi",
+          "Lê Hàn Quốc",
+          "Lê xanh",
+          "Lê đường"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Lựu",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 137,
+        "preparation": "RAW",
+        "source_description": "Pomegranates, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Quả lựu",
+          "Trái lựu",
+          "Hạt lựu",
+          "Lựu đỏ",
+          "Lựu tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Mận",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 142,
+        "preparation": "RAW",
+        "source_description": "Plums, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Mận",
+          "Quả mận",
+          "Mận hậu",
+          "Trái mận"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Na",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 128,
+        "preparation": "RAW",
+        "source_description": "Sugar-apples, (sweetsop), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Mãng cầu",
+          "Mãng cầu ta",
+          "Quả na"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Mít",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 127,
+        "preparation": "RAW",
+        "source_description": "Jackfruit, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Mít",
+          "Mít tươi",
+          "Mít dai",
+          "Mít mật",
+          "Mít nghệ"
+        ],
+        "locking_aliases": [
+          "Mít chín"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Mơ",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 318,
+        "preparation": "RAW",
+        "source_description": "Apricots, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Quả mơ",
+          "Trái mơ"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Nhãn",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 125,
+        "preparation": "RAW",
+        "source_description": "Longans, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Quả nhãn",
+          "Trái nhãn",
+          "Long an",
+          "Nhãn tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Nho",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 130,
+        "preparation": "RAW",
+        "source_description": "Grapes, red or green (European type, such as Thompson seedless), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Nho tươi",
+          "Nho xanh",
+          "Nho đỏ",
+          "Nho ta",
+          "Quả nho",
+          "Grapes"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Nho khô",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 320,
+        "preparation": "RAW",
+        "source_description": "Raisins, dark, seedless (Includes foods for USDA's Food Distribution Program)",
+        "source_approximate": false,
+        "aliases": [
+          "Nho khô",
+          "Nho khô đen",
+          "Nho khô không hạt"
+        ],
+        "locking_aliases": [
+          "Nho khô",
+          "Nho khô đen"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Nước dừa",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 139,
+        "preparation": "RAW",
+        "source_description": "Nuts, coconut water (liquid from coconuts)",
+        "source_approximate": false,
+        "aliases": [
+          "Nước dừa tươi",
+          "Nước dừa xiêm",
+          "Coconut water"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Ổi",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 121,
+        "preparation": "RAW",
+        "source_description": "Guavas, common, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Ổi ta",
+          "Trái ổi",
+          "Quả ổi",
+          "Ổi xanh",
+          "Ổi tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Quýt",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 133,
+        "preparation": "RAW",
+        "source_description": "Tangerines, (mandarin oranges), raw",
+        "source_approximate": false,
+        "aliases": [
+          "Quýt",
+          "Quýt ngọt",
+          "Quýt ta",
+          "Trái quýt",
+          "Quả quýt"
+        ],
+        "locking_aliases": [
+          "quýt tươi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sung",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 145,
+        "preparation": "RAW",
+        "source_description": "Figs, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Quả sung",
+          "Trái sung",
+          "Sung tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Táo",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 39,
+        "preparation": "RAW",
+        "source_description": "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
+        "source_approximate": false,
+        "aliases": [
+          "Táo tươi",
+          "Trái táo",
+          "Quả táo",
+          "Táo tây",
+          "Apple"
+        ],
+        "locking_aliases": [
+          "táo sống"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Táo tàu",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 317,
+        "preparation": "RAW",
+        "source_description": "Jujube, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Táo tàu",
+          "Táo đỏ",
+          "Hồng táo",
+          "Táo tàu tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Me",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 144,
+        "preparation": "RAW",
+        "source_description": "Tamarinds, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Me tươi",
+          "Trái me",
+          "Quả me"
+        ],
+        "locking_aliases": [
+          "me sống",
+          "me nguyên trái"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Vải",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 126,
+        "preparation": "RAW",
+        "source_description": "Litchis, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Vải thiều",
+          "Quả vải",
+          "Trái vải",
+          "Vải tươi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Việt quất",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 146,
+        "preparation": "RAW",
+        "source_description": "Blueberries, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Quả việt quất",
+          "Trái việt quất",
+          "Blueberry"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Xoài",
+    "category_code": "FRUIT",
+    "category": "Trái cây",
+    "preparations": [
+      {
+        "id": 41,
+        "preparation": "RAW",
+        "source_description": "Mangos, raw",
+        "source_approximate": false,
+        "aliases": [
+          "Xoài",
+          "Quả xoài",
+          "Trái xoài"
+        ],
+        "locking_aliases": [
+          "Xoài chín",
+          "Xoài tươi"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Bia",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 298,
+        "preparation": "RAW",
+        "source_description": "Alcoholic beverage, beer, regular, all",
+        "source_approximate": false,
+        "aliases": [
+          "Bia",
+          "Bia chai",
+          "Bia lon",
+          "Bia hơi"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Bột cacao",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 292,
+        "preparation": "RAW",
+        "source_description": "Cocoa, dry powder, unsweetened",
+        "source_approximate": false,
+        "aliases": [
+          "Cacao",
+          "Bột ca cao",
+          "Ca cao bột",
+          "Cacao nguyên chất"
+        ],
+        "locking_aliases": [
+          "Bột cacao nguyên chất"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Bột nghệ",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 290,
+        "preparation": "RAW",
+        "source_description": "Spices, turmeric, ground",
+        "source_approximate": false,
+        "aliases": [
+          "Bột nghệ vàng",
+          "Tinh bột nghệ",
+          "Nghệ xay",
+          "Bột củ nghệ"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Cà phê đen",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 294,
+        "preparation": "RAW",
+        "source_description": "Beverages, coffee, brewed, prepared with tap water",
+        "source_approximate": false,
+        "aliases": [
+          "Cà phê",
+          "Cà phê đen không đường",
+          "Cà phê phin",
+          "Cafe đen"
+        ],
+        "locking_aliases": [
+          "Cà phê đen",
+          "Cafe đen đá"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Dầu đậu nành",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 42,
+        "preparation": "RAW",
+        "source_description": "Oil, soybean, salad or cooking",
+        "source_approximate": false,
+        "aliases": [
+          "Dầu thực vật",
+          "Dầu ăn",
+          "Dầu nành",
+          "Dầu thực vật nấu ăn"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Dầu dừa",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 274,
+        "preparation": "RAW",
+        "source_description": "Oil, coconut",
+        "source_approximate": false,
+        "aliases": [
+          "Dầu dừa",
+          "Dầu dừa nguyên chất",
+          "Coconut oil"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Dầu hào",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 322,
+        "preparation": "RAW",
+        "source_description": "Sauce, oyster, ready-to-serve",
+        "source_approximate": false,
+        "aliases": [
+          "Dầu hào",
+          "Sốt hào"
+        ],
+        "locking_aliases": [
+          "Sốt dầu hào",
+          "Dầu hào nấu ăn"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Dầu ô liu",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 273,
+        "preparation": "RAW",
+        "source_description": "Oil, olive, salad or cooking",
+        "source_approximate": false,
+        "aliases": [
+          "Dầu oliu",
+          "Olive oil",
+          "Dầu ô-liu"
+        ],
+        "locking_aliases": [
+          "dầu ô liu ăn sống",
+          "dầu ô liu nấu ăn"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Đường kính",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 44,
+        "preparation": "RAW",
+        "source_description": "Sugars, granulated",
+        "source_approximate": false,
+        "aliases": [
+          "Đường",
+          "Đường trắng",
+          "Đường cát",
+          "Đường tinh luyện"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Đường nâu",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 321,
+        "preparation": "RAW",
+        "source_description": "Sugars, brown",
+        "source_approximate": false,
+        "aliases": [
+          "Đường cát nâu",
+          "Đường mía nâu",
+          "Đường thẻ nâu",
+          "Đường vàng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Giấm",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 288,
+        "preparation": "RAW",
+        "source_description": "Vinegar, distilled",
+        "source_approximate": false,
+        "aliases": [
+          "Dấm",
+          "Giấm trắng",
+          "Dấm trắng",
+          "Giấm gạo"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Mật ong",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 284,
+        "preparation": "RAW",
+        "source_description": "Honey",
+        "source_approximate": false,
+        "aliases": [
+          "Mật ong nguyên chất",
+          "Mật ong rừng",
+          "Mật ong nuôi",
+          "Mật ong hoa nhãn"
+        ],
+        "locking_aliases": [
+          "Honey"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Mỡ lợn",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 275,
+        "preparation": "RAW",
+        "source_description": "Lard",
+        "source_approximate": false,
+        "aliases": [
+          "Mỡ heo",
+          "Mỡ cục",
+          "Mỡ miếng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Mứt trái cây",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 291,
+        "preparation": "RAW",
+        "source_description": "Jams and preserves",
+        "source_approximate": false,
+        "aliases": [
+          "Mứt",
+          "Mứt hoa quả",
+          "Mứt ngọt"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Nước cam",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 297,
+        "preparation": "RAW",
+        "source_description": "Orange juice, raw (Includes foods for USDA's Food Distribution Program)",
+        "source_approximate": false,
+        "aliases": [
+          "Nước cam ép",
+          "Nước cam vắt"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Nước mắm",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 43,
+        "preparation": "RAW",
+        "source_description": "Sauce, fish, ready-to-serve",
+        "source_approximate": false,
+        "aliases": [
+          "Nước mắm",
+          "Nước mắm nhĩ",
+          "Nước mắm cốt"
+        ],
+        "locking_aliases": [
+          "Nước chấm"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Nước ngọt cola",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 324,
+        "preparation": "RAW",
+        "source_description": "Beverages, carbonated, cola, regular",
+        "source_approximate": false,
+        "aliases": [
+          "Coca",
+          "Cola",
+          "Pepsi",
+          "Nước ngọt",
+          "Nước có ga"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Nước tương",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 285,
+        "preparation": "RAW",
+        "source_description": "Soy sauce made from soy and wheat (shoyu)",
+        "source_approximate": false,
+        "aliases": [
+          "Xì dầu",
+          "Tàu vị yểu",
+          "Nước chấm",
+          "Hắc xì dầu"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Rượu mạnh",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 300,
+        "preparation": "RAW",
+        "source_description": "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 80 proof",
+        "source_approximate": false,
+        "aliases": [
+          "Rượu chưng cất",
+          "Vodka",
+          "Whisky",
+          "Gin",
+          "Rum",
+          "Rượu ngoại"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Rượu vang đỏ",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 299,
+        "preparation": "RAW",
+        "source_description": "Alcoholic beverage, wine, table, red",
+        "source_approximate": false,
+        "aliases": [
+          "Vang đỏ",
+          "Rượu đỏ",
+          "Red wine",
+          "Vang chát đỏ"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Socola đen",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 293,
+        "preparation": "RAW",
+        "source_description": "Chocolate, dark, 70-85% cacao solids",
+        "source_approximate": false,
+        "aliases": [
+          "Socola đen",
+          "Sô cô la đen",
+          "Chocolate đen",
+          "Dark chocolate"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Sốt mayonnaise",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 276,
+        "preparation": "RAW",
+        "source_description": "Salad dressing, mayonnaise, regular",
+        "source_approximate": false,
+        "aliases": [
+          "Mayonnaise",
+          "Mayo",
+          "Dầu trứng"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Tiêu đen",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 289,
+        "preparation": "RAW",
+        "source_description": "Spices, pepper, black",
+        "source_approximate": false,
+        "aliases": [
+          "Tiêu",
+          "Hạt tiêu",
+          "Tiêu hột",
+          "Tiêu sọ đen"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Trà đen",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 295,
+        "preparation": "RAW",
+        "source_description": "Beverages, tea, black, brewed, prepared with tap water",
+        "source_approximate": false,
+        "aliases": [
+          "Hồng trà",
+          "Trà đen",
+          "Nước trà đen"
+        ],
+        "locking_aliases": [
+          "Trà đen pha sẵn",
+          "Hồng trà pha"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Trà xanh",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 296,
+        "preparation": "RAW",
+        "source_description": "Beverages, tea, green, brewed, regular",
+        "source_approximate": false,
+        "aliases": [
+          "Nước trà xanh",
+          "Chè xanh",
+          "Nước chè xanh",
+          "Trà xanh tươi"
+        ],
+        "locking_aliases": [
+          "Trà xanh nấu",
+          "Chè xanh nấu"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Tương cà",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 287,
+        "preparation": "RAW",
+        "source_description": "Catsup",
+        "source_approximate": false,
+        "aliases": [
+          "Ketchup",
+          "Sốt cà chua",
+          "Nước sốt cà chua"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Tương hoisin",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 323,
+        "preparation": "RAW",
+        "source_description": "Sauce, hoisin, ready-to-serve",
+        "source_approximate": false,
+        "aliases": [
+          "Tương hoisin",
+          "Sốt hoisin",
+          "Hoisin sauce"
+        ],
+        "locking_aliases": []
+      }
+    ]
+  },
+  {
+    "name": "Tương ớt Sriracha",
+    "category_code": "OTHER",
+    "category": "Gia vị & khác",
+    "preparations": [
+      {
+        "id": 286,
+        "preparation": "RAW",
+        "source_description": "Sauce, hot chile, sriracha",
+        "source_approximate": false,
+        "aliases": [
+          "Tương ớt Sriracha",
+          "Sốt Sriracha",
+          "Sriracha"
+        ],
+        "locking_aliases": [
+          "Tương ớt Sriracha cay",
+          "Sốt ớt Sriracha"
+        ]
+      }
+    ]
+  }
+]
