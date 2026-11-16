@@ -17,6 +17,14 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     @EntityGraph(attributePaths = {"category", "source"})
     List<Food> findByNameOrderById(String name);
 
+    /** Every alias of every food, for the food list sent to the frontend (one query, grouped in Java). */
+    @Query(value = """
+            SELECT food_id AS foodId, alias AS alias, locks_preparation AS locksPreparation
+            FROM food_aliases
+            ORDER BY food_id, alias
+            """, nativeQuery = true)
+    List<FoodAliasRow> findAllAliases();
+
     /** Other names of a food, from the aliases of all its preparations (food detail page). */
     @Query(value = """
             SELECT DISTINCT a.alias
@@ -54,7 +62,7 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     /**
      * "Món gần giống" when the user's search finds nothing. Each row: [0] food name (String), [1] score 0..1.
      * Looser than searchByNameOrAlias: word_similarity also scores a name found INSIDE the term
-     * ("bún mọc" -> "Bún tươi" via the alias "Bún"). Averaging the accent-free and the accented
+     * ("bún mọc" -> "Bún" via the alias "Bún tươi"). Averaging the accent-free and the accented
      * word scores keeps "phở bò" closer to "Thịt bò" than to "Bơ" (both are "bo" without accents).
      * Full scan of foods + aliases: fine for a few hundred rows; revisit past ~10k.
      */

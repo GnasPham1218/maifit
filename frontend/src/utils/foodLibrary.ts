@@ -1,12 +1,13 @@
 import { PREPARATIONS } from '../constants/meal';
 import type { Food } from '../types/meal';
-import { normalize } from './text';
+import { searchFoods } from './foodSearch';
 
 // One library row = one food name; its numbers are those of its first preparation (raw first)
 export interface LibraryEntry {
   name: string;
   rows: Food[]; // every preparation, in the usual order
   first: Food;
+  matchedAlias?: string | null; // set by filterLibrary when the search matched an everyday name, not the name
 }
 
 export type LibrarySort = 'name' | 'protein' | 'kcalAsc' | 'kcalDesc';
@@ -35,12 +36,15 @@ const SORTS: Record<LibrarySort, (a: LibraryEntry, b: LibraryEntry) => number> =
   kcalDesc: (a, b) => b.first.kcal - a.first.kcal || BY_NAME(a, b),
 };
 
-// Accent-insensitive search on the name; a name matches a source when any of its preparations comes from it
+// Accent-insensitive search on names and everyday names (see searchFoods); a name matches a source when any of
+// its preparations comes from it. With a query, the default A-Z order becomes best match first.
 export function filterLibrary(entries: LibraryEntry[], f: LibraryFilter): LibraryEntry[] {
-  const q = normalize(f.query.trim());
-  return entries
-    .filter((e) => (q === '' || normalize(e.name).includes(q))
-      && (f.categoryId == null || e.first.categoryId === f.categoryId)
-      && (f.sourceId == null || e.rows.some((r) => r.sourceId === f.sourceId)))
-    .sort(SORTS[f.sort]);
+  const kept = entries.filter((e) => (f.categoryId == null || e.first.categoryId === f.categoryId)
+    && (f.sourceId == null || e.rows.some((r) => r.sourceId === f.sourceId)));
+  if (f.query.trim() === '') return kept.sort(SORTS[f.sort]);
+
+  const byName = new Map(kept.map((e) => [e.name, e]));
+  const found = searchFoods(new Map(kept.map((e) => [e.name, e.rows])), f.query)
+    .map((hit) => ({ ...byName.get(hit.name)!, matchedAlias: hit.alias }));
+  return f.sort === 'name' ? found : found.sort(SORTS[f.sort]);
 }
