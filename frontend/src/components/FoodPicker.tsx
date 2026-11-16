@@ -135,7 +135,8 @@ export function FoodPicker({ mealType, foods, onAdd, initialFood = null, onMealT
           {food?.preparation === 'FRIED' && (
             <p className="text-sm text-ink-soft">Số liệu món chiên đã gồm dầu ngấm vào món, không cần thêm Dầu ăn.</p>
           )}
-          {food?.name === 'Dầu ăn' && (
+          {/* "Dầu ăn" is an alias of Dầu đậu nành */}
+          {food?.name === 'Dầu đậu nành' && (
             <p className="text-sm text-ink-soft">
               Chỉ thêm dầu khi món xào/chiên được ghi bằng nguyên liệu sống (vd. rau muống xào = rau muống sống + dầu).
             </p>

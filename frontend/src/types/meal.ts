@@ -21,6 +21,13 @@ export interface Food {
   estimated: boolean;
   image: FoodImage | null; // the main photo
   leanVersionId: number | null; // non-null -> this food can be logged with a 0-100 fat-trim slider
+  aliases: FoodAlias[]; // everyday names of this row ("Cơm" on Gạo tẻ boiled), used by the search
+}
+
+// locksPreparation: the name already says how it is cooked ("Cơm" = boiled), so that row is picked directly
+export interface FoodAlias {
+  alias: string;
+  locksPreparation: boolean;
 }
 
 // GET /foods/search: a close food name when the local search finds nothing

@@ -5,7 +5,7 @@ import { filterLibrary, groupByName, type LibraryFilter } from './foodLibrary';
 const food = (id: number, name: string, preparation: Food['preparation'], kcal: number, proteinG: number | null,
   categoryId = 1, sourceId = 1): Food => ({
   id, name, preparation, kcal, proteinG, carbG: 0, fatG: 0, fiberG: 0, categoryId, sourceId,
-  sourceName: 'USDA', sourceRef: String(id), estimated: false, leanVersionId: null, image: null,
+  sourceName: 'USDA', sourceRef: String(id), estimated: false, leanVersionId: null, image: null, aliases: [],
 });
 
 const FOODS = [

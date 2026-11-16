@@ -1,5 +1,6 @@
 package dev.gnaspham1218.maifit.backend.food.mapper;
 
+import dev.gnaspham1218.maifit.backend.food.dto.FoodAliasResponse;
 import dev.gnaspham1218.maifit.backend.food.dto.FoodCategoryResponse;
 import dev.gnaspham1218.maifit.backend.food.dto.FoodImageResponse;
 import dev.gnaspham1218.maifit.backend.food.dto.FoodResponse;
@@ -17,11 +18,11 @@ import java.util.List;
 @Component
 public class FoodMapper {
 
-    public FoodResponse toResponse(Food f, FoodImage mainImage) {
+    public FoodResponse toResponse(Food f, FoodImage mainImage, List<FoodAliasResponse> aliases) {
         return new FoodResponse(f.getId(), f.getName(), f.getPreparation(), f.getKcal(),
                 f.getProteinG(), f.getCarbG(), f.getFatG(), f.getFiberG(),
                 f.getCategory().getId(), f.getSource().getId(), f.getSource().getName(), f.getSourceRef(),
-                f.isEstimated(), f.getLeanVersionId(), mainImage == null ? null : toImage(mainImage));
+                f.isEstimated(), f.getLeanVersionId(), mainImage == null ? null : toImage(mainImage), aliases);
     }
 
     public FoodVariantResponse toVariant(Food f, List<FoodImage> images) {

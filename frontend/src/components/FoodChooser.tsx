@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { foodApi } from '../apis/foodApi';
 import { PREPARATIONS, WEIGHED_WHEN_LABELS } from '../constants/meal';
 import type { Food } from '../types/meal';
+import { searchFoods, type FoodSearchHit } from '../utils/foodSearch';
 import { normalize } from '../utils/text';
 import { FormField } from './FormField';
 import { ReportMissingFood } from './ReportMissingFood';
@@ -22,7 +23,8 @@ const CHIP = 'cursor-pointer rounded-full border px-3 py-1.5 text-sm transition-
 const chipClass = (selected: boolean) =>
   `${CHIP} ${selected ? 'border-accent bg-accent text-on-accent' : 'border-line bg-surface hover:bg-soft'}`;
 
-// Search a food by name (accent-insensitive), then "weighed raw or cooked?" when it has several states
+// Search a food by name or everyday name (accent-insensitive: "com" finds Gạo tẻ through "Cơm"),
+// then "weighed raw or cooked?" when it has several states
 export function FoodChooser({ foods, idPrefix, autoFocus, initialQuery = '', initialFood = null, onChange }: Props) {
   const [query, setQuery] = useState(initialFood?.name ?? initialQuery);
   const [name, setName] = useState<string | null>(initialFood?.name ?? null);
@@ -38,12 +40,9 @@ export function FoodChooser({ foods, idPrefix, autoFocus, initialQuery = '', ini
     return map;
   }, [foods]);
 
-  const results = useMemo(() => {
-    const q = normalize(query);
-    return [...byName.keys()].filter((n) => normalize(n).includes(q)).slice(0, MAX_RESULTS);
-  }, [byName, query]);
+  const results = useMemo(() => searchFoods(byName, query).slice(0, MAX_RESULTS), [byName, query]);
 
-  // Nothing found locally -> ask the server for close names ("bún mọc" -> "Bún tươi").
+  // Nothing found locally -> ask the server for close names ("bún mọc" -> "Bún").
   // The answer is kept with the query it belongs to, so a late answer for an old query is never shown.
   const q = normalize(query);
   const needServer = results.length === 0 && q.length >= 2;
@@ -66,12 +65,13 @@ export function FoodChooser({ foods, idPrefix, autoFocus, initialQuery = '', ini
 
   const variants = name ? (byName.get(name) ?? []) : [];
 
-  function pickName(n: string) {
+  // locked: the everyday name already says the state ("Cơm" = boiled), so it is chosen (and can still be changed)
+  function pickName(n: string, locked: Food | null = null) {
     const list = byName.get(n) ?? [];
-    const only = list.length === 1 ? list[0] : null; // only one state: nothing to ask
+    const chosen = locked ?? (list.length === 1 ? list[0] : null); // only one state: nothing to ask
     setName(n);
-    setFoodId(only?.id ?? null);
-    onChange(only);
+    setFoodId(chosen?.id ?? null);
+    onChange(chosen);
   }
 
   function pickVariant(food: Food) {
@@ -116,12 +116,7 @@ export function FoodChooser({ foods, idPrefix, autoFocus, initialQuery = '', ini
 
       {results.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          {results.map((n) => (
-            <button key={n} type="button" className={chipClass(n === name)} aria-pressed={n === name}
-              onClick={() => pickName(n)}>
-              {n}
-            </button>
-          ))}
+          {results.map((hit) => <ResultChip key={hit.name} hit={hit} selected={hit.name === name} onPick={pickName} />)}
         </div>
       )}
 
@@ -140,5 +135,15 @@ export function FoodChooser({ foods, idPrefix, autoFocus, initialQuery = '', ini
         </fieldset>
       )}
     </div>
+  );
+}
+
+// A result; found through an everyday name, it says which one ("Gạo tẻ · cơm") so the match makes sense
+function ResultChip({ hit, selected, onPick }: { hit: FoodSearchHit; selected: boolean; onPick: (name: string, locked: Food | null) => void }) {
+  return (
+    <button type="button" className={chipClass(selected)} aria-pressed={selected} onClick={() => onPick(hit.name, hit.lockedFood)}>
+      {hit.name}
+      {hit.alias && <span className="ml-1 opacity-75">· {hit.alias.toLowerCase()}</span>}
+    </button>
   );
 }

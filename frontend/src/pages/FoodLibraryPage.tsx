@@ -45,7 +45,11 @@ function LibraryRow({ entry }: { entry: LibraryEntry }) {
       <Link to={`/foods/${first.id}`} className={`${ROW_GRID} -mx-2 rounded-xl px-2 py-3 text-ink hover:bg-soft hover:text-ink`}>
         <FoodThumb image={first.image} />
         <span className="grid min-w-0 gap-1.5">
-          <span className="truncate font-semibold">{entry.name}</span>
+          <span className="truncate font-semibold">
+            {entry.name}
+            {/* Found through an everyday name: say which, so "cơm" -> "Gạo tẻ" makes sense */}
+            {entry.matchedAlias && <span className="ml-1.5 text-sm font-normal text-muted">· {entry.matchedAlias.toLowerCase()}</span>}
+          </span>
           <span className="flex flex-wrap gap-1">
             {entry.rows.map((r) => (
               <span key={r.id} className="rounded-full bg-soft px-2 py-0.5 text-xs text-link">{PREPARATION_LABELS[r.preparation]}</span>
