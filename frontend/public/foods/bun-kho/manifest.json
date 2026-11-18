@@ -1,0 +1,37 @@
+{
+  "category": "Tinh bột",
+  "food": "Bún khô",
+  "images": [
+    {
+      "file": "bun-kho/raw-01.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bun-kho/raw-02.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bun-kho/raw-03.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bun-kho/raw-04.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bun-kho/raw-01.webp",
+  "signature": "08290a497fbbfbd35231d8f718e527ee249561eb",
+  "slug": "bun-kho"
+}

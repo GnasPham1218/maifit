@@ -1,0 +1,16 @@
+{
+  "category": "Rau",
+  "food": "Cải xoong",
+  "images": [
+    {
+      "file": "cai-xoong/raw-01.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    }
+  ],
+  "primary": "cai-xoong/raw-01.webp",
+  "signature": "9458005d5ec5e0de6f9be9605b71813c9525bb53",
+  "slug": "cai-xoong"
+}

@@ -1,0 +1,37 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Tôm",
+  "images": [
+    {
+      "file": "tom/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "tom/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tom/raw-03.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tom/raw-04.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tom/raw-01.webp",
+  "signature": "921f3fadd120c5f828eb6dc6e366c3447dd10e5b",
+  "slug": "tom"
+}

@@ -1,0 +1,51 @@
+{
+  "category": "Trái cây",
+  "food": "Mít",
+  "images": [
+    {
+      "file": "mit/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "mit/raw-02.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "mit/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "mit/raw-04.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "mit/raw-05.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "mit/raw-06.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "mit/raw-01.webp",
+  "signature": "7ab2cdae20db5977f5c509bd6d0455724f482e55",
+  "slug": "mit"
+}

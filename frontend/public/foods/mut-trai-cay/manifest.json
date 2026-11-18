@@ -1,0 +1,30 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Mứt trái cây",
+  "images": [
+    {
+      "file": "mut-trai-cay/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "mut-trai-cay/raw-02.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "mut-trai-cay/raw-03.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "mut-trai-cay/raw-01.webp",
+  "signature": "f70c33d754ed7516403259c88c87e915d0ba8fc7",
+  "slug": "mut-trai-cay"
+}

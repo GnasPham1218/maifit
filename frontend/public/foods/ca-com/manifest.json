@@ -1,0 +1,37 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Cá cơm",
+  "images": [
+    {
+      "file": "ca-com/raw-01.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ca-com/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-com/raw-03.webp",
+      "original": "000015.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-com/raw-04.webp",
+      "original": "000014.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ca-com/raw-01.webp",
+  "signature": "324dabf8ed02029b50ca4c135b4ea8d4d5a20814",
+  "slug": "ca-com"
+}

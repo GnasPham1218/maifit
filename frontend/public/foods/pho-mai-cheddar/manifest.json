@@ -1,0 +1,30 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Phô mai Cheddar",
+  "images": [
+    {
+      "file": "pho-mai-cheddar/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "pho-mai-cheddar/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "pho-mai-cheddar/raw-03.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "pho-mai-cheddar/raw-01.webp",
+  "signature": "9a6e7451f7113bc4ea9bbc8b2c8ccbe7def9c4a9",
+  "slug": "pho-mai-cheddar"
+}

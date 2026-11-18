@@ -1,0 +1,50 @@
+{
+  "category": "Thịt",
+  "food": "Thịt thỏ",
+  "images": [
+    {
+      "file": "thit-tho/raw-01.webp",
+      "original": "added-3a47819a051e.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "thittho.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "thit-tho/raw-02.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-tho/boiled-01.webp",
+      "original": "added-611a394e8964.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": {
+        "original_name": "thit-tho-10-1506589862345-1506590183846.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "thit-tho/grilled-01.webp",
+      "original": "000003.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-tho/grilled-02.webp",
+      "original": "000004.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "thit-tho/raw-01.webp",
+  "signature": "3f789429bba87fdd40729ace2b8c08ab468ab2e9",
+  "slug": "thit-tho"
+}

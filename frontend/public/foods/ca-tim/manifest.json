@@ -1,0 +1,44 @@
+{
+  "category": "Rau",
+  "food": "Cà tím",
+  "images": [
+    {
+      "file": "ca-tim/raw-01.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ca-tim/raw-02.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-tim/raw-03.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-tim/boiled-01.webp",
+      "original": "000009.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-tim/boiled-02.webp",
+      "original": "000008.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ca-tim/raw-01.webp",
+  "signature": "04be70076ed4613587c6eac42ffa55e2d24aefc8",
+  "slug": "ca-tim"
+}

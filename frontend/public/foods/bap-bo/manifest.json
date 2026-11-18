@@ -1,0 +1,37 @@
+{
+  "category": "Thịt",
+  "food": "Bắp bò",
+  "images": [
+    {
+      "file": "bap-bo/raw-01.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bap-bo/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bap-bo/boiled-02.webp",
+      "original": "000005.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bap-bo/boiled-03.webp",
+      "original": "000012.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bap-bo/raw-01.webp",
+  "signature": "c4a047715d8473d061f6a0a4d19bcb44359ae0fd",
+  "slug": "bap-bo"
+}

@@ -1,0 +1,44 @@
+{
+  "category": "Tinh bột",
+  "food": "Ngô",
+  "images": [
+    {
+      "file": "ngo/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ngo/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ngo/boiled-01.webp",
+      "original": "000003.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ngo/boiled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ngo/boiled-03.webp",
+      "original": "000005.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ngo/raw-01.webp",
+  "signature": "d78560d3605a6b112a45074f3ea5780436e365bf",
+  "slug": "ngo"
+}

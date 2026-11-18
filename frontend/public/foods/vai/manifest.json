@@ -1,0 +1,37 @@
+{
+  "category": "Trái cây",
+  "food": "Vải",
+  "images": [
+    {
+      "file": "vai/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "vai/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "vai/raw-03.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "vai/raw-04.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "vai/raw-01.webp",
+  "signature": "6d175f85c8ba467b4b43bcf7de15b0d66151bb69",
+  "slug": "vai"
+}

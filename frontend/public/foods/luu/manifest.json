@@ -1,0 +1,30 @@
+{
+  "category": "Trái cây",
+  "food": "Lựu",
+  "images": [
+    {
+      "file": "luu/raw-01.webp",
+      "original": "000009.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "luu/raw-02.webp",
+      "original": "000010.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "luu/raw-03.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "luu/raw-01.webp",
+  "signature": "66bec1d0ecf3ea83235bf33911780d487ef16fb7",
+  "slug": "luu"
+}

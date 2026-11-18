@@ -1,0 +1,30 @@
+{
+  "category": "Trái cây",
+  "food": "Ổi",
+  "images": [
+    {
+      "file": "oi/raw-01.webp",
+      "original": "000009.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "oi/raw-02.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "oi/raw-03.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "oi/raw-01.webp",
+  "signature": "fac10e6639c9f6130713e3e320bd0cb0ede4eff0",
+  "slug": "oi"
+}

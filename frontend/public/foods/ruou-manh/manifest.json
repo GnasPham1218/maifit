@@ -1,0 +1,19 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Rượu mạnh",
+  "images": [
+    {
+      "file": "ruou-manh/raw-01.webp",
+      "original": "added-3cf5487a0492.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "added-b9ecc8f2b692.jpg.webp",
+        "type": "upload"
+      }
+    }
+  ],
+  "primary": "ruou-manh/raw-01.webp",
+  "signature": "1247493e6aed06a10004c52e0435aa779da0a571",
+  "slug": "ruou-manh"
+}

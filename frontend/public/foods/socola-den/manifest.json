@@ -1,0 +1,37 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Socola đen",
+  "images": [
+    {
+      "file": "socola-den/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "socola-den/raw-02.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "socola-den/raw-03.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "socola-den/raw-04.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "socola-den/raw-01.webp",
+  "signature": "20cdc8eee7f01f678be04df1bf7ac95293c8f191",
+  "slug": "socola-den"
+}

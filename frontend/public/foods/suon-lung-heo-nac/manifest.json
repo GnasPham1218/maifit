@@ -1,0 +1,44 @@
+{
+  "category": "Thịt",
+  "food": "Sườn lưng heo nạc",
+  "images": [
+    {
+      "file": "suon-lung-heo-nac/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "suon-lung-heo-nac/raw-02.webp",
+      "original": "000010.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "suon-lung-heo-nac/grilled-01.webp",
+      "original": "000003.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "suon-lung-heo-nac/grilled-02.webp",
+      "original": "000012.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "suon-lung-heo-nac/grilled-03.webp",
+      "original": "000011.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "suon-lung-heo-nac/raw-01.webp",
+  "signature": "51b15e193d82131a0444c741711c8ed8298fb7b5",
+  "slug": "suon-lung-heo-nac"
+}

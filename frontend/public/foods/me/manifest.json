@@ -1,0 +1,30 @@
+{
+  "category": "Đậu & hạt",
+  "food": "Mè",
+  "images": [
+    {
+      "file": "me/raw-01.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "me/raw-02.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "me/raw-03.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "me/raw-01.webp",
+  "signature": "39a1cb564b9f39a09b254c0028400b5045241b46",
+  "slug": "me"
+}

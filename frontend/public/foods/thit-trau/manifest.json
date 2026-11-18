@@ -1,0 +1,40 @@
+{
+  "category": "Thịt",
+  "food": "Thịt trâu",
+  "images": [
+    {
+      "file": "thit-trau/raw-01.webp",
+      "original": "added-a6d4d5d7fe1d.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "thittrau.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "thit-trau/grilled-01.webp",
+      "original": "000005.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-trau/grilled-02.webp",
+      "original": "000010.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-trau/grilled-03.webp",
+      "original": "000007.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "thit-trau/raw-01.webp",
+  "signature": "55b075ef4277f7045699537b836aff2dd0ef6bee",
+  "slug": "thit-trau"
+}

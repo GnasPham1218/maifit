@@ -1,0 +1,26 @@
+{
+  "category": "Thịt",
+  "food": "Chim cút",
+  "images": [
+    {
+      "file": "chim-cut/raw-01.webp",
+      "original": "added-74acd25930be.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "chimcut.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "chim-cut/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "chim-cut/raw-01.webp",
+  "signature": "86427a2a8bd5805f42662503f464305823db4f2a",
+  "slug": "chim-cut"
+}

@@ -1,0 +1,23 @@
+{
+  "category": "Rau",
+  "food": "Dưa chuột",
+  "images": [
+    {
+      "file": "dua-chuot/raw-01.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dua-chuot/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dua-chuot/raw-01.webp",
+  "signature": "a8864a4f2aebacb63ab0269d5152c3d398999091",
+  "slug": "dua-chuot"
+}

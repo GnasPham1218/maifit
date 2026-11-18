@@ -1,0 +1,51 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Nghêu",
+  "images": [
+    {
+      "file": "ngheu/raw-01.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ngheu/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ngheu/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ngheu/steamed-01.webp",
+      "original": "000001.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ngheu/steamed-02.webp",
+      "original": "000002.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ngheu/steamed-03.webp",
+      "original": "000003.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ngheu/raw-01.webp",
+  "signature": "51a1a2ed07b847ef12fec5f885d13690364aa641",
+  "slug": "ngheu"
+}

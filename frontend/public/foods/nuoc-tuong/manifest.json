@@ -1,0 +1,23 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Nước tương",
+  "images": [
+    {
+      "file": "nuoc-tuong/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "nuoc-tuong/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "nuoc-tuong/raw-01.webp",
+  "signature": "75c13162b0643cad5b7e876f05b1d7be072d3cbb",
+  "slug": "nuoc-tuong"
+}

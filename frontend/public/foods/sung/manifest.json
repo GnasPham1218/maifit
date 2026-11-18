@@ -1,0 +1,37 @@
+{
+  "category": "Trái cây",
+  "food": "Sung",
+  "images": [
+    {
+      "file": "sung/raw-01.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "sung/raw-02.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "sung/raw-03.webp",
+      "original": "000014.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "sung/raw-04.webp",
+      "original": "000015.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "sung/raw-01.webp",
+  "signature": "dc99636226a088ee69604c11f5a66b51d392ba47",
+  "slug": "sung"
+}

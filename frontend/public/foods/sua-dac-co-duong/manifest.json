@@ -1,0 +1,37 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Sữa đặc có đường",
+  "images": [
+    {
+      "file": "sua-dac-co-duong/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "sua-dac-co-duong/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "sua-dac-co-duong/raw-03.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "sua-dac-co-duong/raw-04.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "sua-dac-co-duong/raw-01.webp",
+  "signature": "dbcd01d6d5cca290b7dd762ca065ab820bedf4e6",
+  "slug": "sua-dac-co-duong"
+}

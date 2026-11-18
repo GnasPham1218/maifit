@@ -1,0 +1,51 @@
+{
+  "category": "Rau",
+  "food": "Đậu bắp",
+  "images": [
+    {
+      "file": "dau-bap/raw-01.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dau-bap/raw-02.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-bap/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-bap/boiled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-bap/boiled-03.webp",
+      "original": "000012.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-bap/boiled-04.webp",
+      "original": "000011.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dau-bap/raw-01.webp",
+  "signature": "1ccb0f62e3e72829872d6787e773c901e79ca3e7",
+  "slug": "dau-bap"
+}

@@ -1,0 +1,37 @@
+{
+  "category": "Rau",
+  "food": "Cà chua",
+  "images": [
+    {
+      "file": "ca-chua/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ca-chua/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-chua/raw-03.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-chua/raw-04.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ca-chua/raw-01.webp",
+  "signature": "d4c9d6357b573ef96246e37de618d3da6b88b005",
+  "slug": "ca-chua"
+}

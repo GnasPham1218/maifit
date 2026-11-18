@@ -1,0 +1,65 @@
+{
+  "category": "Thịt",
+  "food": "Nạc vai heo",
+  "images": [
+    {
+      "file": "nac-vai-heo/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "nac-vai-heo/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nac-vai-heo/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nac-vai-heo/raw-04.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nac-vai-heo/raw-05.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nac-vai-heo/grilled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nac-vai-heo/grilled-02.webp",
+      "original": "000003.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nac-vai-heo/grilled-03.webp",
+      "original": "000002.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "nac-vai-heo/raw-01.webp",
+  "signature": "a4936e20c2a8e0a7e67686d732b6587f4cdfd929",
+  "slug": "nac-vai-heo"
+}

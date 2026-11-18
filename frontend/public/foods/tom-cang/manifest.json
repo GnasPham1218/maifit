@@ -1,0 +1,47 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Tôm càng",
+  "images": [
+    {
+      "file": "tom-cang/raw-01.webp",
+      "original": "added-26ab97f87a3e.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "tomcang.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "tom-cang/steamed-01.webp",
+      "original": "000001.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tom-cang/steamed-02.webp",
+      "original": "000002.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tom-cang/steamed-03.webp",
+      "original": "000003.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tom-cang/steamed-04.webp",
+      "original": "000004.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tom-cang/raw-01.webp",
+  "signature": "2aa066b5faa49807c41bbb161fddabbc55cff1cf",
+  "slug": "tom-cang"
+}

@@ -1,0 +1,44 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Hàu",
+  "images": [
+    {
+      "file": "hau/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "hau/raw-02.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "hau/steamed-01.webp",
+      "original": "000009.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "hau/steamed-02.webp",
+      "original": "000005.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "hau/steamed-03.webp",
+      "original": "000007.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "hau/raw-01.webp",
+  "signature": "01eff7babbf2c121942d458d037a8868df50b874",
+  "slug": "hau"
+}

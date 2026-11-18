@@ -1,0 +1,30 @@
+{
+  "category": "Rau",
+  "food": "Cần tây",
+  "images": [
+    {
+      "file": "can-tay/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "can-tay/raw-02.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "can-tay/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "can-tay/raw-01.webp",
+  "signature": "a9c9c5cd92083de16614d05354ef20d442f9e6ca",
+  "slug": "can-tay"
+}

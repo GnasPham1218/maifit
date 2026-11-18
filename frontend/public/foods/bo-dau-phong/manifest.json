@@ -1,0 +1,30 @@
+{
+  "category": "Đậu & hạt",
+  "food": "Bơ đậu phộng",
+  "images": [
+    {
+      "file": "bo-dau-phong/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bo-dau-phong/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bo-dau-phong/raw-03.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bo-dau-phong/raw-01.webp",
+  "signature": "493c78b64591a4a865525a591f4af7d3968415a8",
+  "slug": "bo-dau-phong"
+}

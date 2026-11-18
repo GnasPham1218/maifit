@@ -1,0 +1,46 @@
+{
+  "category": "Tinh bột",
+  "food": "Bánh mì",
+  "images": [
+    {
+      "file": "banh-mi/raw-01.webp",
+      "original": "added-5868c38ad898.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "banhmi3.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "banh-mi/raw-02.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "banh-mi/raw-03.webp",
+      "original": "added-88daccbe0fc9.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "banhmi.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "banh-mi/raw-04.webp",
+      "original": "added-8998edac3b84.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "banhmi2.webp",
+        "type": "upload"
+      }
+    }
+  ],
+  "primary": "banh-mi/raw-01.webp",
+  "signature": "7d4e94c3c82cf8c15fa7fb95ff143c868ae78d25",
+  "slug": "banh-mi"
+}

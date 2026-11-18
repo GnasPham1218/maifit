@@ -1,0 +1,51 @@
+{
+  "category": "Đậu & hạt",
+  "food": "Đậu phộng",
+  "images": [
+    {
+      "file": "dau-phong/raw-01.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dau-phong/raw-02.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-phong/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-phong/boiled-02.webp",
+      "original": "000005.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-phong/boiled-03.webp",
+      "original": "000004.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-phong/boiled-04.webp",
+      "original": "000012.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dau-phong/raw-01.webp",
+  "signature": "57670a6bc535ff44377e97809344b5f538bb8149",
+  "slug": "dau-phong"
+}

@@ -1,0 +1,43 @@
+{
+  "category": "Tinh bột",
+  "food": "Gạo tẻ",
+  "images": [
+    {
+      "file": "gao-te/boiled-01.webp",
+      "original": "added-352dc610165d.jpg",
+      "preparation": "BOILED",
+      "primary": true,
+      "source": {
+        "original_name": "com.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "gao-te/raw-01.webp",
+      "original": "000015.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "gao-te/raw-02.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "gao-te/boiled-02.webp",
+      "original": "added-dfb6c2cc8b5c.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": {
+        "original_name": "com1.webp",
+        "type": "upload"
+      }
+    }
+  ],
+  "primary": "gao-te/boiled-01.webp",
+  "signature": "b6abe221ebbecafa7ba51d4a093bc44fbfec64c4",
+  "slug": "gao-te"
+}

@@ -1,0 +1,37 @@
+{
+  "category": "Đậu & hạt",
+  "food": "Hạt chia",
+  "images": [
+    {
+      "file": "hat-chia/raw-01.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "hat-chia/raw-02.webp",
+      "original": "000015.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "hat-chia/raw-03.webp",
+      "original": "000014.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "hat-chia/raw-04.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "hat-chia/raw-01.webp",
+  "signature": "b760c0cc595d46f94537c429e5f5939917f267a9",
+  "slug": "hat-chia"
+}

@@ -1,0 +1,30 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Phô mai mozzarella",
+  "images": [
+    {
+      "file": "pho-mai-mozzarella/raw-01.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "pho-mai-mozzarella/raw-02.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "pho-mai-mozzarella/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "pho-mai-mozzarella/raw-01.webp",
+  "signature": "dc9a80808555c883c4ad2b65fd285160f7e996cb",
+  "slug": "pho-mai-mozzarella"
+}

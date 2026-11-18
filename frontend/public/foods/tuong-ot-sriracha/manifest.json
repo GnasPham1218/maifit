@@ -1,0 +1,30 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Tương ớt Sriracha",
+  "images": [
+    {
+      "file": "tuong-ot-sriracha/raw-01.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "tuong-ot-sriracha/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tuong-ot-sriracha/raw-03.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tuong-ot-sriracha/raw-01.webp",
+  "signature": "5db44be89198dd25ebcfeea6c4699973263b4c8d",
+  "slug": "tuong-ot-sriracha"
+}

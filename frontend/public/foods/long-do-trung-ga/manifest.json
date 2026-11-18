@@ -1,0 +1,23 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Lòng đỏ trứng gà",
+  "images": [
+    {
+      "file": "long-do-trung-ga/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "long-do-trung-ga/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "long-do-trung-ga/raw-01.webp",
+  "signature": "56b85b142f1f16e55761d0092c13d051cc12e4b6",
+  "slug": "long-do-trung-ga"
+}

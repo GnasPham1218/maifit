@@ -1,0 +1,51 @@
+{
+  "category": "Rau",
+  "food": "Đậu Hà Lan",
+  "images": [
+    {
+      "file": "dau-ha-lan/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dau-ha-lan/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-ha-lan/raw-03.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-ha-lan/raw-04.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-ha-lan/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-ha-lan/boiled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dau-ha-lan/raw-01.webp",
+  "signature": "cb2b900b293f52385d0e8e62d039f5bbeeca8d8f",
+  "slug": "dau-ha-lan"
+}

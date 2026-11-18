@@ -1,0 +1,58 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Cá ngừ",
+  "images": [
+    {
+      "file": "ca-ngu/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ca-ngu/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-ngu/raw-03.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-ngu/grilled-01.webp",
+      "original": "000007.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-ngu/grilled-02.webp",
+      "original": "000012.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-ngu/grilled-03.webp",
+      "original": "000015.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-ngu/grilled-04.webp",
+      "original": "000014.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ca-ngu/raw-01.webp",
+  "signature": "ae7b1b3ffb6d61419e765a5483049c6f7ba70738",
+  "slug": "ca-ngu"
+}

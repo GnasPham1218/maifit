@@ -1,0 +1,46 @@
+{
+  "category": "Thịt",
+  "food": "Gan bò",
+  "images": [
+    {
+      "file": "gan-bo/raw-01.webp",
+      "original": "added-085cedf00616.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "ganbo.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "gan-bo/raw-02.webp",
+      "original": "added-1f5715e03c46.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "ganbo2.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "gan-bo/braised-01.webp",
+      "original": "added-024236f4cc7b.jpg",
+      "preparation": "BRAISED",
+      "primary": false,
+      "source": {
+        "original_name": "000011.jpg.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "gan-bo/fried-01.webp",
+      "original": "000004.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "gan-bo/raw-01.webp",
+  "signature": "6c2dff5bd3d5c7545449183e0023b4a07779c8f2",
+  "slug": "gan-bo"
+}

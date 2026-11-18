@@ -1,0 +1,51 @@
+{
+  "category": "Trái cây",
+  "food": "Khế",
+  "images": [
+    {
+      "file": "khe/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "khe/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "khe/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "khe/raw-04.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "khe/raw-05.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "khe/raw-06.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "khe/raw-01.webp",
+  "signature": "792b1b5ac50506658151790eb829cc86c6ec2c29",
+  "slug": "khe"
+}

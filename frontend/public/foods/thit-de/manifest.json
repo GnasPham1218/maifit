@@ -1,0 +1,26 @@
+{
+  "category": "Thịt",
+  "food": "Thịt dê",
+  "images": [
+    {
+      "file": "thit-de/raw-01.webp",
+      "original": "added-e8b5173e60e6.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "thitde.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "thit-de/grilled-01.webp",
+      "original": "000002.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "thit-de/raw-01.webp",
+  "signature": "36f493a944b09bb3133ffdd9f14f9f2cbf572083",
+  "slug": "thit-de"
+}

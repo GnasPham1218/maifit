@@ -1,0 +1,106 @@
+{
+  "category": "Thịt",
+  "food": "Ức gà",
+  "images": [
+    {
+      "file": "uc-ga/raw-01.webp",
+      "original": "added-38de077237c5.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "ucga2.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "uc-ga/raw-02.webp",
+      "original": "added-c1c79e59df80.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "ucga.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "uc-ga/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "uc-ga/boiled-02.webp",
+      "original": "000005.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "uc-ga/boiled-03.webp",
+      "original": "000003.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "uc-ga/boiled-04.webp",
+      "original": "000014.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "uc-ga/boiled-05.webp",
+      "original": "000015.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "uc-ga/fried-01.webp",
+      "original": "000001.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "uc-ga/fried-02.webp",
+      "original": "000011.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "uc-ga/grilled-01.webp",
+      "original": "000002.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "uc-ga/grilled-02.webp",
+      "original": "000003.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "uc-ga/grilled-03.webp",
+      "original": "000001.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "uc-ga/grilled-04.webp",
+      "original": "000012.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "uc-ga/raw-01.webp",
+  "signature": "1dda179e2300b325c4c6359a6b7230259b717b89",
+  "slug": "uc-ga"
+}

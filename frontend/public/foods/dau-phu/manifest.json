@@ -1,0 +1,71 @@
+{
+  "category": "Đậu & hạt",
+  "food": "Đậu phụ",
+  "images": [
+    {
+      "file": "dau-phu/raw-01.webp",
+      "original": "added-c98ab91410ac.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "trang2.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "dau-phu/raw-02.webp",
+      "original": "added-4d9ac0a1a3c8.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "trang.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "dau-phu/fried-01.webp",
+      "original": "000001.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-phu/fried-02.webp",
+      "original": "000004.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-phu/fried-03.webp",
+      "original": "000005.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-phu/fried-04.webp",
+      "original": "000002.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-phu/fried-05.webp",
+      "original": "000003.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-phu/fried-06.webp",
+      "original": "000007.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dau-phu/raw-01.webp",
+  "signature": "df612a7ffcf46494fcb356a91e8b28c4d7b19da6",
+  "slug": "dau-phu"
+}

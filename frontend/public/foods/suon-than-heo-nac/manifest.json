@@ -1,0 +1,37 @@
+{
+  "category": "Thịt",
+  "food": "Sườn thăn heo nạc",
+  "images": [
+    {
+      "file": "suon-than-heo-nac/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "suon-than-heo-nac/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "suon-than-heo-nac/braised-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BRAISED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "suon-than-heo-nac/grilled-01.webp",
+      "original": "000003.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "suon-than-heo-nac/raw-01.webp",
+  "signature": "cf8e53332b6b9a7b3fb40d3ff185d213d8796580",
+  "slug": "suon-than-heo-nac"
+}

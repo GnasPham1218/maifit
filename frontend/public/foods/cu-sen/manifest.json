@@ -1,0 +1,51 @@
+{
+  "category": "Rau",
+  "food": "Củ sen",
+  "images": [
+    {
+      "file": "cu-sen/raw-01.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "cu-sen/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cu-sen/raw-03.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cu-sen/raw-04.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cu-sen/boiled-01.webp",
+      "original": "000004.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cu-sen/boiled-02.webp",
+      "original": "000003.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "cu-sen/raw-01.webp",
+  "signature": "f6e14d4c65e015e44b4221e319b4e92198df6929",
+  "slug": "cu-sen"
+}

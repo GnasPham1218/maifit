@@ -1,0 +1,37 @@
+{
+  "category": "Đậu & hạt",
+  "food": "Đậu đỏ",
+  "images": [
+    {
+      "file": "dau-do/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dau-do/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-do/boiled-01.webp",
+      "original": "000003.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-do/boiled-02.webp",
+      "original": "000005.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dau-do/raw-01.webp",
+  "signature": "57d4c2e283f7dbbe420d1942540d4c1371194cc8",
+  "slug": "dau-do"
+}

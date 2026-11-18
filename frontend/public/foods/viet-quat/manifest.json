@@ -1,0 +1,51 @@
+{
+  "category": "Trái cây",
+  "food": "Việt quất",
+  "images": [
+    {
+      "file": "viet-quat/raw-01.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "viet-quat/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "viet-quat/raw-03.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "viet-quat/raw-04.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "viet-quat/raw-05.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "viet-quat/raw-06.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "viet-quat/raw-01.webp",
+  "signature": "945510dc3cd1987e9dae23fd50b9be28dea94ba7",
+  "slug": "viet-quat"
+}

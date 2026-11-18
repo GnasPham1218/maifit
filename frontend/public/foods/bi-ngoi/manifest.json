@@ -1,0 +1,37 @@
+{
+  "category": "Rau",
+  "food": "Bí ngòi",
+  "images": [
+    {
+      "file": "bi-ngoi/raw-01.webp",
+      "original": "000015.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bi-ngoi/boiled-01.webp",
+      "original": "000003.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bi-ngoi/boiled-02.webp",
+      "original": "000005.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bi-ngoi/boiled-03.webp",
+      "original": "000014.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bi-ngoi/raw-01.webp",
+  "signature": "4c661a6dbba2f56e0873bf68a0b3c7af330f809f",
+  "slug": "bi-ngoi"
+}

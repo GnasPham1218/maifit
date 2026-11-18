@@ -1,0 +1,19 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Trứng vịt",
+  "images": [
+    {
+      "file": "trung-vit/raw-01.webp",
+      "original": "added-e346bd664faf.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "trungvit.jpg",
+        "type": "upload"
+      }
+    }
+  ],
+  "primary": "trung-vit/raw-01.webp",
+  "signature": "73b9b078d283f01ffcefb355f282c572a4255952",
+  "slug": "trung-vit"
+}

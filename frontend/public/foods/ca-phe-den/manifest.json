@@ -1,0 +1,30 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Cà phê đen",
+  "images": [
+    {
+      "file": "ca-phe-den/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ca-phe-den/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-phe-den/raw-03.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ca-phe-den/raw-01.webp",
+  "signature": "393603563d90d8b87d63f99d2614deeef48131a1",
+  "slug": "ca-phe-den"
+}

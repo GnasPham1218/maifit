@@ -1,0 +1,30 @@
+{
+  "category": "Rau",
+  "food": "Rau lang",
+  "images": [
+    {
+      "file": "rau-lang/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "rau-lang/raw-02.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "rau-lang/raw-03.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "rau-lang/raw-01.webp",
+  "signature": "302b7c3893c80350ec6531386a4d1990510f4ed6",
+  "slug": "rau-lang"
+}

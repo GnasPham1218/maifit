@@ -1,0 +1,23 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Bột cacao",
+  "images": [
+    {
+      "file": "bot-cacao/raw-01.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bot-cacao/raw-02.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bot-cacao/raw-01.webp",
+  "signature": "b5e7d73825dd3c81edb730622b95b4c380eec08b",
+  "slug": "bot-cacao"
+}

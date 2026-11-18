@@ -1,0 +1,58 @@
+{
+  "category": "Rau",
+  "food": "Bông cải xanh",
+  "images": [
+    {
+      "file": "bong-cai-xanh/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bong-cai-xanh/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bong-cai-xanh/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bong-cai-xanh/raw-04.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bong-cai-xanh/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bong-cai-xanh/boiled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bong-cai-xanh/boiled-03.webp",
+      "original": "000013.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bong-cai-xanh/raw-01.webp",
+  "signature": "eedaefbe3873da768f59a2d5949f68bbc2f08ee9",
+  "slug": "bong-cai-xanh"
+}

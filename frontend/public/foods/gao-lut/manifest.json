@@ -1,0 +1,58 @@
+{
+  "category": "Tinh bột",
+  "food": "Gạo lứt",
+  "images": [
+    {
+      "file": "gao-lut/boiled-01.webp",
+      "original": "000011.jpg",
+      "preparation": "BOILED",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "gao-lut/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "gao-lut/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "gao-lut/raw-03.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "gao-lut/raw-04.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "gao-lut/boiled-02.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "gao-lut/boiled-03.webp",
+      "original": "000009.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "gao-lut/boiled-01.webp",
+  "signature": "818a910d5678c30920e7d037aa208ed770733f60",
+  "slug": "gao-lut"
+}

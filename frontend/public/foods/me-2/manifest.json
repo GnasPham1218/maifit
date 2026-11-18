@@ -1,0 +1,23 @@
+{
+  "category": "Trái cây",
+  "food": "Me",
+  "images": [
+    {
+      "file": "me-2/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "me-2/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "me-2/raw-01.webp",
+  "signature": "85a0c738822fb49efa7531036396d8dda199eca5",
+  "slug": "me-2"
+}

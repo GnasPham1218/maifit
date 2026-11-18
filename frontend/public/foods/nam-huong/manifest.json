@@ -1,0 +1,37 @@
+{
+  "category": "Rau",
+  "food": "Nấm hương",
+  "images": [
+    {
+      "file": "nam-huong/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "nam-huong/raw-02.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nam-huong/raw-03.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nam-huong/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "nam-huong/raw-01.webp",
+  "signature": "55cb8510dc8dc416349eaabbf019214a510f8247",
+  "slug": "nam-huong"
+}

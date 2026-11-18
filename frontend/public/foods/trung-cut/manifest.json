@@ -1,0 +1,16 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Trứng cút",
+  "images": [
+    {
+      "file": "trung-cut/raw-01.webp",
+      "original": "000015.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    }
+  ],
+  "primary": "trung-cut/raw-01.webp",
+  "signature": "f5ec595ae93515dd5e3b8a560c017a10d5846e12",
+  "slug": "trung-cut"
+}

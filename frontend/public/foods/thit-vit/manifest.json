@@ -1,0 +1,40 @@
+{
+  "category": "Thịt",
+  "food": "Thịt vịt",
+  "images": [
+    {
+      "file": "thit-vit/raw-01.webp",
+      "original": "added-02493e1462ab.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "thitvit.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "thit-vit/grilled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-vit/grilled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-vit/grilled-03.webp",
+      "original": "000003.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "thit-vit/raw-01.webp",
+  "signature": "0ac75ff5de604bf029fbee052332213ede1561c5",
+  "slug": "thit-vit"
+}

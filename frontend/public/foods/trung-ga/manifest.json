@@ -1,0 +1,54 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Trứng gà",
+  "images": [
+    {
+      "file": "trung-ga/raw-01.webp",
+      "original": "added-6849bd5d5489.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "000004.jpg.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "trung-ga/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "trung-ga/boiled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "trung-ga/boiled-03.webp",
+      "original": "000015.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "trung-ga/fried-01.webp",
+      "original": "000011.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "trung-ga/fried-02.webp",
+      "original": "000001.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "trung-ga/raw-01.webp",
+  "signature": "fb86fcd16efcf5d3125e98726a7001ea71efa4e3",
+  "slug": "trung-ga"
+}

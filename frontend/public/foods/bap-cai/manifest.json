@@ -1,0 +1,65 @@
+{
+  "category": "Rau",
+  "food": "Bắp cải",
+  "images": [
+    {
+      "file": "bap-cai/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bap-cai/raw-02.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bap-cai/raw-03.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bap-cai/raw-04.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bap-cai/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bap-cai/boiled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bap-cai/boiled-03.webp",
+      "original": "000011.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bap-cai/boiled-04.webp",
+      "original": "000006.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bap-cai/raw-01.webp",
+  "signature": "3334a1ccd7528fa5a84d4f1cf5f93ad68431569f",
+  "slug": "bap-cai"
+}

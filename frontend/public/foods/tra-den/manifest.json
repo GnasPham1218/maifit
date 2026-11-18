@@ -1,0 +1,23 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Trà đen",
+  "images": [
+    {
+      "file": "tra-den/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "tra-den/raw-02.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tra-den/raw-01.webp",
+  "signature": "55415f358b2a538a236b84335314f13812f03b25",
+  "slug": "tra-den"
+}

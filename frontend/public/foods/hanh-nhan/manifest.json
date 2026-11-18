@@ -1,0 +1,30 @@
+{
+  "category": "Đậu & hạt",
+  "food": "Hạnh nhân",
+  "images": [
+    {
+      "file": "hanh-nhan/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "hanh-nhan/raw-02.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "hanh-nhan/raw-03.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "hanh-nhan/raw-01.webp",
+  "signature": "38cf0e281ac4d7c255ead08f2f09735f1d3857d7",
+  "slug": "hanh-nhan"
+}

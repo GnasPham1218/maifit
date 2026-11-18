@@ -1,0 +1,30 @@
+{
+  "category": "Trái cây",
+  "food": "Lê",
+  "images": [
+    {
+      "file": "le/raw-01.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "le/raw-02.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "le/raw-03.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "le/raw-01.webp",
+  "signature": "f05c7f32a37a9165eb80e632d0c561de10211744",
+  "slug": "le"
+}

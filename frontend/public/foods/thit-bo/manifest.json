@@ -1,0 +1,37 @@
+{
+  "category": "Thịt",
+  "food": "Thịt bò",
+  "images": [
+    {
+      "file": "thit-bo/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "thit-bo/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-bo/raw-03.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-bo/braised-01.webp",
+      "original": "000012.jpg",
+      "preparation": "BRAISED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "thit-bo/raw-01.webp",
+  "signature": "ede4fab0228b8c2ca9490d172b4a119124b17e74",
+  "slug": "thit-bo"
+}

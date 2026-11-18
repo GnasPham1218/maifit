@@ -1,0 +1,51 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Cá bơn",
+  "images": [
+    {
+      "file": "ca-bon/raw-01.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ca-bon/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-bon/raw-03.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-bon/grilled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-bon/grilled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-bon/grilled-03.webp",
+      "original": "000003.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ca-bon/raw-01.webp",
+  "signature": "581658924c51bc31d4d6ec1c8fb3016459f47595",
+  "slug": "ca-bon"
+}

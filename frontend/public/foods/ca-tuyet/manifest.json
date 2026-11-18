@@ -1,0 +1,44 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Cá tuyết",
+  "images": [
+    {
+      "file": "ca-tuyet/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ca-tuyet/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-tuyet/grilled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-tuyet/grilled-02.webp",
+      "original": "000003.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-tuyet/grilled-03.webp",
+      "original": "000005.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ca-tuyet/raw-01.webp",
+  "signature": "f6b60f20041e0ebbe68fa757d0dfdc1acb67784b",
+  "slug": "ca-tuyet"
+}

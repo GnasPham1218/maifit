@@ -1,0 +1,43 @@
+{
+  "category": "Thịt",
+  "food": "Gan gà",
+  "images": [
+    {
+      "file": "gan-ga/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "gan-ga/raw-02.webp",
+      "original": "000010.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "gan-ga/boiled-01.webp",
+      "original": "added-275b0504961a.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": {
+        "original_name": "gnaga.jpg",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "gan-ga/fried-01.webp",
+      "original": "added-4c3ac93c2bc6.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": {
+        "original_name": "gâng2.webp",
+        "type": "upload"
+      }
+    }
+  ],
+  "primary": "gan-ga/raw-01.webp",
+  "signature": "6715dffed7bd7e69cc23c1a99b8e0136a22a7c56",
+  "slug": "gan-ga"
+}

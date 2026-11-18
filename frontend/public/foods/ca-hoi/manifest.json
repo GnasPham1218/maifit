@@ -1,0 +1,44 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Cá hồi",
+  "images": [
+    {
+      "file": "ca-hoi/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ca-hoi/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-hoi/raw-03.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-hoi/raw-04.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-hoi/raw-05.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ca-hoi/raw-01.webp",
+  "signature": "4588463f9d1eee61dbfa31f63d507c088fe69e8c",
+  "slug": "ca-hoi"
+}

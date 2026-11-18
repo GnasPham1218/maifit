@@ -1,0 +1,23 @@
+{
+  "category": "Trái cây",
+  "food": "Dứa",
+  "images": [
+    {
+      "file": "dua/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dua/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dua/raw-01.webp",
+  "signature": "ad43ca515ea946876e25e6975b51f45392857fb5",
+  "slug": "dua"
+}

@@ -1,0 +1,30 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Trà xanh",
+  "images": [
+    {
+      "file": "tra-xanh/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "tra-xanh/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tra-xanh/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tra-xanh/raw-01.webp",
+  "signature": "04599923c4f39504c62dc83f9cf03e219d61351d",
+  "slug": "tra-xanh"
+}

@@ -1,0 +1,16 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Bơ nhạt",
+  "images": [
+    {
+      "file": "bo-nhat/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    }
+  ],
+  "primary": "bo-nhat/raw-01.webp",
+  "signature": "6ebeb35a0172bdf00e76e3a7a1daa64563fa2146",
+  "slug": "bo-nhat"
+}

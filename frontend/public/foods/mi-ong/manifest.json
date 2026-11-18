@@ -1,0 +1,36 @@
+{
+  "category": "Tinh bột",
+  "food": "Mì ống",
+  "images": [
+    {
+      "file": "mi-ong/raw-01.webp",
+      "original": "added-58f65e033577.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "miogn.jpg",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "mi-ong/raw-02.webp",
+      "original": "added-f1f265683d63.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "miong2.jpg",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "mi-ong/boiled-01.webp",
+      "original": "000004.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "mi-ong/raw-01.webp",
+  "signature": "08dde988f8f902f30ee963ebc7141604360b40b3",
+  "slug": "mi-ong"
+}

@@ -1,0 +1,51 @@
+{
+  "category": "Rau",
+  "food": "Đậu cô ve",
+  "images": [
+    {
+      "file": "dau-co-ve/raw-01.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dau-co-ve/raw-02.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-co-ve/boiled-01.webp",
+      "original": "000003.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-co-ve/boiled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-co-ve/boiled-03.webp",
+      "original": "000012.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-co-ve/boiled-04.webp",
+      "original": "000011.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dau-co-ve/raw-01.webp",
+  "signature": "e6aed71b5faec43323560f70a9bfc3f16237bb1e",
+  "slug": "dau-co-ve"
+}

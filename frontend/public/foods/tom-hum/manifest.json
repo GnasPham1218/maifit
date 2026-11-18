@@ -1,0 +1,54 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Tôm hùm",
+  "images": [
+    {
+      "file": "tom-hum/raw-01.webp",
+      "original": "added-ecbea18e8ba3.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "tomhum.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "tom-hum/steamed-01.webp",
+      "original": "000002.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tom-hum/steamed-02.webp",
+      "original": "000001.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tom-hum/steamed-03.webp",
+      "original": "000003.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tom-hum/steamed-04.webp",
+      "original": "000004.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tom-hum/steamed-05.webp",
+      "original": "000005.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tom-hum/raw-01.webp",
+  "signature": "55f96b93e5e5d88d639c274fbaac9b996a7e9aef",
+  "slug": "tom-hum"
+}

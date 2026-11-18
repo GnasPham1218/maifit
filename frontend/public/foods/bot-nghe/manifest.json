@@ -1,0 +1,23 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Bột nghệ",
+  "images": [
+    {
+      "file": "bot-nghe/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bot-nghe/raw-02.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bot-nghe/raw-01.webp",
+  "signature": "0bcb9eb9627a335eef44925191f9a0c0e1653256",
+  "slug": "bot-nghe"
+}
