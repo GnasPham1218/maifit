@@ -1,0 +1,51 @@
+{
+  "category": "Trái cây",
+  "food": "Bưởi",
+  "images": [
+    {
+      "file": "buoi/raw-01.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "buoi/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "buoi/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "buoi/raw-04.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "buoi/raw-05.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "buoi/raw-06.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "buoi/raw-01.webp",
+  "signature": "73b0e2d5c067aebb6bbb515b9bedd92851c8ea12",
+  "slug": "buoi"
+}

@@ -1,0 +1,44 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Bạch tuộc",
+  "images": [
+    {
+      "file": "bach-tuoc/raw-01.webp",
+      "original": "000014.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bach-tuoc/raw-02.webp",
+      "original": "000010.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bach-tuoc/steamed-01.webp",
+      "original": "000004.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bach-tuoc/steamed-02.webp",
+      "original": "000003.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bach-tuoc/steamed-03.webp",
+      "original": "000005.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bach-tuoc/raw-01.webp",
+  "signature": "243ba29a5a40d7d86fd9aa99ed531adf0c7bdc1b",
+  "slug": "bach-tuoc"
+}

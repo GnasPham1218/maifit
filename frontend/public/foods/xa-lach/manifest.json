@@ -1,0 +1,30 @@
+{
+  "category": "Rau",
+  "food": "Xà lách",
+  "images": [
+    {
+      "file": "xa-lach/raw-01.webp",
+      "original": "000014.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "xa-lach/raw-02.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "xa-lach/raw-03.webp",
+      "original": "000015.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "xa-lach/raw-01.webp",
+  "signature": "d3095920b80720a8438f8da1e0e3de03a624adf8",
+  "slug": "xa-lach"
+}

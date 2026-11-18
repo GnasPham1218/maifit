@@ -1,0 +1,30 @@
+{
+  "category": "Tinh bột",
+  "food": "Bột mì",
+  "images": [
+    {
+      "file": "bot-mi/raw-01.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bot-mi/raw-02.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bot-mi/raw-03.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bot-mi/raw-01.webp",
+  "signature": "7fab7fdc5ba367e32f6068c10ec512665881f422",
+  "slug": "bot-mi"
+}

@@ -1,0 +1,37 @@
+{
+  "category": "Tinh bột",
+  "food": "Khoai môn",
+  "images": [
+    {
+      "file": "khoai-mon/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "khoai-mon/raw-02.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "khoai-mon/raw-03.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "khoai-mon/boiled-01.webp",
+      "original": "000005.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "khoai-mon/raw-01.webp",
+  "signature": "6d1532ec555e2f4e6c6b243b79fbde7b9abe91cd",
+  "slug": "khoai-mon"
+}

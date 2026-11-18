@@ -1,0 +1,23 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Lòng trắng trứng",
+  "images": [
+    {
+      "file": "long-trang-trung/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "long-trang-trung/raw-02.webp",
+      "original": "000009.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "long-trang-trung/raw-01.webp",
+  "signature": "c4226ee37ccbeaf988d2131257a0f3ab3aae2ebc",
+  "slug": "long-trang-trung"
+}

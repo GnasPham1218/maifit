@@ -1,0 +1,30 @@
+{
+  "category": "Tinh bột",
+  "food": "Khoai mì",
+  "images": [
+    {
+      "file": "khoai-mi/raw-01.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "khoai-mi/raw-02.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "khoai-mi/raw-03.webp",
+      "original": "000009.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "khoai-mi/raw-01.webp",
+  "signature": "7842e1ee5070b22102c8f866de768d63aa1b986c",
+  "slug": "khoai-mi"
+}

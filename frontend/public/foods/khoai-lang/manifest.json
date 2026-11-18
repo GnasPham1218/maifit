@@ -1,0 +1,50 @@
+{
+  "category": "Tinh bột",
+  "food": "Khoai lang",
+  "images": [
+    {
+      "file": "khoai-lang/boiled-01.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "khoai-lang/raw-01.webp",
+      "original": "added-01ff470daf2e.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "khoailang.jpg",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "khoai-lang/raw-02.webp",
+      "original": "added-0327e326da91.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "khoailang2.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "khoai-lang/boiled-02.webp",
+      "original": "000003.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "khoai-lang/boiled-03.webp",
+      "original": "000008.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "khoai-lang/boiled-01.webp",
+  "signature": "78255353b3ee0b365799b1eadb9c62e3d03ac828",
+  "slug": "khoai-lang"
+}

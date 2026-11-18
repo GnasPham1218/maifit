@@ -1,0 +1,37 @@
+{
+  "category": "Trái cây",
+  "food": "Quýt",
+  "images": [
+    {
+      "file": "quyt/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "quyt/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "quyt/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "quyt/raw-04.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "quyt/raw-01.webp",
+  "signature": "e16e461a688710cc8d0f30b48031ecb36885c7f7",
+  "slug": "quyt"
+}

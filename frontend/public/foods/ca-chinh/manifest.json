@@ -1,0 +1,58 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Cá chình",
+  "images": [
+    {
+      "file": "ca-chinh/raw-01.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ca-chinh/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-chinh/raw-03.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-chinh/grilled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-chinh/grilled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-chinh/grilled-03.webp",
+      "original": "000004.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-chinh/grilled-04.webp",
+      "original": "000014.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ca-chinh/raw-01.webp",
+  "signature": "51517910aa074dab8817d0e54f28c3004dc4c0d3",
+  "slug": "ca-chinh"
+}

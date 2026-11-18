@@ -1,0 +1,58 @@
+{
+  "category": "Rau",
+  "food": "Su hào",
+  "images": [
+    {
+      "file": "su-hao/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "su-hao/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "su-hao/raw-03.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "su-hao/raw-04.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "su-hao/raw-05.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "su-hao/boiled-01.webp",
+      "original": "000010.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "su-hao/boiled-02.webp",
+      "original": "000012.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "su-hao/raw-01.webp",
+  "signature": "5dc0144f4b0b3880e47977d4f310ff5dcccf9a7c",
+  "slug": "su-hao"
+}

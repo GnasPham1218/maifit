@@ -1,0 +1,30 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Kem whipping",
+  "images": [
+    {
+      "file": "kem-whipping/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "kem-whipping/raw-02.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "kem-whipping/raw-03.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "kem-whipping/raw-01.webp",
+  "signature": "69ce87b6952c1b414debcbeb988b308a01cbd395",
+  "slug": "kem-whipping"
+}

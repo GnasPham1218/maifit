@@ -1,0 +1,23 @@
+{
+  "category": "Thịt",
+  "food": "Đùi gà",
+  "images": [
+    {
+      "file": "dui-ga/raw-01.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dui-ga/raw-02.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dui-ga/raw-01.webp",
+  "signature": "ba45073d181063a1992c0e4837eac09f370a71bc",
+  "slug": "dui-ga"
+}

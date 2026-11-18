@@ -1,0 +1,30 @@
+{
+  "category": "Tinh bột",
+  "food": "Miến",
+  "images": [
+    {
+      "file": "mien/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "mien/raw-02.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "mien/raw-03.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "mien/raw-01.webp",
+  "signature": "c2cdb937f459d1940afe0c0182d78f23826a2f01",
+  "slug": "mien"
+}

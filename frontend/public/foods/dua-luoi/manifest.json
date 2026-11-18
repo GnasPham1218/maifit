@@ -1,0 +1,37 @@
+{
+  "category": "Trái cây",
+  "food": "Dưa lưới",
+  "images": [
+    {
+      "file": "dua-luoi/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dua-luoi/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dua-luoi/raw-03.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dua-luoi/raw-04.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dua-luoi/raw-01.webp",
+  "signature": "bae26fe24e28bfea1a5d9cbbcabd6f63ad3905b6",
+  "slug": "dua-luoi"
+}

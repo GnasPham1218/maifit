@@ -1,0 +1,40 @@
+{
+  "category": "Rau",
+  "food": "Đậu đũa",
+  "images": [
+    {
+      "file": "dau-dua/raw-01.webp",
+      "original": "added-761677c23bbf.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "000012.jpg.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "dau-dua/boiled-01.webp",
+      "original": "000004.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-dua/boiled-02.webp",
+      "original": "000007.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-dua/boiled-03.webp",
+      "original": "000008.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dau-dua/raw-01.webp",
+  "signature": "3922b4eaa6de08b177f72af93ebd39b52c997122",
+  "slug": "dau-dua"
+}

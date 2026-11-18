@@ -1,0 +1,29 @@
+{
+  "category": "Rau",
+  "food": "Giá đỗ",
+  "images": [
+    {
+      "file": "gia-do/raw-01.webp",
+      "original": "added-a0f261f27869.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "gia.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "gia-do/raw-02.webp",
+      "original": "added-3ce253c68737.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "gia2.jpg",
+        "type": "upload"
+      }
+    }
+  ],
+  "primary": "gia-do/raw-01.webp",
+  "signature": "a57c1424a96bdcb83dd72fc29d49b8f44757765a",
+  "slug": "gia-do"
+}

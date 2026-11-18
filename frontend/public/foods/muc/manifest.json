@@ -1,0 +1,65 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Mực",
+  "images": [
+    {
+      "file": "muc/raw-01.webp",
+      "original": "000009.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "muc/raw-02.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "muc/raw-03.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "muc/raw-04.webp",
+      "original": "000015.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "muc/fried-01.webp",
+      "original": "000002.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "muc/fried-02.webp",
+      "original": "000001.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "muc/fried-03.webp",
+      "original": "000006.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "muc/fried-04.webp",
+      "original": "000010.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "muc/raw-01.webp",
+  "signature": "7d9ba8a867f39f660a675588e11e0de88824212a",
+  "slug": "muc"
+}

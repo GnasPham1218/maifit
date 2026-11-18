@@ -1,0 +1,30 @@
+{
+  "category": "Thịt",
+  "food": "Thịt thăn heo",
+  "images": [
+    {
+      "file": "thit-than-heo/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "thit-than-heo/raw-02.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-than-heo/grilled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "thit-than-heo/raw-01.webp",
+  "signature": "822a060bf16631104758deee1278449a4b164efa",
+  "slug": "thit-than-heo"
+}

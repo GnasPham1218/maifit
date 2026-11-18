@@ -1,0 +1,30 @@
+{
+  "category": "Đậu & hạt",
+  "food": "Óc chó",
+  "images": [
+    {
+      "file": "oc-cho/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "oc-cho/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "oc-cho/raw-03.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "oc-cho/raw-01.webp",
+  "signature": "41151fba656d449bef1dbf88a70d062b97d0b1dc",
+  "slug": "oc-cho"
+}

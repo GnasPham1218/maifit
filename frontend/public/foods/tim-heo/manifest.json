@@ -1,0 +1,23 @@
+{
+  "category": "Thịt",
+  "food": "Tim heo",
+  "images": [
+    {
+      "file": "tim-heo/raw-01.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "tim-heo/braised-01.webp",
+      "original": "000011.jpg",
+      "preparation": "BRAISED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tim-heo/raw-01.webp",
+  "signature": "99ba8aff0cfb02ec5e584677affb153bbc32a737",
+  "slug": "tim-heo"
+}

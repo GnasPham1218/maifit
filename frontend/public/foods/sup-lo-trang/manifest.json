@@ -1,0 +1,51 @@
+{
+  "category": "Rau",
+  "food": "Súp lơ trắng",
+  "images": [
+    {
+      "file": "sup-lo-trang/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "sup-lo-trang/raw-02.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "sup-lo-trang/raw-03.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "sup-lo-trang/raw-04.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "sup-lo-trang/boiled-01.webp",
+      "original": "000011.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "sup-lo-trang/boiled-02.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "sup-lo-trang/raw-01.webp",
+  "signature": "5da862137bb0b8c6bd3ac057239bbcd6e549c3ce",
+  "slug": "sup-lo-trang"
+}

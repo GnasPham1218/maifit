@@ -1,0 +1,37 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Ốc",
+  "images": [
+    {
+      "file": "oc/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "oc/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "oc/raw-03.webp",
+      "original": "000009.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "oc/raw-04.webp",
+      "original": "000010.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "oc/raw-01.webp",
+  "signature": "f419b5bf0b39f30d852cc23c8646006c4c064d88",
+  "slug": "oc"
+}

@@ -1,0 +1,23 @@
+{
+  "category": "Tinh bột",
+  "food": "Bột gạo",
+  "images": [
+    {
+      "file": "bot-gao/raw-01.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bot-gao/raw-02.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bot-gao/raw-01.webp",
+  "signature": "412adcb6acba7826c56bd56346fd9fc3e618046e",
+  "slug": "bot-gao"
+}

@@ -1,0 +1,16 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Rượu vang đỏ",
+  "images": [
+    {
+      "file": "ruou-vang-do/raw-01.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    }
+  ],
+  "primary": "ruou-vang-do/raw-01.webp",
+  "signature": "9458005d5ec5e0de6f9be9605b71813c9525bb53",
+  "slug": "ruou-vang-do"
+}

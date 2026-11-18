@@ -1,0 +1,58 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Cá rô phi",
+  "images": [
+    {
+      "file": "ca-ro-phi/raw-01.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ca-ro-phi/raw-02.webp",
+      "original": "000015.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-ro-phi/raw-03.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-ro-phi/grilled-01.webp",
+      "original": "000004.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-ro-phi/grilled-02.webp",
+      "original": "000005.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-ro-phi/grilled-03.webp",
+      "original": "000001.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-ro-phi/grilled-04.webp",
+      "original": "000002.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ca-ro-phi/raw-01.webp",
+  "signature": "0ae248e829ef9889a28f62d6a2926f5347f7bf74",
+  "slug": "ca-ro-phi"
+}

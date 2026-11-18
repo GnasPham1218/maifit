@@ -1,0 +1,30 @@
+{
+  "category": "Trái cây",
+  "food": "Chuối",
+  "images": [
+    {
+      "file": "chuoi/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "chuoi/raw-02.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "chuoi/raw-03.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "chuoi/raw-01.webp",
+  "signature": "b38fa45d15f74593b0fa8a6b6645cfd6f18aaabe",
+  "slug": "chuoi"
+}

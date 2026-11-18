@@ -1,0 +1,65 @@
+{
+  "category": "Thịt",
+  "food": "Thịt ba chỉ",
+  "images": [
+    {
+      "file": "thit-ba-chi/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "thit-ba-chi/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-ba-chi/raw-03.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-ba-chi/raw-04.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-ba-chi/braised-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BRAISED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-ba-chi/braised-02.webp",
+      "original": "000002.jpg",
+      "preparation": "BRAISED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-ba-chi/braised-03.webp",
+      "original": "000005.jpg",
+      "preparation": "BRAISED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-ba-chi/braised-04.webp",
+      "original": "000004.jpg",
+      "preparation": "BRAISED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "thit-ba-chi/raw-01.webp",
+  "signature": "52bdb4e7e969838d984b0607fa9effe5e0c6c948",
+  "slug": "thit-ba-chi"
+}

@@ -1,0 +1,30 @@
+{
+  "category": "Thịt",
+  "food": "Sườn bò",
+  "images": [
+    {
+      "file": "suon-bo/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "suon-bo/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "suon-bo/braised-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BRAISED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "suon-bo/raw-01.webp",
+  "signature": "7d8db82a7dd18610ddd9cf16e8cd427a821e13ae",
+  "slug": "suon-bo"
+}

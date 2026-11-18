@@ -1,0 +1,37 @@
+{
+  "category": "Rau",
+  "food": "Rau muống",
+  "images": [
+    {
+      "file": "rau-muong/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "rau-muong/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "rau-muong/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "rau-muong/boiled-02.webp",
+      "original": "000003.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "rau-muong/raw-01.webp",
+  "signature": "037325db602d518d4406ebb53732988bfac8c8fc",
+  "slug": "rau-muong"
+}

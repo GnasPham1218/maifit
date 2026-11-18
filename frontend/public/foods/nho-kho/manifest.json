@@ -1,0 +1,37 @@
+{
+  "category": "Trái cây",
+  "food": "Nho khô",
+  "images": [
+    {
+      "file": "nho-kho/raw-01.webp",
+      "original": "000014.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "nho-kho/raw-02.webp",
+      "original": "000015.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nho-kho/raw-03.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nho-kho/raw-04.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "nho-kho/raw-01.webp",
+  "signature": "a797518a285b1675738632c89111c1c703893200",
+  "slug": "nho-kho"
+}

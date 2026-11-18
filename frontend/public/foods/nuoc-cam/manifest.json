@@ -1,0 +1,37 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Nước cam",
+  "images": [
+    {
+      "file": "nuoc-cam/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "nuoc-cam/raw-02.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nuoc-cam/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nuoc-cam/raw-04.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "nuoc-cam/raw-01.webp",
+  "signature": "759b122fa7898e59a9eea9fabb948bb91b0a76d6",
+  "slug": "nuoc-cam"
+}

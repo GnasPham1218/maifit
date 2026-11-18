@@ -1,0 +1,23 @@
+{
+  "category": "Trái cây",
+  "food": "Chanh",
+  "images": [
+    {
+      "file": "chanh/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "chanh/raw-02.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "chanh/raw-01.webp",
+  "signature": "4a70da7af339e5d585527d1a8101aaae9d14615c",
+  "slug": "chanh"
+}

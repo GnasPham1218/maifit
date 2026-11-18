@@ -1,0 +1,30 @@
+{
+  "category": "Rau",
+  "food": "Ớt chuông đỏ",
+  "images": [
+    {
+      "file": "ot-chuong-do/raw-01.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ot-chuong-do/raw-02.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ot-chuong-do/raw-03.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ot-chuong-do/raw-01.webp",
+  "signature": "8408f8f11aaf7acb936989d04ef8be0880bee506",
+  "slug": "ot-chuong-do"
+}

@@ -1,0 +1,37 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Cá trích",
+  "images": [
+    {
+      "file": "ca-trich/raw-01.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "ca-trich/raw-02.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-trich/grilled-01.webp",
+      "original": "000011.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "ca-trich/grilled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "ca-trich/raw-01.webp",
+  "signature": "ff3c818d9ff001230920094b224920e1d1eb5d63",
+  "slug": "ca-trich"
+}

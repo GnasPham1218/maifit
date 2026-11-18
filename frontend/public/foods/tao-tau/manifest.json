@@ -1,0 +1,30 @@
+{
+  "category": "Trái cây",
+  "food": "Táo tàu",
+  "images": [
+    {
+      "file": "tao-tau/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "tao-tau/raw-02.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tao-tau/raw-03.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tao-tau/raw-01.webp",
+  "signature": "67acfc6028a6768af1ef7e37c023aee7cecfa89f",
+  "slug": "tao-tau"
+}

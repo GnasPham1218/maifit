@@ -1,0 +1,30 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Bia",
+  "images": [
+    {
+      "file": "bia/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bia/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bia/raw-03.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bia/raw-01.webp",
+  "signature": "ecb8ce640597cf9470f660e0d694edfa24d323d2",
+  "slug": "bia"
+}

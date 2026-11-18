@@ -1,0 +1,30 @@
+{
+  "category": "Rau",
+  "food": "Mướp",
+  "images": [
+    {
+      "file": "muop/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "muop/raw-02.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "muop/raw-03.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "muop/raw-01.webp",
+  "signature": "eb58708c3263d092b8ec3f2b8cc8591662ce7eab",
+  "slug": "muop"
+}

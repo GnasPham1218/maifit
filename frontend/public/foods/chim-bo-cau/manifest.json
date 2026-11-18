@@ -1,0 +1,19 @@
+{
+  "category": "Thịt",
+  "food": "Chim bồ câu",
+  "images": [
+    {
+      "file": "chim-bo-cau/raw-01.webp",
+      "original": "added-4d63b54c13ea.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "bocau.webp",
+        "type": "upload"
+      }
+    }
+  ],
+  "primary": "chim-bo-cau/raw-01.webp",
+  "signature": "3559f0b182aa1d11a16759f7252a9d014e3f080c",
+  "slug": "chim-bo-cau"
+}

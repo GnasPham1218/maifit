@@ -1,0 +1,29 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Mật ong",
+  "images": [
+    {
+      "file": "mat-ong/raw-01.webp",
+      "original": "added-2537cc9e8975.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "R.jpg",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "mat-ong/raw-02.webp",
+      "original": "added-0e96afcaccf5.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "OIP (1).webp",
+        "type": "upload"
+      }
+    }
+  ],
+  "primary": "mat-ong/raw-01.webp",
+  "signature": "ad87d251df69535587a35a69d530b104adaad644",
+  "slug": "mat-ong"
+}

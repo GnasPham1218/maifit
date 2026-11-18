@@ -1,0 +1,33 @@
+{
+  "category": "Cá & hải sản",
+  "food": "Sò điệp",
+  "images": [
+    {
+      "file": "so-diep/raw-01.webp",
+      "original": "added-57b50fd9a1a3.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "sodiep.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "so-diep/steamed-01.webp",
+      "original": "000013.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "so-diep/steamed-02.webp",
+      "original": "000003.jpg",
+      "preparation": "STEAMED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "so-diep/raw-01.webp",
+  "signature": "7b13dc9a77a712ca782bc127579a57094a934485",
+  "slug": "so-diep"
+}

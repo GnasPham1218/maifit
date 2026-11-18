@@ -1,0 +1,29 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Sữa chua",
+  "images": [
+    {
+      "file": "sua-chua/raw-01.webp",
+      "original": "added-017e8cc3339d.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "chua.png",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "sua-chua/raw-02.webp",
+      "original": "added-7de2ca7ba500.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "chua2.jpeg",
+        "type": "upload"
+      }
+    }
+  ],
+  "primary": "sua-chua/raw-01.webp",
+  "signature": "b2f8cc4191bd07891ac1c5dbc0e43c2013db5df0",
+  "slug": "sua-chua"
+}

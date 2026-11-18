@@ -1,0 +1,23 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Sữa tách béo",
+  "images": [
+    {
+      "file": "sua-tach-beo/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "sua-tach-beo/raw-02.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "sua-tach-beo/raw-01.webp",
+  "signature": "d9c334d2a7dbc2cd5cf487b2fecbc29da703ba7f",
+  "slug": "sua-tach-beo"
+}

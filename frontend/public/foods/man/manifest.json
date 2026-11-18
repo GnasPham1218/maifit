@@ -1,0 +1,30 @@
+{
+  "category": "Trái cây",
+  "food": "Mận",
+  "images": [
+    {
+      "file": "man/raw-01.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "man/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "man/raw-03.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "man/raw-01.webp",
+  "signature": "f77854ea2d53faf3e7aaf7bce76cd4a4a37178fd",
+  "slug": "man"
+}

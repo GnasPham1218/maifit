@@ -1,0 +1,16 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Nước mắm",
+  "images": [
+    {
+      "file": "nuoc-mam/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    }
+  ],
+  "primary": "nuoc-mam/raw-01.webp",
+  "signature": "91e1340d236b66ca508d7a2de9e068b0b5451363",
+  "slug": "nuoc-mam"
+}

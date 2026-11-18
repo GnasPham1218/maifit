@@ -1,0 +1,40 @@
+{
+  "category": "Thịt",
+  "food": "Thịt bò xay",
+  "images": [
+    {
+      "file": "thit-bo-xay/grilled-01.webp",
+      "original": "000003.jpg",
+      "preparation": "GRILLED",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "thit-bo-xay/raw-01.webp",
+      "original": "added-d4da082757cc.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "boxay.jpg",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "thit-bo-xay/grilled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-bo-xay/grilled-03.webp",
+      "original": "000001.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "thit-bo-xay/grilled-01.webp",
+  "signature": "6ec58d3ca0cbeac43593652bd1d287a0b4bcca09",
+  "slug": "thit-bo-xay"
+}

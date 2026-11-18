@@ -1,0 +1,23 @@
+{
+  "category": "Đậu & hạt",
+  "food": "Hạt hướng dương",
+  "images": [
+    {
+      "file": "hat-huong-duong/raw-01.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "hat-huong-duong/raw-02.webp",
+      "original": "000014.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "hat-huong-duong/raw-01.webp",
+  "signature": "73441a3740653c8e7c8384f41ff86c718c71ea93",
+  "slug": "hat-huong-duong"
+}

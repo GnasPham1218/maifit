@@ -1,0 +1,51 @@
+{
+  "category": "Rau",
+  "food": "Cải cúc",
+  "images": [
+    {
+      "file": "cai-cuc/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "cai-cuc/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cai-cuc/raw-03.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cai-cuc/raw-04.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cai-cuc/boiled-01.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cai-cuc/boiled-02.webp",
+      "original": "000003.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "cai-cuc/raw-01.webp",
+  "signature": "ade74379587ae2c5634f49a40af2494cebf72dbd",
+  "slug": "cai-cuc"
+}

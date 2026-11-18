@@ -1,0 +1,30 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Sốt mayonnaise",
+  "images": [
+    {
+      "file": "sot-mayonnaise/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "sot-mayonnaise/raw-02.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "sot-mayonnaise/raw-03.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "sot-mayonnaise/raw-01.webp",
+  "signature": "84a84ccfe17c580dc995f7b8365a6d56eafe6b7e",
+  "slug": "sot-mayonnaise"
+}

@@ -1,0 +1,30 @@
+{
+  "category": "Rau",
+  "food": "Gừng",
+  "images": [
+    {
+      "file": "gung/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "gung/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "gung/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "gung/raw-01.webp",
+  "signature": "080829831ee71c934ef1e354badf26fdd0b6734e",
+  "slug": "gung"
+}

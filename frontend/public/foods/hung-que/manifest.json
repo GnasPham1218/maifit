@@ -1,0 +1,37 @@
+{
+  "category": "Rau",
+  "food": "Húng quế",
+  "images": [
+    {
+      "file": "hung-que/raw-01.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "hung-que/raw-02.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "hung-que/raw-03.webp",
+      "original": "000014.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "hung-que/raw-04.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "hung-que/raw-01.webp",
+  "signature": "80cb747f72d6343ec799a9952ec88b738e0afc8b",
+  "slug": "hung-que"
+}

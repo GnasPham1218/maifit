@@ -1,0 +1,51 @@
+{
+  "category": "Rau",
+  "food": "Cải thìa",
+  "images": [
+    {
+      "file": "cai-thia/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "cai-thia/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cai-thia/raw-03.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cai-thia/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cai-thia/boiled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cai-thia/boiled-03.webp",
+      "original": "000013.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "cai-thia/raw-01.webp",
+  "signature": "f4ccc1ab5611d8596b6634a9e90d3d4881d06201",
+  "slug": "cai-thia"
+}

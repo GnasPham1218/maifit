@@ -1,0 +1,23 @@
+{
+  "category": "Rau",
+  "food": "Mùi tây",
+  "images": [
+    {
+      "file": "mui-tay/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "mui-tay/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "mui-tay/raw-01.webp",
+  "signature": "85a0c738822fb49efa7531036396d8dda199eca5",
+  "slug": "mui-tay"
+}

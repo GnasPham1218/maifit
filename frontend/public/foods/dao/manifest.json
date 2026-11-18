@@ -1,0 +1,30 @@
+{
+  "category": "Trái cây",
+  "food": "Đào",
+  "images": [
+    {
+      "file": "dao/raw-01.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dao/raw-02.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dao/raw-03.webp",
+      "original": "000009.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dao/raw-01.webp",
+  "signature": "651d3c32e147875be5a2b67c0afea87bdfc072f2",
+  "slug": "dao"
+}

@@ -1,0 +1,30 @@
+{
+  "category": "Tinh bột",
+  "food": "Mì trứng",
+  "images": [
+    {
+      "file": "mi-trung/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "mi-trung/raw-01.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "mi-trung/raw-02.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "mi-trung/boiled-01.webp",
+  "signature": "aa4754b96ebbd3a49680aa2653bf1492607aa05c",
+  "slug": "mi-trung"
+}

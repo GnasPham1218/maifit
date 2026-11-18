@@ -1,0 +1,61 @@
+{
+  "category": "Thịt",
+  "food": "Thịt gà",
+  "images": [
+    {
+      "file": "thit-ga/raw-01.webp",
+      "original": "added-1bfec11d5bbb.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "thitha.jpg",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "thit-ga/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-ga/boiled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-ga/fried-01.webp",
+      "original": "000002.jpg",
+      "preparation": "FRIED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-ga/grilled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-ga/grilled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "thit-ga/grilled-03.webp",
+      "original": "000004.jpg",
+      "preparation": "GRILLED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "thit-ga/raw-01.webp",
+  "signature": "f1965f461be89d60d633f0bf10c14c5829e20051",
+  "slug": "thit-ga"
+}

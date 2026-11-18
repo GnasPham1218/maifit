@@ -1,0 +1,51 @@
+{
+  "category": "Trái cây",
+  "food": "Đu đủ",
+  "images": [
+    {
+      "file": "du-du/raw-01.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "du-du/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "du-du/raw-03.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "du-du/raw-04.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "du-du/raw-05.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "du-du/raw-06.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "du-du/raw-01.webp",
+  "signature": "a94c50c55d66e5c218ca665142a418daf8ea8053",
+  "slug": "du-du"
+}

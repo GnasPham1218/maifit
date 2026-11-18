@@ -1,0 +1,37 @@
+{
+  "category": "Tinh bột",
+  "food": "Bánh mì nguyên cám",
+  "images": [
+    {
+      "file": "banh-mi-nguyen-cam/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "banh-mi-nguyen-cam/raw-02.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "banh-mi-nguyen-cam/raw-03.webp",
+      "original": "000009.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "banh-mi-nguyen-cam/raw-04.webp",
+      "original": "000013.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "banh-mi-nguyen-cam/raw-01.webp",
+  "signature": "976a0a461de7504cbd4792dbcfe1b17eb1a6e148",
+  "slug": "banh-mi-nguyen-cam"
+}

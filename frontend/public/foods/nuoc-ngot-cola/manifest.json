@@ -1,0 +1,16 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Nước ngọt cola",
+  "images": [
+    {
+      "file": "nuoc-ngot-cola/raw-01.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    }
+  ],
+  "primary": "nuoc-ngot-cola/raw-01.webp",
+  "signature": "a13eea4a08a4bc95a3d98b6e473b9bad41cf6f62",
+  "slug": "nuoc-ngot-cola"
+}

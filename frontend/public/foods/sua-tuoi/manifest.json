@@ -1,0 +1,30 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Sữa tươi",
+  "images": [
+    {
+      "file": "sua-tuoi/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "sua-tuoi/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "sua-tuoi/raw-03.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "sua-tuoi/raw-01.webp",
+  "signature": "b2e38bf8f8894c55e67ef06600a772e39a160260",
+  "slug": "sua-tuoi"
+}

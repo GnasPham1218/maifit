@@ -1,0 +1,37 @@
+{
+  "category": "Thịt",
+  "food": "Mề gà",
+  "images": [
+    {
+      "file": "me-ga/raw-01.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "me-ga/raw-02.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "me-ga/boiled-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "me-ga/boiled-02.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "me-ga/raw-01.webp",
+  "signature": "2e9b13f2b78f4635cb1613f167e185169c5954fc",
+  "slug": "me-ga"
+}

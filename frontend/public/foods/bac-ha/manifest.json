@@ -1,0 +1,23 @@
+{
+  "category": "Rau",
+  "food": "Bạc hà",
+  "images": [
+    {
+      "file": "bac-ha/raw-01.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bac-ha/raw-02.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bac-ha/raw-01.webp",
+  "signature": "fd7cf0c703769eb287e10b87a76491926632ff88",
+  "slug": "bac-ha"
+}

@@ -1,0 +1,37 @@
+{
+  "category": "Thịt",
+  "food": "Tim gà",
+  "images": [
+    {
+      "file": "tim-ga/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "tim-ga/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tim-ga/raw-03.webp",
+      "original": "000009.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tim-ga/boiled-01.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tim-ga/raw-01.webp",
+  "signature": "e8792216838f225d971768c85ce9ae8d36930f90",
+  "slug": "tim-ga"
+}

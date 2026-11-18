@@ -1,0 +1,29 @@
+{
+  "category": "Thịt",
+  "food": "Thịt heo xay",
+  "images": [
+    {
+      "file": "thit-heo-xay/raw-01.webp",
+      "original": "added-17ee12fcfc7b.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "heoxay.webp",
+        "type": "upload"
+      }
+    },
+    {
+      "file": "thit-heo-xay/raw-02.webp",
+      "original": "added-a1515596cd27.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": {
+        "original_name": "heoxay2.webp",
+        "type": "upload"
+      }
+    }
+  ],
+  "primary": "thit-heo-xay/raw-01.webp",
+  "signature": "ff9685fcf5c862caee59a72515f8a3d97a000965",
+  "slug": "thit-heo-xay"
+}

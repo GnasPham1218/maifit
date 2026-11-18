@@ -1,0 +1,30 @@
+{
+  "category": "Đậu & hạt",
+  "food": "Sữa đậu nành",
+  "images": [
+    {
+      "file": "sua-dau-nanh/raw-01.webp",
+      "original": "000014.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "sua-dau-nanh/raw-02.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "sua-dau-nanh/raw-03.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "sua-dau-nanh/raw-01.webp",
+  "signature": "9fb55aab94cb2e6c8c4504747353124a2ae82e35",
+  "slug": "sua-dau-nanh"
+}

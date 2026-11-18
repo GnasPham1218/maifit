@@ -5,3 +5,16 @@ frontend/dist/
 .idea/
 .vscode/
 .codegraph/
+
+# tools/food-image: downloaded photos, caches and review state stay local (only the exported
+# .webp files in frontend/public/foods are committed)
+tools/food-image/images/
+tools/food-image/.thumbs/
+tools/food-image/selected/
+tools/food-image/__pycache__/
+tools/food-image/*.tmp
+tools/food-image/crawl_log.txt
+tools/food-image/selections.json
+tools/food-image/main_images.json
+tools/food-image/rejected.json
+tools/food-image/sources.json

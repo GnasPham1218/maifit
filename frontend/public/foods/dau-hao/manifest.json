@@ -1,0 +1,23 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Dầu hào",
+  "images": [
+    {
+      "file": "dau-hao/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dau-hao/raw-02.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dau-hao/raw-01.webp",
+  "signature": "0626df421d68e21761fb4a30633ece1fc807c87f",
+  "slug": "dau-hao"
+}

@@ -1,0 +1,30 @@
+{
+  "category": "Rau",
+  "food": "Nấm kim châm",
+  "images": [
+    {
+      "file": "nam-kim-cham/raw-01.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "nam-kim-cham/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nam-kim-cham/raw-03.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "nam-kim-cham/raw-01.webp",
+  "signature": "5db44be89198dd25ebcfeea6c4699973263b4c8d",
+  "slug": "nam-kim-cham"
+}

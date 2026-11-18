@@ -1,0 +1,23 @@
+{
+  "category": "Rau",
+  "food": "Hành lá",
+  "images": [
+    {
+      "file": "hanh-la/raw-01.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "hanh-la/raw-02.webp",
+      "original": "000015.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "hanh-la/raw-01.webp",
+  "signature": "410c0523012c00b18ca17b0f9e34495a517b5070",
+  "slug": "hanh-la"
+}

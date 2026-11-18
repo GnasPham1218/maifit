@@ -1,0 +1,30 @@
+{
+  "category": "Thịt",
+  "food": "Gan heo",
+  "images": [
+    {
+      "file": "gan-heo/raw-01.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "gan-heo/braised-01.webp",
+      "original": "000001.jpg",
+      "preparation": "BRAISED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "gan-heo/braised-02.webp",
+      "original": "000002.jpg",
+      "preparation": "BRAISED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "gan-heo/raw-01.webp",
+  "signature": "e7d5e916d627523a6825f46ccc0120fd6592241c",
+  "slug": "gan-heo"
+}

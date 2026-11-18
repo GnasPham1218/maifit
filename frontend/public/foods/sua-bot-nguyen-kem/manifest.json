@@ -1,0 +1,19 @@
+{
+  "category": "Trứng & sữa",
+  "food": "Sữa bột nguyên kem",
+  "images": [
+    {
+      "file": "sua-bot-nguyen-kem/raw-01.webp",
+      "original": "added-2215393c76d7.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": {
+        "original_name": "kohieu.webp",
+        "type": "upload"
+      }
+    }
+  ],
+  "primary": "sua-bot-nguyen-kem/raw-01.webp",
+  "signature": "e451ab6ea3408ad26836c66f063bd6bd85b43182",
+  "slug": "sua-bot-nguyen-kem"
+}

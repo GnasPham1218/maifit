@@ -1,0 +1,30 @@
+{
+  "category": "Rau",
+  "food": "Tỏi",
+  "images": [
+    {
+      "file": "toi/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "toi/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "toi/raw-03.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "toi/raw-01.webp",
+  "signature": "93a5b6c12e6e154c07b28e1e837bf19464bd7454",
+  "slug": "toi"
+}

@@ -1,0 +1,44 @@
+{
+  "category": "Trái cây",
+  "food": "Dâu tây",
+  "images": [
+    {
+      "file": "dau-tay/raw-01.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dau-tay/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-tay/raw-03.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-tay/raw-04.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-tay/raw-05.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dau-tay/raw-01.webp",
+  "signature": "07d8aea42b0fffe090faa363f3b34d4ba0945a8b",
+  "slug": "dau-tay"
+}

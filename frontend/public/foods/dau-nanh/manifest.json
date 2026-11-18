@@ -1,0 +1,44 @@
+{
+  "category": "Đậu & hạt",
+  "food": "Đậu nành",
+  "images": [
+    {
+      "file": "dau-nanh/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dau-nanh/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-nanh/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-nanh/boiled-01.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dau-nanh/boiled-02.webp",
+      "original": "000001.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dau-nanh/raw-01.webp",
+  "signature": "1221147910772ad37a56d7f753b519a396846df0",
+  "slug": "dau-nanh"
+}

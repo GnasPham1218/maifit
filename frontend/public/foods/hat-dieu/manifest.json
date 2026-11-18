@@ -1,0 +1,37 @@
+{
+  "category": "Đậu & hạt",
+  "food": "Hạt điều",
+  "images": [
+    {
+      "file": "hat-dieu/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "hat-dieu/raw-02.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "hat-dieu/raw-03.webp",
+      "original": "000009.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "hat-dieu/raw-04.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "hat-dieu/raw-01.webp",
+  "signature": "1a1157eff902c3e546d51decc4be8477ef2ad6d6",
+  "slug": "hat-dieu"
+}

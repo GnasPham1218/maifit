@@ -1,0 +1,51 @@
+{
+  "category": "Rau",
+  "food": "Bí đao",
+  "images": [
+    {
+      "file": "bi-dao/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bi-dao/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bi-dao/raw-03.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bi-dao/boiled-01.webp",
+      "original": "000003.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bi-dao/boiled-02.webp",
+      "original": "000008.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bi-dao/boiled-03.webp",
+      "original": "000007.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bi-dao/raw-01.webp",
+  "signature": "c23b205297e2f52cb943f67696b9a1e43e3a1209",
+  "slug": "bi-dao"
+}

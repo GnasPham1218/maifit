@@ -1,0 +1,30 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Tương hoisin",
+  "images": [
+    {
+      "file": "tuong-hoisin/raw-01.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "tuong-hoisin/raw-02.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tuong-hoisin/raw-03.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tuong-hoisin/raw-01.webp",
+  "signature": "0f1e24f4573a9dae5943331528b416302dd00326",
+  "slug": "tuong-hoisin"
+}

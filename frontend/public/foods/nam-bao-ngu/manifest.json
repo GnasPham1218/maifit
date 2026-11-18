@@ -1,0 +1,30 @@
+{
+  "category": "Rau",
+  "food": "Nấm bào ngư",
+  "images": [
+    {
+      "file": "nam-bao-ngu/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "nam-bao-ngu/raw-02.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "nam-bao-ngu/raw-03.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "nam-bao-ngu/raw-01.webp",
+  "signature": "689f4fa70f80a3a91bda28bf9c6c2a1f5481ddd6",
+  "slug": "nam-bao-ngu"
+}

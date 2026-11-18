@@ -1,0 +1,23 @@
+{
+  "category": "Tinh bột",
+  "food": "Yến mạch",
+  "images": [
+    {
+      "file": "yen-mach/raw-01.webp",
+      "original": "000015.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "yen-mach/raw-02.webp",
+      "original": "000009.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "yen-mach/raw-01.webp",
+  "signature": "5a1720265591b07c9d5496d3a5abddc71744c07f",
+  "slug": "yen-mach"
+}

@@ -1,0 +1,37 @@
+{
+  "category": "Rau",
+  "food": "Bầu",
+  "images": [
+    {
+      "file": "bau/raw-01.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "bau/boiled-01.webp",
+      "original": "000002.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bau/boiled-02.webp",
+      "original": "000003.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "bau/boiled-03.webp",
+      "original": "000004.jpg",
+      "preparation": "BOILED",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "bau/raw-01.webp",
+  "signature": "aa9920c4217e1ddc3827239208f0615424edb6de",
+  "slug": "bau"
+}

@@ -1,0 +1,23 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Đường kính",
+  "images": [
+    {
+      "file": "duong-kinh/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "duong-kinh/raw-02.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "duong-kinh/raw-01.webp",
+  "signature": "34beb3bf5ee13f04d14be38ef222da1bba757e04",
+  "slug": "duong-kinh"
+}

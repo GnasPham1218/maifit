@@ -1,0 +1,30 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Mỡ lợn",
+  "images": [
+    {
+      "file": "mo-lon/raw-01.webp",
+      "original": "000007.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "mo-lon/raw-02.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "mo-lon/raw-03.webp",
+      "original": "000008.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "mo-lon/raw-01.webp",
+  "signature": "bd4d5d78c03e020e0223645d93e02299d39ad977",
+  "slug": "mo-lon"
+}

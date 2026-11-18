@@ -1,0 +1,30 @@
+{
+  "category": "Gia vị & khác",
+  "food": "Tương cà",
+  "images": [
+    {
+      "file": "tuong-ca/raw-01.webp",
+      "original": "000004.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "tuong-ca/raw-02.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "tuong-ca/raw-03.webp",
+      "original": "000005.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tuong-ca/raw-01.webp",
+  "signature": "1d89366055af6b8ab6ece342262a3484659ee38a",
+  "slug": "tuong-ca"
+}

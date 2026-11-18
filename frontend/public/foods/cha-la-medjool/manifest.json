@@ -1,0 +1,30 @@
+{
+  "category": "Trái cây",
+  "food": "Chà là Medjool",
+  "images": [
+    {
+      "file": "cha-la-medjool/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "cha-la-medjool/raw-02.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "cha-la-medjool/raw-03.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "cha-la-medjool/raw-01.webp",
+  "signature": "d6e5585e6b761837a4e7084f109ae0ba62df2f65",
+  "slug": "cha-la-medjool"
+}

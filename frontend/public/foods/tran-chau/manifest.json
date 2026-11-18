@@ -1,0 +1,23 @@
+{
+  "category": "Tinh bột",
+  "food": "Trân châu",
+  "images": [
+    {
+      "file": "tran-chau/raw-01.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "tran-chau/raw-02.webp",
+      "original": "000011.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tran-chau/raw-01.webp",
+  "signature": "a4fb8f4ba00e4a82962bc24618a4a140143f5b43",
+  "slug": "tran-chau"
+}

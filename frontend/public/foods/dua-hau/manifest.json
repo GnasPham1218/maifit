@@ -1,0 +1,37 @@
+{
+  "category": "Trái cây",
+  "food": "Dưa hấu",
+  "images": [
+    {
+      "file": "dua-hau/raw-01.webp",
+      "original": "000003.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "dua-hau/raw-02.webp",
+      "original": "000002.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dua-hau/raw-03.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    },
+    {
+      "file": "dua-hau/raw-04.webp",
+      "original": "000012.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "dua-hau/raw-01.webp",
+  "signature": "05ddd7305a1ca5e53b78b86f2343440a0ba86601",
+  "slug": "dua-hau"
+}

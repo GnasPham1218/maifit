@@ -1,0 +1,23 @@
+{
+  "category": "Trái cây",
+  "food": "Táo",
+  "images": [
+    {
+      "file": "tao/raw-01.webp",
+      "original": "000001.jpg",
+      "preparation": "RAW",
+      "primary": true,
+      "source": null
+    },
+    {
+      "file": "tao/raw-02.webp",
+      "original": "000006.jpg",
+      "preparation": "RAW",
+      "primary": false,
+      "source": null
+    }
+  ],
+  "primary": "tao/raw-01.webp",
+  "signature": "474b0eadeac78c5cdfbc8daeb29f91e7c3194d46",
+  "slug": "tao"
+}
