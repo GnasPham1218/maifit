@@ -659,7 +659,7 @@
     ]
   },
   {
-    "name": "Chân giò heo",
+    "name": "Thịt đùi heo nạc",
     "category_code": "MEAT",
     "category": "Thịt",
     "preparations": [
@@ -669,8 +669,8 @@
         "source_description": "Pork, fresh, leg (ham), whole, separable lean only, raw",
         "source_approximate": false,
         "aliases": [
-          "Giò heo",
-          "Thịt chân giò"
+          "Thịt đùi heo",
+          "Đùi heo"
         ],
         "locking_aliases": []
       },
@@ -681,10 +681,8 @@
         "source_approximate": false,
         "aliases": [],
         "locking_aliases": [
-          "Chân giò heo quay",
-          "Giò heo nướng",
-          "Thịt chân giò quay",
-          "Chân giò nướng"
+          "Đùi heo nướng",
+          "Thịt đùi heo nướng"
         ]
       }
     ]
@@ -1014,7 +1012,7 @@
         "id": 161,
         "preparation": "RAW",
         "source_description": "Beef, chuck, short ribs, boneless, separable lean only, trimmed to 0\" fat, choice, raw",
-        "source_approximate": false,
+        "source_approximate": true,
         "aliases": [
           "Dẻ sườn bò",
           "Thịt sườn bò"
@@ -1025,7 +1023,7 @@
         "id": 162,
         "preparation": "BRAISED",
         "source_description": "Beef, chuck, short ribs, boneless, separable lean only, trimmed to 0\" fat, choice, cooked, braised",
-        "source_approximate": false,
+        "source_approximate": true,
         "aliases": [],
         "locking_aliases": [
           "Sườn bò kho",
@@ -1285,7 +1283,7 @@
         "id": 20,
         "preparation": "RAW",
         "source_description": "Beef, round, top round steak, boneless, separable lean only, trimmed to 0\" fat, all grades, raw",
-        "source_approximate": false,
+        "source_approximate": true,
         "aliases": [
           "Thịt bò nạc",
           "Thịt bò đùi",
@@ -1297,7 +1295,7 @@
         "id": 21,
         "preparation": "BRAISED",
         "source_description": "Beef, round, top round, separable lean only, trimmed to 0\" fat, select, cooked, braised",
-        "source_approximate": false,
+        "source_approximate": true,
         "aliases": [],
         "locking_aliases": [
           "Thịt bò kho",
@@ -1669,7 +1667,7 @@
         "id": 215,
         "preparation": "GRILLED",
         "source_description": "Fish, catfish, channel, farmed, cooked, dry heat",
-        "source_approximate": false,
+        "source_approximate": true,
         "aliases": [],
         "locking_aliases": [
           "Cá basa nướng",
@@ -2162,7 +2160,7 @@
         "id": 227,
         "preparation": "RAW",
         "source_description": "Mollusks, scallop, mixed species, raw",
-        "source_approximate": false,
+        "source_approximate": true,
         "aliases": [
           "Cồi sò điệp",
           "Thịt sò điệp"
@@ -2175,7 +2173,7 @@
         "id": 228,
         "preparation": "STEAMED",
         "source_description": "Mollusks, scallop, (bay and sea), cooked, steamed",
-        "source_approximate": false,
+        "source_approximate": true,
         "aliases": [],
         "locking_aliases": [
           "Sò điệp hấp",
@@ -2214,7 +2212,7 @@
         "id": 236,
         "preparation": "RAW",
         "source_description": "Crustaceans, crayfish, mixed species, wild, raw",
-        "source_approximate": false,
+        "source_approximate": true,
         "aliases": [
           "Tôm nước ngọt",
           "Tôm sông",
@@ -2226,7 +2224,7 @@
         "id": 237,
         "preparation": "STEAMED",
         "source_description": "Crustaceans, crayfish, mixed species, wild, cooked, moist heat",
-        "source_approximate": false,
+        "source_approximate": true,
         "aliases": [],
         "locking_aliases": [
           "Tôm càng hấp",

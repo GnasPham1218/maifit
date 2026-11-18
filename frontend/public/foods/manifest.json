@@ -2186,49 +2186,6 @@
       "slug": "cha-la-medjool"
     },
     {
-      "category": "Thịt",
-      "food": "Chân giò heo",
-      "images": [
-        {
-          "file": "chan-gio-heo/raw-01.webp",
-          "original": "added-d15144294761.jpg",
-          "preparation": "RAW",
-          "primary": true,
-          "source": {
-            "original_name": "gioheo.jpg",
-            "type": "upload"
-          }
-        },
-        {
-          "file": "chan-gio-heo/raw-02.webp",
-          "original": "added-c303700d038a.jpg",
-          "preparation": "RAW",
-          "primary": false,
-          "source": {
-            "original_name": "gioheo.webp",
-            "type": "upload"
-          }
-        },
-        {
-          "file": "chan-gio-heo/grilled-01.webp",
-          "original": "000002.jpg",
-          "preparation": "GRILLED",
-          "primary": false,
-          "source": null
-        },
-        {
-          "file": "chan-gio-heo/grilled-02.webp",
-          "original": "000005.jpg",
-          "preparation": "GRILLED",
-          "primary": false,
-          "source": null
-        }
-      ],
-      "primary": "chan-gio-heo/raw-01.webp",
-      "signature": "344317b0ac601c00117680ff482034344f8179cf",
-      "slug": "chan-gio-heo"
-    },
-    {
       "category": "Trái cây",
       "food": "Chanh",
       "images": [
@@ -7577,6 +7534,63 @@
       "primary": "thit-de/raw-01.webp",
       "signature": "36f493a944b09bb3133ffdd9f14f9f2cbf572083",
       "slug": "thit-de"
+    },
+    {
+      "category": "Thịt",
+      "food": "Thịt đùi heo nạc",
+      "images": [
+        {
+          "file": "thit-dui-heo-nac/raw-01.webp",
+          "original": "000006.jpg",
+          "preparation": "RAW",
+          "primary": true,
+          "source": null
+        },
+        {
+          "file": "thit-dui-heo-nac/raw-02.webp",
+          "original": "000001.jpg",
+          "preparation": "RAW",
+          "primary": false,
+          "source": null
+        },
+        {
+          "file": "thit-dui-heo-nac/raw-03.webp",
+          "original": "000003.jpg",
+          "preparation": "RAW",
+          "primary": false,
+          "source": null
+        },
+        {
+          "file": "thit-dui-heo-nac/raw-04.webp",
+          "original": "000007.jpg",
+          "preparation": "RAW",
+          "primary": false,
+          "source": null
+        },
+        {
+          "file": "thit-dui-heo-nac/grilled-01.webp",
+          "original": "added-33486f88c3aa.jpg",
+          "preparation": "GRILLED",
+          "primary": false,
+          "source": {
+            "original_name": "cach-uop-thit-nuong-ngon.jpg",
+            "type": "upload"
+          }
+        },
+        {
+          "file": "thit-dui-heo-nac/grilled-02.webp",
+          "original": "added-747b055af3f8.jpg",
+          "preparation": "GRILLED",
+          "primary": false,
+          "source": {
+            "original_name": "1.webp",
+            "type": "upload"
+          }
+        }
+      ],
+      "primary": "thit-dui-heo-nac/raw-01.webp",
+      "signature": "4f67f54c17f6422902510c9fcd81adf8cec8ca20",
+      "slug": "thit-dui-heo-nac"
     },
     {
       "category": "Thịt",
