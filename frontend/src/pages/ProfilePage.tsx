@@ -1,136 +1,69 @@
-import { Crown, LogOut } from 'lucide-react';
+import { Crown } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
-import { bodyCheckinApi, profileApi } from '../apis/profileApi';
+import { useLocation, useNavigate, useSearchParams } from 'react-router';
+import { profileApi } from '../apis/profileApi';
 import { Alert } from '../components/Alert';
 import { Avatar } from '../components/Avatar';
-import { FormField } from '../components/FormField';
+import { ButtonLink } from '../components/ButtonLink';
+import { SegmentedTabs } from '../components/SegmentedTabs';
 import { PaymentDialog } from '../components/premium/PaymentDialog';
 import { PremiumBlock } from '../components/premium/PremiumBlock';
+import { AccountCard } from '../components/profile/AccountCard';
 import { AppearanceCard } from '../components/profile/AppearanceCard';
+import { CoachProfileTab } from '../components/profile/CoachProfileTab';
+import { CoachSummaryCard } from '../components/profile/CoachSummaryCard';
+import { ProfileNudge } from '../components/profile/ProfileNudge';
 import { AiQuotaCard, EnergyStats, MacroDetails } from '../components/profile/ProfileStats';
-import { ProfileSection } from '../components/profile/ProfileSection';
 import { TrainingTimeCard } from '../components/profile/TrainingTimeCard';
 import { WeightSection } from '../components/profile/WeightSection';
-import { usePremiumCheckout } from '../hooks/usePremiumCheckout';
-import { SelectField } from '../components/SelectField';
-import { ACTIVITY_OPTIONS, GOAL_OPTIONS, SEX_OPTIONS } from '../constants/profile';
-import { getErrorMessage, getFieldErrors } from '../constants/errorMessages';
-import type { ActivityLevel, Goal, Profile, Sex } from '../types/profile';
-import { optionalNumber } from '../utils/number';
-import { Button } from '../components/Button';
+import { getErrorMessage } from '../constants/errorMessages';
 import { useAuth } from '../hooks/useAuth';
+import { usePremiumCheckout } from '../hooks/usePremiumCheckout';
+import type { Profile } from '../types/profile';
 
-interface FormState {
-  sex: Sex;
-  birthDate: string;
-  heightCm: string;
-  activityLevel: ActivityLevel;
-  goal: Goal;
-  customTargetKcal: string;
-  weightKg: string; // only used for the first setup (later weights go through check-ins)
+type Tab = 'overview' | 'coach' | 'settings';
+
+function isTab(value: string | null): value is Tab {
+  return value === 'overview' || value === 'coach' || value === 'settings';
 }
 
-const EMPTY_FORM: FormState = {
-  sex: 'MALE',
-  birthDate: '',
-  heightCm: '',
-  activityLevel: 'MODERATE',
-  goal: 'MAINTAIN',
-  customTargetKcal: '',
-  weightKg: '',
-};
-
-function toForm(p: Profile): FormState {
-  return {
-    sex: p.sex,
-    birthDate: p.birthDate,
-    heightCm: String(p.heightCm),
-    activityLevel: p.activityLevel,
-    goal: p.goal,
-    customTargetKcal: p.customTargetKcal != null ? String(p.customTargetKcal) : '',
-    weightKg: '',
-  };
-}
-
+// Three tabs, kept in the address (?tab=coach) so a link or a reload opens the same one
 export default function ProfilePage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [params, setParams] = useSearchParams();
+  const tabParam = params.get('tab');
+  const tab: Tab = isTab(tabParam) ? tabParam : 'overview';
   const checkout = usePremiumCheckout();
   const [payOpen, setPayOpen] = useState(false);
   const [statsKey, setStatsKey] = useState(0); // bumped after paying: the AI limits grow
   const [loggingOut, setLoggingOut] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [error, setError] = useState<string | null>(null);
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [saved, setSaved] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
 
-  // First load. setState only inside .then()/.catch(), never synchronously in the effect body
-  // (react-hooks/set-state-in-effect). `ignore` drops a late response after unmount.
+  // First load. setState only inside .then()/.catch() (react-hooks/set-state-in-effect).
   useEffect(() => {
     let ignore = false;
     profileApi.find()
-      .then((p) => {
-        if (ignore) return;
-        setProfile(p);
-        if (p) setForm(toForm(p));
-      })
-      .catch((err: unknown) => {
-        if (!ignore) setError(getErrorMessage(err));
-      })
-      .finally(() => {
-        if (!ignore) setLoading(false);
-      });
-    return () => {
-      ignore = true;
-    };
+      .then((p) => { if (!ignore) setProfile(p); })
+      .catch((err: unknown) => { if (!ignore) setError(getErrorMessage(err)); })
+      .finally(() => { if (!ignore) setLoading(false); });
+    return () => { ignore = true; };
   }, []);
 
-  // Reload after saving or a check-in (the latest weight changes BMR / TDEE).
-  // Called from event handlers only.
-  async function reloadProfile(): Promise<Profile | null> {
+  // After a check-in (the latest weight changes BMR / TDEE). Called from event handlers only.
+  async function reloadProfile() {
     try {
-      const p = await profileApi.find();
-      setProfile(p);
-      return p;
+      setProfile(await profileApi.find());
     } catch (err) {
       setError(getErrorMessage(err));
-      return null;
     }
   }
 
-  const needsWeight = profile?.latestWeightKg == null;
-
-  async function handleSubmit() {
-    setError(null);
-    setFieldErrors({});
-    setSaved(false);
-    setSubmitting(true);
-    try {
-      await profileApi.save({
-        sex: form.sex,
-        birthDate: form.birthDate,
-        heightCm: Number(form.heightCm),
-        activityLevel: form.activityLevel,
-        goal: form.goal,
-        customTargetKcal: optionalNumber(form.customTargetKcal),
-      });
-      if (needsWeight && form.weightKg) {
-        await bodyCheckinApi.create({ weightKg: Number(form.weightKg) });
-      }
-      const p = await reloadProfile();
-      if (p) setForm(toForm(p));
-      setSaved(true);
-    } catch (err) {
-      setError(getErrorMessage(err));
-      setFieldErrors(getFieldErrors(err));
-    } finally {
-      setSubmitting(false);
-    }
+  function selectTab(next: Tab) {
+    setParams(next === 'overview' ? {} : { tab: next }, { replace: true });
   }
 
   async function handleLogout() {
@@ -168,8 +101,7 @@ export default function ProfilePage() {
 
   return (
     <div className="grid gap-4 md:gap-5">
-      {/* The page's one graphite block (same in both themes, like the home and leaderboard heroes):
-          who you are, and Premium on the right (below on phones) */}
+      {/* The page's one graphite block: who you are, and Premium on the right (below on phones) */}
       <section className="grid gap-5 rounded-card bg-hero p-5 text-hero-ink md:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] md:items-center md:gap-6 md:p-7">
         <div className="flex flex-wrap items-center gap-4 md:gap-6">
           <Avatar name={name} size={96} premium={premium} />
@@ -182,72 +114,65 @@ export default function ProfilePage() {
                 </span>
               )}
               <span className="truncate">{user?.email}</span>
+              {profile && <span>· {profile.age} tuổi</span>}
             </p>
-            <Button variant="hero" size="sm" className="justify-self-start" onClick={() => void handleLogout()} disabled={loggingOut}>
-              <LogOut aria-hidden="true" className="size-4" /> {loggingOut ? 'Đang đăng xuất…' : 'Đăng xuất'}
-            </Button>
           </div>
         </div>
         <PremiumBlock checkout={checkout} onBuy={openPayment} />
       </section>
 
-      {!profile && (
-        <Alert type="info">Nhập vài thông tin để MAIFit tính lượng calo phù hợp cho bạn mỗi ngày.</Alert>
-      )}
-      {profile?.energy && <EnergyStats energy={profile.energy} goal={profile.goal} />}
-
-      {/* Rows 2 and 3 share the same two columns, so their cards line up */}
-      <div className="grid gap-4 md:gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-        <TrainingTimeCard />
-        <AiQuotaCard refreshKey={statsKey} />
+      <div className="flex items-center gap-2">
+        <SegmentedTabs<Tab> label="Hồ sơ" value={tab} onChange={selectTab} items={[
+          { id: 'overview', label: 'Tổng quan' },
+          { id: 'coach', label: 'Hồ sơ huấn luyện' },
+          { id: 'settings', label: 'Cài đặt' },
+        ]} />
       </div>
 
-      <div className="grid items-start gap-4 md:gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-        <ProfileSection title="Thông tin cơ thể" subtitle="Lưu xong, calo mục tiêu được tính lại ngay.">
-          {error && <Alert type="error">{error}</Alert>}
-          {saved && <Alert type="success">Đã lưu hồ sơ.</Alert>}
-          <form
-            className="grid gap-3.5 sm:grid-cols-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              void handleSubmit();
-            }}
-          >
-            <FormField label="Ngày sinh" name="birthDate" type="date" required
-              value={form.birthDate} error={fieldErrors.birthDate}
-              onChange={(e) => setForm({ ...form, birthDate: e.target.value })} />
-            <SelectField label="Giới tính" name="sex" options={SEX_OPTIONS} value={form.sex}
-              onChange={(e) => setForm({ ...form, sex: e.target.value as Sex })} />
-            <FormField label="Chiều cao (cm)" name="heightCm" type="number" step="0.1" min="100" max="250" required
-              value={form.heightCm} error={fieldErrors.heightCm}
-              onChange={(e) => setForm({ ...form, heightCm: e.target.value })} />
-            {needsWeight && (
-              <FormField label="Cân nặng hiện tại (kg)" name="weightKg" type="number" step="0.1" min="20" max="400"
-                required value={form.weightKg} error={fieldErrors.weightKg}
-                onChange={(e) => setForm({ ...form, weightKg: e.target.value })} />
-            )}
-            <SelectField label="Mức vận động" name="activityLevel" options={ACTIVITY_OPTIONS}
-              value={form.activityLevel}
-              onChange={(e) => setForm({ ...form, activityLevel: e.target.value as ActivityLevel })} />
-            <SelectField label="Mục tiêu" name="goal" options={GOAL_OPTIONS} value={form.goal}
-              onChange={(e) => setForm({ ...form, goal: e.target.value as Goal })} />
-            <FormField label="Calo tự đặt (không bắt buộc)" name="customTargetKcal" type="number"
-              min="1000" max="6000" value={form.customTargetKcal} error={fieldErrors.customTargetKcal}
-              onChange={(e) => setForm({ ...form, customTargetKcal: e.target.value })} />
-            <div className="flex items-end justify-end sm:col-span-2">
-              <Button type="submit" disabled={submitting}>
-                {submitting ? 'Đang lưu…' : 'Lưu thay đổi'}
-              </Button>
+      {error && <Alert type="error">{error}</Alert>}
+
+      {tab === 'overview' && (
+        <>
+          <ProfileNudge profile={profile} dismissible={false} />
+          {profile?.energy && <EnergyStats energy={profile.energy} goal={profile.goal} />}
+          <div className="grid gap-4 md:gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+            <TrainingTimeCard />
+            <AiQuotaCard refreshKey={statsKey} />
+          </div>
+          {profile && (
+            <div className="grid items-start gap-4 md:gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+              {/* Check-ins need a profile first, so TDEE can be recomputed right away */}
+              <WeightSection onChanged={() => void reloadProfile()} />
+              <div className="grid gap-4 md:gap-5">
+                <CoachSummaryCard profile={profile} onEdit={() => selectTab('coach')} />
+                {profile.energy && (
+                  <section className="rounded-card bg-surface p-5 text-ink md:p-6"><MacroDetails energy={profile.energy} /></section>
+                )}
+              </div>
             </div>
-          </form>
-          {profile?.energy && <MacroDetails energy={profile.energy} />}
-        </ProfileSection>
+          )}
+        </>
+      )}
 
-        {/* Check-ins need a profile first, so TDEE can be recomputed right away */}
-        {profile && <WeightSection onChanged={() => void reloadProfile()} />}
-      </div>
+      {tab === 'coach' && (profile ? (
+        <CoachProfileTab profile={profile} onSaved={setProfile} />
+      ) : (
+        <section className="grid justify-items-start gap-3 rounded-card bg-surface p-6 text-ink">
+          <h2 className="text-lg font-semibold">Chưa có hồ sơ huấn luyện</h2>
+          <p className="text-muted">Trả lời vài câu ngắn để MAIFit tính calo, đạm và lọc món gợi ý cho riêng bạn. Khoảng 2 phút.</p>
+          <ButtonLink to="/onboarding">Bắt đầu thiết lập</ButtonLink>
+        </section>
+      ))}
 
-      <AppearanceCard />
+      {tab === 'settings' && (
+        <div className="grid items-start gap-4 md:gap-5 lg:grid-cols-2">
+          <AppearanceCard />
+          <div className="grid gap-4 md:gap-5">
+            <AccountCard email={user?.email ?? ''} checkout={checkout} onBuy={openPayment}
+            onLogout={() => void handleLogout()} loggingOut={loggingOut} />
+          </div>
+        </div>
+      )}
 
       <PaymentDialog open={payOpen} onClose={closePayment} checkout={checkout} name={name} />
     </div>

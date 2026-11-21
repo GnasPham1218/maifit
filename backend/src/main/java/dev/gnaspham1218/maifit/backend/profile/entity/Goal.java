@@ -1,18 +1,22 @@
 package dev.gnaspham1218.maifit.backend.profile.entity;
 
-// kcalAdjustment: added to TDEE (same ±500 as tdeecalculator.net: cutting / bulking)
+// The user's main goal. Energy and protein targets are computed in TdeeCalculator (sources there).
+// proteinPerKg: daily protein per kg of body weight for this goal.
 public enum Goal {
-    LOSE(-500),
-    MAINTAIN(0),
-    GAIN(500);
+    FAT_LOSS(2.2),     // lose fat, keep muscle
+    RECOMP(2.0),       // lose fat and build muscle at the same time (maintenance calories)
+    MAINTAIN(1.6),     // keep the weight, eat healthily
+    LEAN_BULK(2.0),    // build muscle, limit fat gain (small surplus)
+    WEIGHT_GAIN(1.6),  // gain weight (+500 kcal)
+    ENDURANCE(1.6);    // running, cycling, swimming: maintenance calories, more carbohydrate
 
-    private final int kcalAdjustment;
+    private final double proteinPerKg;
 
-    Goal(int kcalAdjustment) {
-        this.kcalAdjustment = kcalAdjustment;
+    Goal(double proteinPerKg) {
+        this.proteinPerKg = proteinPerKg;
     }
 
-    public int kcalAdjustment() {
-        return kcalAdjustment;
+    public double proteinPerKg() {
+        return proteinPerKg;
     }
 }

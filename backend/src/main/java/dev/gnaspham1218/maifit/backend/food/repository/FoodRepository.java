@@ -1,10 +1,12 @@
 package dev.gnaspham1218.maifit.backend.food.repository;
 
 import dev.gnaspham1218.maifit.backend.food.entity.Food;
+import dev.gnaspham1218.maifit.backend.food.entity.Preparation;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface FoodRepository extends JpaRepository<Food, Long> {
@@ -16,6 +18,9 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     /** Every preparation of one food, in table order (the chatbot calculates portions from these). */
     @EntityGraph(attributePaths = {"category", "source"})
     List<Food> findByNameOrderById(String name);
+
+    /** The rows of these foods in one preparation (profile: an excluded food is stored as its RAW row). */
+    List<Food> findByNameInAndPreparation(Collection<String> names, Preparation preparation);
 
     /** Every alias of every food, for the food list sent to the frontend (one query, grouped in Java). */
     @Query(value = """

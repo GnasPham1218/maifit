@@ -9,7 +9,11 @@ public record EnergyTargets(
         int tdee,
         int suggestedKcal,
         int targetKcal,
-        boolean deficitSkippedForMinor, // under 18 + goal LOSE: no deficit is applied
-        List<Macros> macros             // one entry per MacroSplit, computed from targetKcal
+        boolean deficitSkippedForMinor, // under 18 + a goal with a deficit: no deficit is applied
+        List<Macros> macros,            // one entry per MacroSplit, computed from targetKcal
+        String recommendedSplit,        // the MacroSplit that fits the goal (ENDURANCE -> HIGHER_CARB)
+        int proteinTargetG,             // daily protein target, grams
+        double proteinPerKg,            // the rate used for proteinTargetG
+        String proteinBasis             // BODY_WEIGHT or LEAN_MASS (fat loss with a measured body fat %)
 ) {
 }

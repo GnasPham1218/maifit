@@ -11,9 +11,11 @@ import FoodLibraryPage from './pages/FoodLibraryPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomePage from './pages/HomePage';
 import LeaderboardPage from './pages/LeaderboardPage';
+import AboutAllergensPage from './pages/AboutAllergensPage';
 import LoginPage from './pages/LoginPage';
 import MealsPage from './pages/MealsPage';
 import NotFoundPage from './pages/NotFoundPage';
+import OnboardingPage from './pages/OnboardingPage';
 import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
@@ -30,6 +32,8 @@ export const router = createBrowserRouter([
     // Logged-in area
     element: <ProtectedRoute />,
     children: [
+      // First-time profile setup: full screen, without the app navigation
+      { path: '/onboarding', element: <OnboardingPage /> },
       {
         element: <MainLayout />,
         children: [
@@ -82,5 +86,7 @@ export const router = createBrowserRouter([
       { path: '/reset-password', element: <ResetPasswordPage /> },
     ],
   },
+  // Public (linked from the profile and the food pages; reference data only)
+  { path: '/about/allergens', element: <AboutAllergensPage /> },
   { path: '*', element: <NotFoundPage /> },
 ]);

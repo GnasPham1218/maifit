@@ -1,24 +1,26 @@
 import { useEffect, useState } from 'react';
 import { aiApi } from '../../apis/aiApi';
-import { FORMULA_LABELS, MACRO_SPLIT_LABELS } from '../../constants/profile';
+import { FORMULA_LABELS, GOAL_SHORT, MACRO_SPLIT_LABELS } from '../../constants/profile';
 import type { AiQuota, AiQuotas } from '../../types/ai';
 import type { EnergyTargets, Goal } from '../../types/profile';
 import { formatNumber } from '../../utils/number';
 import { Alert } from '../Alert';
 
-const GOAL_SHORT: Record<Goal, string> = { LOSE: 'giảm cân', MAINTAIN: 'giữ cân', GAIN: 'tăng cân' };
-
-// Phones: the three numbers share one card. md+: each number is its own card (the wrapper is display: contents).
+// Phones: two rows of two inside one card. md+: each number is its own card.
 const STAT = 'grid min-w-0 content-start gap-1 md:rounded-card md:p-6';
 
-function Stat({ label, value, unit, accent = false }: { label: string; value: number; unit: string; accent?: boolean }) {
+function Stat({ label, value, unit, accent = false, suffix, valueClass = '' }: {
+  label: string; value: number; unit: string; accent?: boolean; suffix?: string; valueClass?: string;
+}) {
   // The target is the number that matters most: an accent card from md
   const tone = accent ? 'md:bg-accent md:text-on-accent' : 'md:bg-surface';
   const soft = accent ? 'text-muted md:text-on-accent/80' : 'text-muted';
   return (
     <div className={`${STAT} ${tone}`}>
       <p className={`text-xs md:text-sm md:whitespace-nowrap ${soft}`}>{label}</p>
-      <p className="font-display text-3xl leading-none font-bold tabular-nums md:text-5xl">{formatNumber(value)}</p>
+      <p className={`font-display text-3xl leading-none font-bold tabular-nums md:text-5xl ${valueClass}`}>
+        {formatNumber(value)}{suffix && <span className="text-2xl md:text-3xl"> {suffix}</span>}
+      </p>
       <p className={`text-xs md:text-sm ${soft}`}>{unit}</p>
     </div>
   );
@@ -39,7 +41,7 @@ function QuotaBar({ label, quota }: { label: string; quota: AiQuota }) {
   );
 }
 
-// BMR, TDEE and the target. Row of three cards from md, one card on phones.
+// BMR, TDEE, the calorie target and the protein target. Four cards from md, one card on phones.
 export function EnergyStats({ energy, goal }: { energy: EnergyTargets; goal: Goal }) {
   const custom = energy.targetKcal !== energy.suggestedKcal;
   return (
@@ -50,11 +52,13 @@ export function EnergyStats({ energy, goal }: { energy: EnergyTargets; goal: Goa
           được đặt bằng mức duy trì.
         </Alert>
       )}
-      <div className="grid grid-cols-3 gap-3 rounded-card bg-surface p-5 text-ink md:gap-4 md:bg-transparent md:p-0">
+      <div className="grid grid-cols-2 gap-x-3 gap-y-5 rounded-card bg-surface p-5 text-ink md:grid-cols-4 md:gap-4 md:bg-transparent md:p-0">
         <Stat label="Năng lượng nghỉ (BMR)" value={energy.bmr} unit="kcal mỗi ngày" />
         <Stat label="Tiêu hao cả ngày (TDEE)" value={energy.tdee} unit="kcal mỗi ngày" />
         <Stat label="Mục tiêu ăn" value={energy.targetKcal} accent
           unit={custom ? `kcal, tự đặt (gợi ý ${formatNumber(energy.suggestedKcal)})` : `kcal, ${GOAL_SHORT[goal]}`} />
+        <Stat label="Đạm mỗi ngày" value={energy.proteinTargetG} suffix="g" valueClass="text-protein"
+          unit={`${formatNumber(energy.proteinPerKg)} g/kg ${energy.proteinBasis === 'LEAN_MASS' ? 'khối nạc' : 'cân nặng'}`} />
       </div>
     </div>
   );
@@ -95,7 +99,7 @@ export function AiQuotaCard({ refreshKey }: { refreshKey: number }) {
 // Grams per day for each macro split, under the body form (details: closed by default)
 export function MacroDetails({ energy }: { energy: EnergyTargets }) {
   return (
-    <details className="mt-4 border-t border-line pt-3 text-sm">
+    <details className="text-sm">
       <summary className="cursor-pointer text-muted">Chia đạm, béo, carb theo mục tiêu</summary>
       <table className="mt-3 w-full border-collapse [&_td]:border-b [&_td]:border-line [&_td]:py-2 [&_th]:border-b [&_th]:border-line [&_th]:py-2 [&_th]:text-left [&_th]:font-medium">
         <thead>

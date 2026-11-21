@@ -268,7 +268,8 @@ def summarize(out_root: Path, limit: int) -> list[tuple[str, str, int]]:
         return short
     print("\n=== Summary ===")
     for food_dir in sorted(out_root.iterdir()):
-        if not food_dir.is_dir():
+        # _rejected/ holds images rejected in review_server.py, not a food
+        if not food_dir.is_dir() or food_dir.name.startswith("_"):
             continue
         for prep_dir in sorted(food_dir.iterdir()):
             if not prep_dir.is_dir():

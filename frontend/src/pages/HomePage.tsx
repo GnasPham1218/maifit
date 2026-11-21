@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { Navigate } from 'react-router';
 import { mealApi } from '../apis/mealApi';
 import { profileApi } from '../apis/profileApi';
 import { workoutApi } from '../apis/workoutApi';
 import { Alert } from '../components/Alert';
 import { HomeEmptyState } from '../components/home/HomeEmptyState';
+import { ProfileNudge } from '../components/profile/ProfileNudge';
 import { MealsTodayCard } from '../components/home/MealsTodayCard';
 import { StreakWeekCard } from '../components/home/StreakWeekCard';
 import { TodayHero } from '../components/home/TodayHero';
@@ -14,6 +16,7 @@ import type { DailyMeals } from '../types/meal';
 import type { Profile } from '../types/profile';
 import type { Leaderboard, MonthlyWorkoutSummary } from '../types/workout';
 import { todayVn } from '../utils/date';
+import { onboardingSkipped } from '../utils/onboarding';
 import { activeDays, monthsOf, weekDays } from '../utils/week';
 
 interface WeekData {
@@ -65,6 +68,8 @@ export default function HomePage() {
   if (!data) return <p className="text-muted">Đang tải…</p>;
 
   const { profile, day, week } = data;
+  // A new account goes through the setup once; "Tôi sẽ điền sau" keeps them here afterwards
+  if (!profile && !onboardingSkipped()) return <Navigate to="/onboarding" replace />;
   if (!profile?.energy) return <HomeEmptyState hasProfile={profile != null} />;
 
   const energy = profile.energy;
@@ -73,6 +78,7 @@ export default function HomePage() {
 
   return (
     <div className="grid gap-5">
+      <ProfileNudge profile={profile} />
       <TodayHero eaten={day.totals} targetKcal={energy.targetKcal} targets={targets} />
       <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <MealsTodayCard meals={day.meals} />

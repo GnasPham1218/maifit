@@ -26,6 +26,7 @@ public enum ErrorCode {
     // ---- Profile & body ----
     PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "Profile has not been set up yet"),
     AGE_OUT_OF_RANGE(HttpStatus.BAD_REQUEST, "Age must be between 13 and 100"),
+    UNKNOWN_ALLERGEN(HttpStatus.BAD_REQUEST, "One or more allergen codes do not exist"),
     CHECKIN_IN_FUTURE(HttpStatus.BAD_REQUEST, "Check-in time cannot be in the future"),
     INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "Invalid date range (max 366 days)"),
 

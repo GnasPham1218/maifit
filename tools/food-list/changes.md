@@ -210,3 +210,11 @@
 |---|---|---|
 | 148 Heo thăn (GRILLED) | 15 Thịt thăn heo (GRILLED) | cùng thăn heo |
 | 265 Sữa tươi nguyên kem (RAW) | 45 Sữa tươi (RAW) | cùng mã USDA; alias "Sữa nguyên kem" chuyển sang 45 |
+
+## V25 – món dùng số liệu đại diện (2026-11-18)
+
+| id | tên mới | thay đổi |
+|---|---|---|
+| 151 | Thịt đùi heo nạc | đổi tên "Chân giò heo" → "Thịt đùi heo nạc" (USDA là đùi heo chỉ phần nạc, không phải chân giò có da, mỡ, xương); bỏ alias "Giò heo", "Thịt chân giò" (tên cũ sai món: không giữ làm alias); thêm "Thịt đùi heo", "Đùi heo" |
+| 152 | Thịt đùi heo nạc | đổi tên như trên; bỏ "Chân giò heo quay", "Giò heo nướng", "Thịt chân giò quay", "Chân giò nướng"; thêm "Đùi heo nướng", "Thịt đùi heo nướng" |
+| – | Sườn bò, Tôm càng, Sò điệp, Thịt bò (mọi dòng), Cá basa (GRILLED) | source_approximate = true: USDA chỉ có món gần nhất (sườn bò rút xương nạc, crayfish, sò điệp nhiều loài, đùi bò top round, channel catfish) |
