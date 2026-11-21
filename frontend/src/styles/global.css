@@ -37,6 +37,8 @@
   --color-success-bg: #e3f4ea;
   --color-info: #1e4fd8;
   --color-info-bg: #e6edff;
+  --color-warn: #8a5a00;      /* "may contain" tags, cautions: 5.6:1 on white */
+  --color-warn-bg: #fdf3df;
 
   /* Old names, kept until each page is rewritten (plan steps 4-10), then removed in step 11 */
   --color-bg: var(--color-ground);
@@ -104,6 +106,8 @@
   --color-success-bg: #1d3328;
   --color-info: #7ea6ff;
   --color-info-bg: #262b3a;
+  --color-warn: #f7c978;
+  --color-warn-bg: #3a3020;
 }
 
 /* Accent picked in the profile (data-accent on <html>, set by utils/accent.ts and public/theme-init.js).

@@ -28,9 +28,9 @@ export function HomeEmptyState({ hasProfile }: { hasProfile: boolean }) {
           <p className="text-hero-muted">
             {hasProfile
               ? 'Ghi cân nặng hôm nay để tính TDEE và mục tiêu calo của bạn.'
-              : 'Nhập chiều cao, cân nặng và mục tiêu, mất khoảng 1 phút.'}
+              : 'Trả lời vài câu ngắn về cơ thể và mục tiêu, mất khoảng 2 phút.'}
           </p>
-          <ButtonLink to="/profile">{hasProfile ? 'Ghi cân nặng' : 'Thiết lập hồ sơ'}</ButtonLink>
+          <ButtonLink to={hasProfile ? '/profile' : '/onboarding'}>{hasProfile ? 'Ghi cân nặng' : 'Thiết lập hồ sơ'}</ButtonLink>
         </div>
       </section>
 
