@@ -31,6 +31,8 @@ public class SecurityConfig {
             "/auth/reset-password",
             // Landing page: price and daily limits from the config, nothing about a user
             "/payments/pricing",
+            // Allergen groups: reference data for the "about allergen data" page, nothing about a user
+            "/allergens",
             // Called by the payment gateway's servers (no JWT); authenticated by the provider's
             // own check inside PaymentProvider.parseWebhook (payOS: HMAC signature)
             "/payments/webhook/*"
